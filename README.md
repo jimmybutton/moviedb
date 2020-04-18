@@ -2,11 +2,11 @@
 A flask based web application to search for movies and actors
 
 ## Features
-- manage a list of movies and actors in a database
+- user login and authorization
+- manage a list of movies and actors
 - create, update and delete entries
 - manage relationships (actors and roles in movies)
-- advanced search functionalities for movies, movies by year, movies with actors etc.
-- have a user login and authorization
+- search functionality for movies, movies by year, movies with actors etc.
 
 ### movie fields
 - title
