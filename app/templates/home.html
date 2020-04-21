@@ -1,7 +1,10 @@
-{% extends "layout.html" %}
+{% extends "base.html" %}
 {% block title %}
 Home
 {% endblock %}
 {% block content %}
-<p>Home page for the Visual Studio Code Flask tutorial.</p>
+<p>Home page for the moviedb app.</p>
+{% for movie in movies %}
+<div><strong>{{ movie.title }}</strong> ({{ movie.year }}), {{ movie.stars }}/10 stars</div>
+{% endfor %}
 {% endblock %}
