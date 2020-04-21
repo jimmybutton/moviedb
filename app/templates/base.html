@@ -1,38 +1,44 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <title>{% block title %}{% endblock %}</title>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}" />
-    </head>
 
-    <body>
-        <div>
-            MovieDB: 
-            <a href="{{ url_for('home') }}">Home</a>
-            <a href="{{ url_for('actors') }}">Actors</a>
-            <a href="{{ url_for('users') }}">Users</a>
-            <a href="{{ url_for('login') }}">Login</a>
-        </div>
-        <hr>
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}" />
+</head>
 
-        <div>
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <ul>
-                {% for message in messages %}
-                <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            {% endwith %}
-            
-            {% block content %}
-            {% endblock %}
-            <hr/>
-            <footer>
-                <p>© 2018</p>
-            </footer>
-        </div>
-    </body>
+<body>
+    <div>
+        MovieDB:
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('actors') }}">Actors</a>
+        <a href="{{ url_for('users') }}">Users</a>
+        {% if current_user.is_anonymous %}
+        <a href="{{ url_for('login') }}">Login</a>
+        {% else %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
+    </div>
+    <hr>
+
+    <div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}
+        {% endblock %}
+        <hr />
+        <footer>
+            <p>© 2018</p>
+        </footer>
+    </div>
+</body>
+
 </html>
