@@ -1,12 +1,13 @@
-from flask import Flask, render_template, flash, url_for, redirect
+from flask import Flask, render_template, flash, url_for, redirect, request
 from app import app
 from app.forms import LoginForm
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User
-
+from werkzeug.urls import url_parse
 
 
 @app.route("/")
+@login_required
 def home():
     movies = [
         {
@@ -38,11 +39,13 @@ def home():
 
 
 @app.route("/actors")
+@login_required
 def actors():
     return render_template("actors.html")
 
 
 @app.route("/users")
+@login_required
 def users():
     return render_template("users.html")
 
@@ -58,7 +61,10 @@ def login():
             flash("Invalid username or password")
             return redirect(url_for('home'))
         login_user(user, remember=form.remember_me.data)
-        return redirect(url_for("home"))
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('home')
+        return redirect(next_page)
     return render_template("login.html", form=form)
 
 @app.route('/logout')
