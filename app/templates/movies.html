@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}
+Movies
+{% endblock %}
+{% block content %}
+<h1>Movies</h1>
+<p>Here is a list of movies</p>
+{% for movie in movies %}
+<div><strong>{{ movie.title }}</strong> ({{ movie.year }}), {{ movie.stars }}/10 stars</div>
+{% endfor %}
+{% endblock %}
