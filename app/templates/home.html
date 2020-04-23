@@ -5,7 +5,4 @@ Home
 {% block content %}
 <h1>Hi, {{ current_user.username }}</h1>
 <p>Home page for the moviedb app.</p>
-{% for movie in movies %}
-<div><strong>{{ movie.title }}</strong> ({{ movie.year }}), {{ movie.stars }}/10 stars</div>
-{% endfor %}
 {% endblock %}

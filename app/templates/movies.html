@@ -5,7 +5,25 @@ Movies
 {% block content %}
 <h1>Movies</h1>
 <p>Here is a list of movies</p>
-{% for movie in movies %}
-<div><strong>{{ movie.title }}</strong> ({{ movie.year }}), {{ movie.stars }}/10 stars</div>
-{% endfor %}
+<table>
+    <th>
+        <tr style="font-weight: bold;">
+            <td>Title</td>
+            <td>Year</td>
+            <td>Description</td>
+            <td>Stars</td>
+        </tr>
+    </th>
+    <tbody>
+        {% for movie in movies %}
+        <tr>
+            <td>{{ movie.title }}</td>
+            <td>{{ movie.year }}</td>
+            <td>{{ movie.description|truncate(60) }}</td>
+            <td>{{ movie.stars }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
 {% endblock %}

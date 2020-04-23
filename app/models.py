@@ -30,6 +30,7 @@ class Movie(db.Model):
     title = db.Column(db.String(64), index=True)
     description = db.Column(db.String(200))
     year = db.Column(db.Integer)
+    stars = db.Column(db.Float)
 
     def __repr__(self):
         return "<Movie {}>".format(self.title)
