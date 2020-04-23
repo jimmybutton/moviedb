@@ -9,7 +9,6 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    movies_created = db.relationship("Movie", backref="created_by", lazy="dynamic")
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     
@@ -26,7 +25,8 @@ class User(UserMixin, db.Model):
 class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     created = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    created_by_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    # created_by_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    # created_by = db.relationship("User", backref="movies_created", lazy="dynamic")
     title = db.Column(db.String(64), index=True)
     description = db.Column(db.String(200))
     year = db.Column(db.Integer)
