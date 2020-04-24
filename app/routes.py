@@ -18,6 +18,15 @@ def movies():
     movies = Movie.query.all()
     return render_template("movies.html", movies=movies)
 
+@app.route("/movie/<id>")
+@login_required
+def movie(id):
+    movie = Movie.query.get(id)
+    if not movie:
+        flash("Movie with id={} not found.".format(id))
+        return redirect(url_for("movies"))
+    return render_template("movie.html", movie=movie)
+
 
 @app.route("/actors")
 @login_required

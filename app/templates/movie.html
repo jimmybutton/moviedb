@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}
+Movie
+{% endblock %}
+{% block content %}
+<h1><a href="{{ url_for('movies') }}">Movies</a> / {{ movie.title }} ({{ movie.year }})</h1>
+<h3>Properties</h3>
+<table>
+    <tr>
+        <td>Title</td>
+        <td>{{ movie.title }}</td>
+    </tr>
+    <tr>
+        <td>Year</td>
+        <td>{{ movie.year }}</td>
+    </tr>
+    <tr valign="top">
+        <td>Description</td>
+        <td>{{ movie.description }}</td>
+    </tr>
+    <tr>
+        <td>Stars</td>
+        <td>{{ movie.stars }}</td>
+    </tr>
+</table>
+
+{% endblock %}

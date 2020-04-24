@@ -17,7 +17,7 @@ Movies
     <tbody>
         {% for movie in movies %}
         <tr>
-            <td>{{ movie.title }}</td>
+            <td><a href="{{ url_for('movie', id=movie.id) }}">{{ movie.title }}</a></td>
             <td>{{ movie.year }}</td>
             <td>{{ movie.description|truncate(60) }}</td>
             <td>{{ movie.stars }}</td>
