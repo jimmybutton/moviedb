@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField, DecimalField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length
 from app.models import User
-
+from datetime import date
 
 class LoginForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
@@ -44,3 +44,20 @@ class EditProfileForm(FlaskForm):
             user = User.query.filter_by(username=self.username.data).first()
             if user is not None:
                 raise ValidationError('Please use a different username.')
+    
+class EditMovieForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    year = IntegerField('Year', validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[Length(min=0, max=200)])
+    stars = DecimalField(label='Stars', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+    def validate_year(self, year):
+        min_year = 1900
+        max_year = date.today().year
+        if year.data < min_year or year.data > max_year:
+            raise ValidationError('Please use a year between {} and {}.'.format(min_year, max_year))
+    
+    def validate_stars(self, stars):
+        if stars.data < 0 or stars.data > 10:
+            raise ValidationError('Please use a number between 0 and 10.')

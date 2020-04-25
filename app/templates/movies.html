@@ -4,7 +4,9 @@ Movies
 {% endblock %}
 {% block content %}
 <h1>Movies</h1>
-<p>Here is a list of movies</p>
+<p>
+    <a href="{{ url_for('movie_create') }}">New Movie</a>
+</p>
 <table>
     <th>
         <tr style="font-weight: bold;">

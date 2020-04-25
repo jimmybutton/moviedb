@@ -1,6 +1,6 @@
 from flask import Flask, render_template, flash, url_for, redirect, request
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, EditProfileForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, EditMovieForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Movie
 from werkzeug.urls import url_parse
@@ -12,11 +12,13 @@ from datetime import datetime
 def home():
     return render_template("home.html")
 
+
 @app.route("/movies")
 @login_required
 def movies():
     movies = Movie.query.all()
     return render_template("movies.html", movies=movies)
+
 
 @app.route("/movie/<id>")
 @login_required
@@ -26,6 +28,48 @@ def movie(id):
         flash("Movie with id={} not found.".format(id))
         return redirect(url_for("movies"))
     return render_template("movie.html", movie=movie)
+
+
+@app.route("/create_movie", methods=["GET", "POST"])
+def movie_create():
+    form = EditMovieForm()
+    if form.validate_on_submit():
+        movie = Movie(
+            title=form.title.data,
+            year=form.year.data,
+            description=form.description.data,
+            stars=form.stars.data,
+        )
+        db.session.add(movie)
+        db.session.commit()
+        flash("Movie {} added.".format(movie.title))
+        return redirect(url_for("movie", id=movie.id))
+    return render_template("movie_create.html", form=form)
+
+
+@app.route("/movie/<id>/edit", methods=["GET", "POST"])
+@login_required
+def edit_movie(id):
+    form = EditMovieForm()
+    movie = Movie.query.get(id)
+    if not movie:
+        flash("Movie with id={} not found.".format(id))
+        return redirect(url_for("movies"))
+    if form.validate_on_submit():
+        movie.title = form.title.data
+        movie.year = form.year.data
+        movie.description = form.description.data
+        movie.stars = form.stars.data
+        db.session.add(movie)
+        db.session.commit()
+        flash("Movie {} has been updated.".format(movie.title))
+        return redirect(url_for("movie", id=movie.id))
+    elif request.method == "GET":
+        form.title.data = movie.title
+        form.year.data = movie.year
+        form.description.data = movie.description
+        form.stars.data = movie.stars
+    return render_template("movie_create.html", form=form)
 
 
 @app.route("/actors")
@@ -79,11 +123,13 @@ def register():
         return redirect(url_for("login"))
     return render_template("register.html", form=form)
 
-@app.route('/user/<username>')
+
+@app.route("/user/<username>")
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    return render_template('user.html', user=user)
+    return render_template("user.html", user=user)
+
 
 @app.before_request
 def before_request():
@@ -91,7 +137,8 @@ def before_request():
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
 
-@app.route('/edit_profile', methods=['GET', 'POST'])
+
+@app.route("/edit_profile", methods=["GET", "POST"])
 @login_required
 def edit_profile():
     form = EditProfileForm(current_user.username)
@@ -99,10 +146,9 @@ def edit_profile():
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data
         db.session.commit()
-        flash('Your changes have been saved.')
-        return redirect(url_for('user', username=current_user.username))
-    elif request.method == 'GET':
+        flash("Your changes have been saved.")
+        return redirect(url_for("user", username=current_user.username))
+    elif request.method == "GET":
         form.username.data = current_user.username
         form.about_me.data = current_user.about_me
-    return render_template('edit_profile.html', title='Edit Profile',
-                           form=form)
+    return render_template("edit_profile.html", title="Edit Profile", form=form)
