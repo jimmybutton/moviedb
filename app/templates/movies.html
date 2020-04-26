@@ -12,7 +12,7 @@ Movies
         <tr style="font-weight: bold;">
             <td>Title</td>
             <td>Year</td>
-            <td>Description</td>
+            <!-- <td>Description</td> -->
             <td>Stars</td>
         </tr>
     </th>
@@ -21,11 +21,21 @@ Movies
         <tr>
             <td><a href="{{ url_for('movie', id=movie.id) }}">{{ movie.title }}</a></td>
             <td>{{ movie.year }}</td>
-            <td>{{ movie.description|truncate(60) }}</td>
+            <!-- <td>{{ movie.description|truncate(60) }}</td> -->
             <td>{{ movie.stars }}</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+
+<p>
+    {% if prev_url %}
+    <a href="{{ prev_url }}">&lt;</a>
+    {% endif %}
+    {{ page }}
+    {% if next_url %}
+    <a href="{{ next_url }}">&gt;</a>
+    {% endif %}
+</p>
 
 {% endblock %}

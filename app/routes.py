@@ -16,8 +16,19 @@ def home():
 @app.route("/movies")
 @login_required
 def movies():
-    movies = Movie.query.all()
-    return render_template("movies.html", movies=movies)
+    page = request.args.get("page", 1, type=int)
+    movies = Movie.query.order_by(Movie.title.asc()).paginate(
+        page, app.config["ITEMS_PER_PAGE"], False
+    )
+    next_url = url_for("movies", page=movies.next_num) if movies.has_next else None
+    prev_url = url_for("movies", page=movies.prev_num) if movies.has_prev else None
+    return render_template(
+        "movies.html",
+        movies=movies.items,
+        page=page,
+        next_url=next_url,
+        prev_url=prev_url,
+    )
 
 
 @app.route("/movie/<id>")
