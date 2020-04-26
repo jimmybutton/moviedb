@@ -3,24 +3,78 @@
         "title": "Parasite",
         "year": 2019,
         "description": "A poor family, the Kims, con their way into becoming the servants of a rich family, the Parks. But their easy life gets complicated when their deception is threatened with exposure.",
-        "director": "Bong Joon Ho",
-        "actors": ["Kang-ho Song", "Sun-kyun Lee", "Yeo-jeong Jo"],
         "stars": 8.6
     },
     {
         "title": "Inception",
         "year": 2010,
         "description": "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
-        "director": "Christopher Nolan",
-        "actors": ["Leonardo DiCaprio", "Joseph Gordon-Levitt", "Ellen Page"],
         "stars": 8.8
     },
     {
         "title": "Forrest Gump",
         "year": 1994,
         "description": "The presidencies of Kennedy and Johnson, the events of Vietnam, Watergate and other historical events unfold through the perspective of an Alabama man with an IQ of 75, whose only desire is to be reunited with his childhood sweetheart.",
-        "director": "Robert Zemeckis",
-        "actors": ["Tom Hanks", "Robin Wright", "Gary Sinise"],
         "stars": 8.8
+    },
+    {
+        "title": "The Dark Knight",
+        "year": 2008,
+        "description": "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice. ",
+        "stars": 9.0
+    },
+    {
+        "title": "Interstellar",
+        "year": 2014,
+        "description": "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
+        "stars": 8.6
+    },
+    {
+        "title": "The Godfather",
+        "year": 1972,
+        "description": "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
+        "stars": 9.2
+    },
+    {
+        "title": "The Lord of the Rings: The Return of the King",
+        "year": 2003,
+        "description": "Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.",
+        "stars": 8.9
+    },
+    {
+        "title": "The Lord of the Rings: The Fellowhip of the Ring",
+        "year": 2001,
+        "description": "A meek Hobbit from the Shire and eight companions set out on a journey to destroy the powerful One Ring and save Middle-earth from the Dark Lord Sauron.",
+        "stars": 8.8
+    },
+    {
+        "title": "The Lord of the Rings: The Two Towers",
+        "year": 2002,
+        "description": "While Frodo and Sam edge closer to Mordor with the help of the shifty Gollum, the divided fellowship makes a stand against Sauron's new ally, Saruman, and his hordes of Isengard.",
+        "stars": 8.7
+    },
+    {
+        "title": "Saving Private Ryan",
+        "year": 1998,
+        "description": "Following the Normandy Landings, a group of U.S. soldiers go behind enemy lines to retrieve a paratrooper whose brothers have been killed in action.",
+        "stars": 8.6
+    },
+    {
+        "title": "Gladiator",
+        "year": 2000,
+        "description": "A former Roman General sets out to exact vengeance against the corrupt emperor who murdered his family and sent him into slavery. ",
+        "stars": 8.5
+    },
+    {
+        "title": "Unorthodox",
+        "year": 2020,
+        "description": "Story of a young ultra-Orthodox Jewish woman who flees her arranged marriage and religious community to start a new life abroad.",
+        "stars": 8.1
+    },
+    {
+        "title": "asdf",
+        "year": 2000,
+        "description": "asdf",
+        "stars": 4.0
     }
 ]

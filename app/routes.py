@@ -50,6 +50,7 @@ def movie_create():
             year=form.year.data,
             description=form.description.data,
             stars=form.stars.data,
+            created_by=current_user
         )
         db.session.add(movie)
         db.session.commit()
@@ -71,6 +72,7 @@ def edit_movie(id):
         movie.year = form.year.data
         movie.description = form.description.data
         movie.stars = form.stars.data
+        movie.modified_by = current_user
         db.session.add(movie)
         db.session.commit()
         flash("Movie {} has been updated.".format(movie.title))

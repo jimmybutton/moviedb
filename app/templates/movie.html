@@ -6,6 +6,12 @@ Movie
 <a href="{{ url_for('movies') }}">Movies</a>
 <h1>{{ movie.title }} ({{ movie.year }})</h1>
 <p>
+    {% if movie.created_by %}
+    Created by {{ movie.created_by.username }} on {{ movie.created_timestamp }}<br>
+    {% endif %}
+    {% if movie.modified_by %}
+    Last modified by {{ movie.modified_by.username }} on {{ movie.modified_timestamp }}<br>
+    {% endif %} 
     <a href="{{ url_for('edit_movie', id=movie.id) }}">Edit movie</a>
 </p>
 <p>

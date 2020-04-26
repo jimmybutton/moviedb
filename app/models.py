@@ -24,9 +24,12 @@ class User(UserMixin, db.Model):
 
 class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    created = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    # created_by_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-    # created_by = db.relationship("User", backref="movies_created", lazy="dynamic")
+    created_timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    created_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    created_by = db.relationship("User", foreign_keys=[created_id])
+    modified_timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow, onupdate=datetime.utcnow)
+    modified_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    modified_by = db.relationship("User", foreign_keys=[modified_id])
     title = db.Column(db.String(64), index=True)
     description = db.Column(db.String(200))
     year = db.Column(db.Integer)
