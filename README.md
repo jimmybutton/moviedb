@@ -29,9 +29,12 @@ A flask based web application to search for movies and actors
 
 ## ToDo
 ### Step 1
-- flesh out application structure, user model and movie model
-- create login and register page
-- create list view, details view and edit form for movies
+- DONE flesh out application structure, user model and movie model
+- DONE create login and register page
+- DONE create list view, details view and edit form for movies
+- display dates and times locally
+- order movies by columns
+- import movies from csv
 
 ### Step 2
 - add a actor model
@@ -41,3 +44,4 @@ A flask based web application to search for movies and actors
 
 ### Step 3
 - filter and search for movies
+- user comments on movies
