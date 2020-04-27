@@ -7,10 +7,10 @@ Movie
 <h1>{{ movie.displayname }}</h1>
 <p>
     {% if movie.created_by %}
-    Created by {{ movie.created_by.username }} on {{ movie.created_timestamp }}<br>
+    Created by {{ movie.created_by.username }}, {{ moment(movie.created_timestamp).format('LLL') }}<br>
     {% endif %}
     {% if movie.modified_by %}
-    Last modified by {{ movie.modified_by.username }} on {{ movie.modified_timestamp }}<br>
+    Last modified by {{ movie.modified_by.username }}, {{ moment(movie.modified_timestamp).format('LLL') }}<br>
     {% endif %} 
 </p>
 <p>

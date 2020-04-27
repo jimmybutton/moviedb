@@ -48,7 +48,7 @@ class EditProfileForm(FlaskForm):
 class EditMovieForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     year = IntegerField('Year', validators=[DataRequired()])
-    description = TextAreaField('Description', validators=[Length(min=0, max=200)])
+    description = TextAreaField('Description', validators=[Length(min=0, max=300)])
     stars = DecimalField(label='Stars', validators=[DataRequired()])
     submit = SubmitField('Submit')
 

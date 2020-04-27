@@ -5,6 +5,8 @@
     <meta charset="utf-8" />
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}" />
+    {{ moment.include_jquery() }}
+    {{ moment.include_moment() }}
 </head>
 
 <body>
@@ -41,6 +43,7 @@
             <p>© 2018</p>
         </footer>
     </div>
+
 </body>
 
 </html>

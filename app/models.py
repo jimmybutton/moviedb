@@ -31,7 +31,7 @@ class Movie(db.Model):
     modified_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     modified_by = db.relationship("User", foreign_keys=[modified_id])
     title = db.Column(db.String(64), index=True)
-    description = db.Column(db.String(200))
+    description = db.Column(db.String(300))
     year = db.Column(db.Integer)
     stars = db.Column(db.Float)
 
