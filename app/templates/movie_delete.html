@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}
+Delete Movie
+{% endblock %}
+
+{% block content %}
+<h1>Delete Movie</h1>
+<p>Are you sure you want to delete the Movie {{ movie.displayname }}?</p>
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <p>{{ form.submit() }} <a href="{{ url_for('movies') }}">Cancel</a></p>
+</form>
+{% endblock %}

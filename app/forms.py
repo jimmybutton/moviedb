@@ -61,3 +61,6 @@ class EditMovieForm(FlaskForm):
     def validate_stars(self, stars):
         if stars.data < 0 or stars.data > 10:
             raise ValidationError('Please use a number between 0 and 10.')
+
+class DeleteItemForm(FlaskForm):
+    submit = SubmitField('Delete')

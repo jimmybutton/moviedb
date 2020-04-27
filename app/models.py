@@ -37,6 +37,11 @@ class Movie(db.Model):
 
     def __repr__(self):
         return "<Movie {}>".format(self.title)
+    
+    @property
+    def displayname(self):
+        return f"{self.title} ({self.year})"
+
 
 @login.user_loader
 def load_user(id):

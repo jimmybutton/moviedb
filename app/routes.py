@@ -1,6 +1,6 @@
 from flask import Flask, render_template, flash, url_for, redirect, request
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, EditMovieForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, EditMovieForm, DeleteItemForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Movie
 from werkzeug.urls import url_parse
@@ -83,6 +83,22 @@ def edit_movie(id):
         form.description.data = movie.description
         form.stars.data = movie.stars
     return render_template("movie_create.html", form=form)
+
+@app.route("/movie/<id>/delete", methods=["GET", "POST"])
+@login_required
+def delete_movie(id):
+    form = DeleteItemForm()
+    movie = Movie.query.get(id)
+    if not movie:
+        flash("Movie with id={} not found.".format(id))
+        return redirect(url_for("movies"))
+    if form.validate_on_submit():
+        title = movie.title
+        db.session.delete(movie)
+        db.session.commit()
+        flash("Movie {} ({}) has been deleted.".format(movie.title, movie.year))
+        return redirect(url_for("movies"))
+    return render_template("movie_delete.html", form=form, movie=movie)
 
 
 @app.route("/actors")
