@@ -5,15 +5,46 @@ Movies
 {% block content %}
 <h1>Movies</h1>
 <p>
-    <a href="{{ url_for('movie_create') }}">New Movie</a>
+    Total: {{ total }}
+    <a href="{{ url_for('movie_create') }}">New Movie</a> 
+    <a href="{{ url_for('movies_export', order_by=order_by, sort=sort) }}">Export to .csv</a>
 </p>
+<!-- Toggle sort for column headers -->
+{% if sort == 'desc' %}
+{% set new_sort = 'asc' %}
+{% else %}
+{% set new_sort = 'desc' %}
+{% endif %}
 <table>
     <th>
         <tr style="font-weight: bold;">
-            <td>Title</td>
-            <td>Year</td>
+            <td><a href="{{ url_for('movies', order_by='title', sort=new_sort) }}">Title
+                    {% if order_by == 'title' %}
+                    {% if sort == 'desc' %}
+                    &#9662;
+                    {% else %}
+                    &#9652;
+                    {% endif %}
+                    {% endif %}
+                </a></td>
+            <td><a href="{{ url_for('movies', order_by='year', sort=new_sort) }}">Year
+                    {% if order_by == 'year' %}
+                    {% if sort == 'desc' %}
+                    &#9662;
+                    {% else %}
+                    &#9652;
+                    {% endif %}
+                    {% endif %}</a></td>
             <!-- <td>Description</td> -->
-            <td>Stars</td>
+            <td><a href="{{ url_for('movies', order_by='stars', sort=new_sort) }}">Stars
+                    {% if order_by == 'stars' %}
+                    {% if sort == 'desc' %}
+                    &#9662;
+                    {% else %}
+                    &#9652;
+                    {% endif %}
+                    {% endif %}
+                </a></td>
         </tr>
     </th>
     <tbody>

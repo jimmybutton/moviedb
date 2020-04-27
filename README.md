@@ -32,11 +32,13 @@ A flask based web application to search for movies and actors
 - DONE flesh out application structure, user model and movie model
 - DONE create login and register page
 - DONE create list view, details view and edit form for movies
-- display dates and times locally
-- order movies by columns
+- DONE display dates and times locally
+- DONE order movies by columns
+- DONE export movies to csv
 - import movies from csv
 
 ### Step 2
+- refactor using blueprints
 - add a actor model
 - list view, details view and edit form for actors
 - add association table

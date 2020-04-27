@@ -5,6 +5,9 @@ from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Movie
 from werkzeug.urls import url_parse
 from datetime import datetime
+import csv
+from io import StringIO
+from werkzeug.wrappers import Response
 
 
 @app.route("/")
@@ -17,18 +20,72 @@ def home():
 @login_required
 def movies():
     page = request.args.get("page", 1, type=int)
-    movies = Movie.query.order_by(Movie.title.asc()).paginate(
+    order_by = request.args.get("order_by", "title", type=str)
+    sort = request.args.get("sort", "asc", type=str)
+    if order_by not in [i for i in Movie.__dict__.keys() if i[:1] != '_']:
+        order_by = "title"
+    order_by_field = Movie.__dict__[order_by]
+    order_method = order_by_field.desc() if sort == "desc" else order_by_field.asc()
+    movies = Movie.query.order_by(order_method).paginate(
         page, app.config["ITEMS_PER_PAGE"], False
     )
-    next_url = url_for("movies", page=movies.next_num) if movies.has_next else None
-    prev_url = url_for("movies", page=movies.prev_num) if movies.has_prev else None
+    next_url = url_for("movies", page=movies.next_num, order_by=order_by, sort=sort) if movies.has_next else None
+    prev_url = url_for("movies", page=movies.prev_num, order_by=order_by, sort=sort) if movies.has_prev else None
     return render_template(
         "movies.html",
         movies=movies.items,
         page=page,
+        total=movies.total,
         next_url=next_url,
         prev_url=prev_url,
+        order_by=order_by,
+        sort=sort
     )
+
+
+@app.route("/movies/export", methods=['GET'])
+@login_required
+def movies_export():
+    def generate(movies):
+        """
+        Generate the data with csv.writer and stream the response. 
+        Use StringIO to write to an in-memory buffer rather than 
+        generating an intermediate file.
+        """
+        data = StringIO()
+        w = csv.writer(data)
+
+        # write header
+        w.writerow(('title', 'year', 'description', 'stars'))
+        yield data.getvalue()
+        data.seek(0)
+        data.truncate(0)
+
+        # write each log item
+        for movie in movies:
+            w.writerow((
+                movie.title,
+                movie.year,
+                movie.description,
+                movie.stars
+            ))
+            yield data.getvalue()
+            data.seek(0)
+            data.truncate(0)
+
+    order_by = request.args.get("order_by", "title", type=str)
+    sort = request.args.get("sort", "asc", type=str)
+    if order_by not in [i for i in Movie.__dict__.keys() if i[:1] != '_']:
+        order_by = "title"
+    order_by_field = Movie.__dict__[order_by]
+    order_method = order_by_field.desc() if sort == "desc" else order_by_field.asc()
+    movies = Movie.query.order_by(order_method).all()
+    
+    # stream the response as the data is generated
+    response = Response(generate(movies), mimetype='text/csv')
+    # add a filename
+    response.headers.set("Content-Disposition", "attachment", filename="movies.csv")
+    return response
 
 
 @app.route("/movie/<id>")
