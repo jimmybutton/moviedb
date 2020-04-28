@@ -6,7 +6,7 @@ Movies
 <h1>Movies</h1>
 <p>
     Total: {{ total }}
-    <a href="{{ url_for('movie_create') }}">New Movie</a> 
+    <a href="{{ url_for('movie_create') }}">New Movie</a>
     <a href="{{ url_for('movies_export', order_by=order_by, sort=sort) }}">Export to .csv</a>
 </p>
 <!-- Toggle sort for column headers -->
@@ -36,8 +36,8 @@ Movies
                     {% endif %}
                     {% endif %}</a></td>
             <!-- <td>Description</td> -->
-            <td><a href="{{ url_for('movies', order_by='stars', sort=new_sort) }}">Stars
-                    {% if order_by == 'stars' %}
+            <td><a href="{{ url_for('movies', order_by='rating_value', sort=new_sort) }}">Rating
+                    {% if order_by == 'rating_value' %}
                     {% if sort == 'desc' %}
                     &#9662;
                     {% else %}
@@ -45,6 +45,24 @@ Movies
                     {% endif %}
                     {% endif %}
                 </a></td>
+            <td><a href="{{ url_for('movies', order_by='certificate', sort=new_sort) }}">Certificate
+                {% if order_by == 'certificate' %}
+                {% if sort == 'desc' %}
+                &#9662;
+                {% else %}
+                &#9652;
+                {% endif %}
+                {% endif %}
+            </a></td>
+            <td><a href="{{ url_for('movies', order_by='runtime', sort=new_sort) }}">Runtime
+                {% if order_by == 'runtime' %}
+                {% if sort == 'desc' %}
+                &#9662;
+                {% else %}
+                &#9652;
+                {% endif %}
+                {% endif %}
+            </a></td>
         </tr>
     </th>
     <tbody>
@@ -53,7 +71,9 @@ Movies
             <td><a href="{{ url_for('movie', id=movie.id) }}">{{ movie.title }}</a></td>
             <td>{{ movie.year }}</td>
             <!-- <td>{{ movie.description|truncate(60) }}</td> -->
-            <td>{{ movie.stars }}</td>
+            <td>{{ movie.rating_value }}</td>
+            <td>{{ movie.certificate }}</td>
+            <td>{{ movie.runtime }}</td>
         </tr>
         {% endfor %}
     </tbody>

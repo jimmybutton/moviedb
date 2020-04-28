@@ -30,10 +30,19 @@ class Movie(db.Model):
     modified_timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow, onupdate=datetime.utcnow)
     modified_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     modified_by = db.relationship("User", foreign_keys=[modified_id])
-    title = db.Column(db.String(64), index=True)
-    description = db.Column(db.String(300))
+
+    title = db.Column(db.String(128), index=True)
     year = db.Column(db.Integer)
-    stars = db.Column(db.Float)
+    certificate = db.Column(db.String(16))
+    category = db.Column(db.String(64))
+    release_date = db.Column(db.String(128))
+    plot_summary = db.Column(db.String(512))
+    director = db.Column(db.String(64))
+    rating_value = db.Column(db.Float)
+    rating_count = db.Column(db.Integer)
+    poster_url = db.Column(db.String(256))
+    runtime = db.Column(db.String(16))
+    url = db.Column(db.String(64))
 
     def __repr__(self):
         return "<Movie {}>".format(self.title)
