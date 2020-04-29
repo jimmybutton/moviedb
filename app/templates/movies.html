@@ -20,49 +20,34 @@ Movies
         <tr style="font-weight: bold;">
             <td><a href="{{ url_for('movies', order_by='title', sort=new_sort) }}">Title
                     {% if order_by == 'title' %}
-                    {% if sort == 'desc' %}
-                    &#9662;
-                    {% else %}
-                    &#9652;
-                    {% endif %}
+                    {% if sort == 'desc' %}&#9662;{% else %}&#9652;{% endif %}
                     {% endif %}
                 </a></td>
             <td><a href="{{ url_for('movies', order_by='year', sort=new_sort) }}">Year
                     {% if order_by == 'year' %}
-                    {% if sort == 'desc' %}
-                    &#9662;
-                    {% else %}
-                    &#9652;
-                    {% endif %}
+                    {% if sort == 'desc' %}&#9662;{% else %}&#9652;{% endif %}
                     {% endif %}</a></td>
             <!-- <td>Description</td> -->
             <td><a href="{{ url_for('movies', order_by='rating_value', sort=new_sort) }}">Rating
                     {% if order_by == 'rating_value' %}
-                    {% if sort == 'desc' %}
-                    &#9662;
-                    {% else %}
-                    &#9652;
+                    {% if sort == 'desc' %}&#9662;{% else %}&#9652;{% endif %}
                     {% endif %}
+                </a></td>
+            <td><a href="{{ url_for('movies', order_by='rating_value', sort=new_sort) }}">Category
+                    {% if order_by == 'category' %}
+                    {% if sort == 'desc' %}&#9662;{% else %}&#9652;{% endif %}
                     {% endif %}
                 </a></td>
             <td><a href="{{ url_for('movies', order_by='certificate', sort=new_sort) }}">Certificate
-                {% if order_by == 'certificate' %}
-                {% if sort == 'desc' %}
-                &#9662;
-                {% else %}
-                &#9652;
-                {% endif %}
-                {% endif %}
-            </a></td>
-            <td><a href="{{ url_for('movies', order_by='runtime', sort=new_sort) }}">Runtime
-                {% if order_by == 'runtime' %}
-                {% if sort == 'desc' %}
-                &#9662;
-                {% else %}
-                &#9652;
-                {% endif %}
-                {% endif %}
-            </a></td>
+                    {% if order_by == 'certificate' %}
+                    {% if sort == 'desc' %}&#9662;{% else %}&#9652;{% endif %}
+                    {% endif %}
+                </a></td>
+            <td><a href="{{ url_for('movies', order_by='runtime', sort=new_sort) }}">Runtime (min)
+                    {% if order_by == 'runtime' %}
+                    {% if sort == 'desc' %}&#9662;{% else %}&#9652;{% endif %}
+                    {% endif %}
+                </a></td>
         </tr>
     </th>
     <tbody>
@@ -72,6 +57,7 @@ Movies
             <td>{{ movie.year }}</td>
             <!-- <td>{{ movie.description|truncate(60) }}</td> -->
             <td>{{ movie.rating_value }}</td>
+            <td>{{ movie.category }}</td>
             <td>{{ movie.certificate }}</td>
             <td>{{ movie.runtime }}</td>
         </tr>

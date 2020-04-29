@@ -25,12 +25,32 @@ Movie
     <strong>Year</strong><br>
     {{ movie.year }}
 </p>
+<!-- <p>
+    <strong>Category</strong><br>
+    {{ movie.category }}
+</p> -->
+<p>
+    <strong>Director</strong><br>
+    {{ movie.director }}
+</p>
+<p>
+    <strong>Certificate</strong><br>
+    {{ movie.certificate }}
+</p>
 <p>
     <strong>Plot summary</strong><br>
-    {{ movie.plot_summary }}
+    {{ movie.plot_summary }} (Source: <a href="{{ movie.url }}" target="_blank">imdb.com</a>)
 </p>
 <p>
     <strong>Rating</strong><br>
     {{ movie.rating_value }}
+</p>
+<p>
+    <strong>Runtime</strong><br>
+    {{ movie.runtime }}
+</p>
+<p>
+    <strong>Poster</strong><br>
+    <img src="{{ movie.poster_url }}" alt="Poster">
 </p>
 {% endblock %}

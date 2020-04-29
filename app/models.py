@@ -41,7 +41,7 @@ class Movie(db.Model):
     rating_value = db.Column(db.Float)
     rating_count = db.Column(db.Integer)
     poster_url = db.Column(db.String(256))
-    runtime = db.Column(db.String(16))
+    runtime = db.Column(db.Integer)
     url = db.Column(db.String(64))
 
     def __repr__(self):

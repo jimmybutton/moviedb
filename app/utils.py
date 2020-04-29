@@ -1,6 +1,10 @@
 import json
-from app import db
-from app.models import Movie
+
+def delete_movies():
+    movies = Movie.query.all()
+    for m in movies:
+        db.session.delete(m)
+    db.session.commit()
 
 def import_movies(movies):
     for m in movies:
@@ -11,7 +15,10 @@ def import_movies(movies):
         db.session.add(movie)
     db.session.commit()
 
-with open('../movies.json', "r") as fp:
+with open('movies.json', "r") as fp:
     movies = json.load(fp)
 
+user = User.query.get(1)
+
+delete_movies()
 import_movies(movies)
