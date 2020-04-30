@@ -4,13 +4,13 @@
 <head>
     <meta charset="utf-8" />
     <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='tailwind.css')}}" />
     {{ moment.include_jquery() }}
     {{ moment.include_moment() }}
 </head>
 
-<body>
-    <div>
+<body class="bg-gray-200">
+    <div class="p-1">
         MovieDB:
         <a href="{{ url_for('home') }}">Home</a>
         <a href="{{ url_for('movies') }}">Movies</a>

@@ -1,30 +1,41 @@
-{% extends "base.html" %}
+{% extends "base_no_nav.html" %}
 
 {% block title %}
 Login
 {% endblock %}
 
 {% block content %}
-    <h1>Sign In</h1>
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.username.label }}<br>
-            {{ form.username(size=32) }}<br>
-            {% for error in form.username.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
+<div class="min-h-screen flex items-center bg-gray-200 justify-center">
+    <div class="w-full max-w-xs">
+        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <div class="mb-4">
+                {{ form.username.label(class_='block text-gray-700 text-sm font-bold mb-2') }}
+                {{ form.username(size=32, class_='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline', placeholder="Username") }}<br>
+                {% for error in form.username.errors %}
+                <p class="text-red-500 text-xs italic">[{{ error }}]</p>
+                {% endfor %}
+            </div>
+            <div class="mb-6">
+                {{ form.password.label(class_='block text-gray-700 text-sm font-bold mb-2') }}
+                {{ form.password(size=32, class_='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline', placeholder="******************") }}<br>
+                {% for error in form.username.errors %}
+                <p class="text-red-500 text-xs italic">[{{ error }}]</p>
+                {% endfor %}
+            </div>
+            <div class="mb-4">{{ form.remember_me() }} {{ form.remember_me.label }}</div>
+            <div class="flex items-center justify-between mb-4">
+                {{ form.submit(class_='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline') }}
+                <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
+                    Forgot Password?
+                </a>
+            </div>
+            <div class="text-center text-gray-700 text-sm">New User? <a href="{{ url_for('register') }}">Click to
+                    Register!</a></div>
+        </form>
+        <p class="text-center text-gray-500 text-xs">
+            &copy;2020 Acme Corp. All rights reserved.
         </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}<br>
-            {% for error in form.password.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-        <p>{{ form.submit() }}</p>
-    </form>
-
-    <p>New User? <a href="{{ url_for('register') }}">Click to Register!</a></p>
+    </div>
+</div>
 {% endblock %}

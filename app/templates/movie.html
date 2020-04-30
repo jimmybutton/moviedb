@@ -4,7 +4,7 @@ Movie
 {% endblock %}
 {% block content %}
 <a href="{{ url_for('movies') }}">Movies</a>
-<h1>{{ movie.displayname }}</h1>
+<h1 class="text-4xl font-bold text-center text-blue-500">{{ movie.displayname }}</h1>
 <p>
     {% if movie.created_by %}
     Created by {{ movie.created_by.username }}, {{ moment(movie.created_timestamp).format('LLL') }}<br>

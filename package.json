@@ -1,0 +1,25 @@
+{
+  "name": "moviedb",
+  "version": "1.0.0",
+  "description": "A flask based web application to search for movies and actors",
+  "main": "index.js",
+  "scripts": {
+    "build": "postcss css/tailwind.css -o app/static/tailwind.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jimmybutton/moviedb.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jimmybutton/moviedb/issues"
+  },
+  "homepage": "https://github.com/jimmybutton/moviedb#readme",
+  "dependencies": {
+    "autoprefixer": "^9.7.6",
+    "postcss-cli": "^7.1.1",
+    "tailwindcss": "^1.4.0"
+  }
+}
