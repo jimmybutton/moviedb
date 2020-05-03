@@ -1,3 +1,53 @@
 @tailwind base;
 @tailwind components;
+
+.btn {
+    @apply py-2 px-4 rounded-md border border-transparent font-medium bg-indigo-500 text-white font-bold transition duration-150;
+}
+.btn:hover {
+    @apply bg-indigo-700;
+}
+.btn:focus {
+    @apply outline-none shadow-outline-indigo;
+}
+.btn:active {
+    @apply bg-indigo-600;
+}
+
+.inline-link {
+    @apply font-medium text-indigo-600 transition ease-in-out duration-150;
+}
+.inline-link:hover {
+    @apply text-indigo-500;
+}
+.inline-link:focus {
+    @apply  outline-none underline;
+}
+
+.nav-item {
+    @apply px-3 py-2 rounded-md text-sm font-medium text-gray-300 
+}
+.nav-item:hover {
+    @apply text-white bg-gray-700 
+}
+.nav-item:focus {
+    @apply outline-none text-white bg-gray-700
+}
+.nav .active {
+    @apply text-white bg-gray-900
+}
+.nav .active:focus {
+    @apply outline-none text-white bg-gray-700
+}
+
+table th {
+    @apply px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider;
+}
+table td {
+    @apply px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-900;
+}
+tr:hover {
+    @apply bg-gray-100;
+}
+
 @tailwind utilities;

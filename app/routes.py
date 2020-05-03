@@ -13,7 +13,7 @@ from werkzeug.wrappers import Response
 @app.route("/")
 @login_required
 def home():
-    return render_template("home.html")
+    return render_template("home.html", title="Dashboard")
 
 
 @app.route("/movies")
@@ -33,6 +33,7 @@ def movies():
     prev_url = url_for("movies", page=movies.prev_num, order_by=order_by, sort=sort) if movies.has_prev else None
     return render_template(
         "movies.html",
+        title="Movies",
         movies=movies.items,
         page=page,
         total=movies.total,
@@ -161,14 +162,14 @@ def delete_movie(id):
 @app.route("/actors")
 @login_required
 def actors():
-    return render_template("actors.html")
+    return render_template("actors.html", title="People")
 
 
 @app.route("/users")
 @login_required
 def users():
     users = User.query.all()
-    return render_template("users.html", users=users)
+    return render_template("users.html", title="Users", users=users)
 
 
 @app.route("/login", methods=["GET", "POST"])

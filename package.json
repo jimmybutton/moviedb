@@ -4,7 +4,8 @@
   "description": "A flask based web application to search for movies and actors",
   "main": "index.js",
   "scripts": {
-    "build": "postcss css/tailwind.css -o app/static/tailwind.css"
+    "build": "postcss css/tailwind.css -o app/static/tailwind.css",
+    "watch": "postcss css/tailwind.css -o app/static/tailwind.css --watch"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,7 @@
   },
   "homepage": "https://github.com/jimmybutton/moviedb#readme",
   "dependencies": {
+    "@tailwindcss/ui": "^0.2.2",
     "autoprefixer": "^9.7.6",
     "postcss-cli": "^7.1.1",
     "tailwindcss": "^1.4.0"
