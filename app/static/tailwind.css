@@ -1020,21 +1020,24 @@ table th {
   letter-spacing: 0.05em;
 }
 
-table td {
+table > tbody > tr > td {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
   white-space: nowrap;
-  border-bottom-width: 1px;
-  --border-opacity: 1;
-  border-color: #e5e7eb;
-  border-color: rgba(229, 231, 235, var(--border-opacity));
   font-size: 0.875rem;
   line-height: 1.25rem;
   --text-opacity: 1;
   color: #161e2e;
   color: rgba(22, 30, 46, var(--text-opacity));
+}
+
+table > tbody > tr:not(:last-child) > td {
+  border-bottom-width: 1px;
+  --border-opacity: 1;
+  border-color: #e5e7eb;
+  border-color: rgba(229, 231, 235, var(--border-opacity));
 }
 
 tr:hover {

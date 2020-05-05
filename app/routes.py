@@ -34,9 +34,7 @@ def movies():
     return render_template(
         "movies.html",
         title="Movies",
-        movies=movies.items,
-        page=page,
-        total=movies.total,
+        movies=movies,
         next_url=next_url,
         prev_url=prev_url,
         order_by=order_by,
@@ -96,7 +94,7 @@ def movie(id):
     if not movie:
         flash("Movie with id={} not found.".format(id))
         return redirect(url_for("movies"))
-    return render_template("movie.html", movie=movie)
+    return render_template("movie.html", movie=movie, title="Movies")
 
 
 @app.route("/create_movie", methods=["GET", "POST"])
