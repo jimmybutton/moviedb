@@ -1,35 +1,47 @@
 {% extends "base.html" %}
-
-{% block title %}
-Create Movie
+{% block nav_movies %}active{% endblock %}
+{% block header %}
+<h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:leading-9 sm:truncate">
+  {% if movie %}
+  Edit Movie: {{ movie.displayname }}
+  {% else %}
+  Create Movie
+  {% endif %}
+</h2>
 {% endblock %}
-
 {% block content %}
-<h1>Create Movie</h1>
-<form action="" method="post">
+<div class="bg-white shadow overflow-hidden sm:rounded-lg">
+  <form action="" method="post">
     {{ form.hidden_tag() }}
     {% for field in form %}
-    <p>
-        {% if field.type == "BooleanField" %}
-            {{ field }} {{ field.label }}<br>
-        {% elif field.type == "StringField" %}
-            {{ field.label }}<br>
-            {{ field(size=64) }}<br>
-        {% elif field.type == "TextAreaField" %}
-            {{ field.label }}<br>
-            {{ field(cols=64, rows=4) }}<br>
-        {% elif field.type == "DecimalField" %}
-            {{ field.label }}<br>
-            {{ field }}<br>
-        {% elif field.type == "IntegerField" %}
-            {{ field.label }}<br>
-            {{ field }}<br>
-        {% endif %}
-        {% for error in field.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </p>
+    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+      {% if field.type == "BooleanField" %}
+      {{ field }} {{ field.label }}<br>
+      {% elif field.type == "StringField" %}
+      {{ field.label }}
+      {{ field(size=64) }}
+      {% elif field.type == "TextAreaField" %}
+      {{ field.label }}<br>
+      {{ field(cols=64, rows=4) }}<br>
+      {% elif field.type == "DecimalField" %}
+      {{ field.label }}<br>
+      {{ field }}<br>
+      {% elif field.type == "IntegerField" %}
+      {{ field.label }}<br>
+      {{ field }}<br>
+      {% endif %}
+      {% for error in field.errors %}
+      <span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+    </div>
     {% endfor %}
-    <p>{{ form.submit() }} <a href="{{ url_for('movies') }}">Cancel</a></p>
-</form>
+    <p>{{ form.submit(class_="btn btn-indigo") }}
+      {% if movie %}
+      <a class="btn ml-1" href="{{ url_for('movie', id=movie.id) }}">Cancel</a>
+      {% else %}
+      <a href="{{ url_for('movies') }}" class="btn ml-1"></a>
+      {% endif %}
+    </p>
+  </form>
+</div>
 {% endblock %}

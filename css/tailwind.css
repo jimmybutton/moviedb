@@ -2,14 +2,33 @@
 @tailwind components;
 
 .btn {
-    @apply py-2 px-4 rounded-md border border-transparent font-medium bg-indigo-500 text-white font-bold transition duration-150;
+    @apply py-2 px-4 rounded-md border border-transparent font-medium bg-gray-500 text-white font-bold transition duration-150;
 }
+
+.btn:hover {
+    @apply bg-gray-700;
+}
+
+.btn:focus {
+    @apply outline-none shadow-outline-gray;
+}
+
+.btn:active {
+    @apply bg-gray-600;
+}
+
+.btn-indigo {
+    @apply bg-indigo-500;
+}
+
 .btn:hover {
     @apply bg-indigo-700;
 }
+
 .btn:focus {
-    @apply outline-none shadow-outline-indigo;
+    @apply shadow-outline-indigo;
 }
+
 .btn:active {
     @apply bg-indigo-600;
 }
@@ -17,25 +36,31 @@
 .inline-link {
     @apply font-medium text-indigo-600 transition ease-in-out duration-150;
 }
+
 .inline-link:hover {
     @apply text-indigo-500;
 }
+
 .inline-link:focus {
-    @apply  outline-none underline;
+    @apply outline-none underline;
 }
 
 .nav-item {
-    @apply px-3 py-2 rounded-md text-sm font-medium text-gray-300 
+    @apply px-3 py-2 rounded-md text-sm font-medium text-gray-300
 }
+
 .nav-item:hover {
-    @apply text-white bg-gray-700 
+    @apply text-white bg-gray-700
 }
+
 .nav-item:focus {
     @apply outline-none text-white bg-gray-700
 }
+
 .nav .active {
     @apply text-white bg-gray-900
 }
+
 .nav .active:focus {
     @apply outline-none text-white bg-gray-700
 }
@@ -43,15 +68,55 @@
 table th {
     @apply px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider;
 }
-table > tbody > tr > td {
-    @apply px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900;
+
+table th:hover {
+    @apply bg-gray-100 text-gray-700;
 }
-table > tbody > tr:not(:last-child) > td {
+
+table>tbody>tr>td {
+    @apply px-6 py-2 whitespace-no-wrap text-sm leading-5 text-gray-900;
+}
+
+table>tbody>tr:not(:last-child)>td {
     @apply border-b border-gray-200;
 }
 
 tr:hover {
     @apply bg-gray-100;
 }
+
+dl>div {
+    @apply bg-white px-4 py-5;
+}
+
+dl>div:nth-child(odd) {
+    @apply bg-gray-50;
+}
+
+dl>div>dt {
+    @apply text-sm leading-5 font-medium text-gray-500;
+}
+
+dl>div>dd {
+    @apply mt-1 text-sm leading-5 text-gray-900;
+}
+label {
+    @apply block text-sm leading-5 font-medium text-gray-700;
+}
+input {
+    @apply mt-1 relative rounded-md form-input block pl-7 pr-12;
+}
+@screen sm{
+    dl>div {
+        @apply grid grid-cols-3 gap-4 px-6;
+    }
+    dl>div>dd {
+        @apply mt-0 col-span-2;
+    }
+    input {
+        @apply mt-0 col-span-2;
+    }
+}
+
 
 @tailwind utilities;

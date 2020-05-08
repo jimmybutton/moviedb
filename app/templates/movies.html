@@ -71,48 +71,61 @@
 {% else %}
 {% set new_sort = 'desc' %}
 {% endif %}
+
+<div class="-mt-4 px-4 py-3 flex items-center justify-between border-gray-200 sm:px-6">
+  <p class="text-sm leading-5 text-gray-700">
+    Showing
+    <span class="font-medium">{{ (movies.page - 1) * movies.per_page + 1 }}</span>
+    to
+    <span class="font-medium">{{ movies.page * movies.per_page }}</span>
+    of
+    <span class="font-medium">{{ movies.total }}</span>
+    results
+  </p>
+</div>
+
 <div class="flex flex-col">
   <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
     <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
       <table class="min-w-full">
         <thead>
           <tr>
-            <th>
+            <th data-href="{{ url_for('movies', order_by='title', sort=new_sort) }}" class="cursor-pointer">
               <a href="{{ url_for('movies', order_by='title', sort=new_sort) }}">Title
                 {% if order_by == 'title' %}
                 {% if sort == 'desc' %}&#9662;{% else %}&#9652;{% endif %}
                 {% endif %}
               </a>
             </th>
-            <th>
+            <th data-href="{{ url_for('movies', order_by='rating_value', sort=new_sort) }}" class="cursor-pointer">
               <a href="{{ url_for('movies', order_by='rating_value', sort=new_sort) }}">Rating
                 {% if order_by == 'rating_value' %}
                 {% if sort == 'desc' %}&#9662;{% else %}&#9652;{% endif %}
                 {% endif %}
               </a>
             </th>
-            <th>
+            <th data-href="{{ url_for('movies', order_by='category', sort=new_sort) }}" class="cursor-pointer">
               <a href="{{ url_for('movies', order_by='category', sort=new_sort) }}">Category
                 {% if order_by == 'category' %}
                 {% if sort == 'desc' %}&#9662;{% else %}&#9652;{% endif %}
                 {% endif %}
               </a>
             </th>
-            <th>
+            <th data-href="{{ url_for('movies', order_by='certificate', sort=new_sort) }}" class="cursor-pointer">
               <a href="{{ url_for('movies', order_by='certificate', sort=new_sort) }}">Certificate
                 {% if order_by == 'certificate' %}
                 {% if sort == 'desc' %}&#9662;{% else %}&#9652;{% endif %}
                 {% endif %}
               </a>
             </th>
-            <th>
+            <th data-href="{{ url_for('movies', order_by='year', sort=new_sort) }}" class="cursor-pointer">
               <a href="{{ url_for('movies', order_by='year', sort=new_sort) }}">Year
                 {% if order_by == 'year' %}
                 {% if sort == 'desc' %}&#9662;{% else %}&#9652;{% endif %}
                 {% endif %}
               </a>
             </th>
-            <th>
+            <th data-href="{{ url_for('movies', order_by='runtime', sort=new_sort) }}" class="cursor-pointer">
               <a href="{{ url_for('movies', order_by='runtime', sort=new_sort) }}">Runtime (min)
                 {% if order_by == 'runtime' %}
                 {% if sort == 'desc' %}&#9662;{% else %}&#9652;{% endif %}
@@ -123,8 +136,8 @@
         </thead>
         <tbody class="bg-white">
           {% for movie in movies.items %}
-          <tr data-href="{{ url_for('movie', id=movie.id) }}" class="cursor-pointer">
-            <td>
+          <tr>
+            <td data-href="{{ url_for('movie', id=movie.id) }}" class="cursor-pointer">
               <div class="flex items-center">
                 <div class="flex-shrink-0 h-16">
                   <img class="h-16"
@@ -161,7 +174,7 @@
   </div>
 </div>
 
-<div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+<div class="px-4 py-3 flex items-center justify-between border-gray-200 sm:px-6">
   <div class="flex-1 flex justify-between sm:hidden">
     <a href="#"
       class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
@@ -260,7 +273,12 @@
 
 <!-- Script to make rows clickable -->
 <script>
-$('tr[data-href]').on("click", function() {
+// Link to Movie details page
+$('td[data-href]').on("click", function() {
+  document.location = $(this).data('href');
+});
+// Link to sort list on column
+$('th[data-href]').on("click", function() {
   document.location = $(this).data('href');
 });
 </script>

@@ -124,21 +124,19 @@ def edit_movie(id):
         flash("Movie with id={} not found.".format(id))
         return redirect(url_for("movies"))
     if form.validate_on_submit():
-        movie.title = form.title.data
-        movie.year = form.year.data
-        movie.description = form.description.data
-        movie.stars = form.stars.data
+        for k,v in movie.__dict__.items():
+            if not k.startswith('_') and k not in ['id', 'created_by', 'created_id', 'created_timestamp', 'modified_by', 'modified_id', 'modified_timestamp']:
+                v = form.__dict__[k].data
         movie.modified_by = current_user
         db.session.add(movie)
         db.session.commit()
         flash("Movie {} has been updated.".format(movie.title))
         return redirect(url_for("movie", id=movie.id))
     elif request.method == "GET":
-        form.title.data = movie.title
-        form.year.data = movie.year
-        form.description.data = movie.description
-        form.stars.data = movie.stars
-    return render_template("movie_create.html", form=form)
+        for k,v in movie.__dict__.items():
+            if not k.startswith('_') and k not in ['id', 'created_by', 'created_id', 'created_timestamp', 'modified_by', 'modified_id', 'modified_timestamp']:
+                form.__dict__[k].data = v
+    return render_template("movie_create.html", form=form, movie=movie)
 
 @app.route("/movie/<id>/delete", methods=["GET", "POST"])
 @login_required

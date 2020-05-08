@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField, DecimalField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField, DecimalField, SelectField, DateField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length
 from app.models import User
 from datetime import date
@@ -48,8 +48,16 @@ class EditProfileForm(FlaskForm):
 class EditMovieForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     year = IntegerField('Year', validators=[DataRequired()])
-    description = TextAreaField('Description', validators=[Length(min=0, max=300)])
-    stars = DecimalField(label='Stars', validators=[DataRequired()])
+    certificate = SelectField('Certificate', choices=['U','12','12A','15','18','R18','A','PG','U/A','S','X'])
+    category = SelectField('Certificate', choices=['U','12','12A','15','18','R18','A','PG','U/A','S','X'])
+    release_date = DateField('Release date')
+    director = StringField('Director', validators=[DataRequired()])
+    plot_summary = TextAreaField('Plot summary', validators=[Length(min=0, max=300)])
+    rating_value = DecimalField(label='Rating', validators=[DataRequired()])
+    rating_count = IntegerField(label='Rating count', validators=[DataRequired()])
+    runtime = IntegerField(label='Runtime (min)', validators=[DataRequired()])
+    poster_url = StringField('Poster URL', validators=[DataRequired()])
+    url = StringField('URL', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
     def validate_year(self, year):

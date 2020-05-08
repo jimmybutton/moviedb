@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% block nav_movies %}active{% endblock %}
 {% block header %}
 <div class="lg:flex lg:items-center lg:justify-between">
   <div class="flex-1 min-w-0">
@@ -15,7 +16,11 @@
           <path
             d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
         </svg>
-        Created by <a href="{{ url_for('user', username=movie.created_by.username) }}" class="inline-link">{{ movie.created_by.username }}</a> on&nbsp;{{ moment(movie.created_timestamp).format('LLL') }}
+        <div>
+          Created by <a href="{{ url_for('user', username=movie.created_by.username) }}"
+            class="inline-link">{{ movie.created_by.username }}</a> on
+          {{ moment(movie.created_timestamp).format('LLL') }}
+        </div>
       </div>
       {% endif %}
       {% if movie.modified_by %}
@@ -25,7 +30,9 @@
             d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
             clip-rule="evenodd" />
         </svg>
-        Created by {{ movie.modified_by.username }} on {{ movie.modified_timestamp }}
+        <div>
+          Created by {{ movie.modified_by.username }} on {{ movie.modified_timestamp }}
+        </div>
       </div>
       {% endif %}
     </div>
@@ -93,40 +100,61 @@
 </div>
 {% endblock %}
 {% block content %}
-<p>
-  <strong>Title</strong><br>
-  {{ movie.title }}
-</p>
-<p>
-  <strong>Year</strong><br>
-  {{ movie.year }}
-</p>
-<!-- <p>
-    <strong>Category</strong><br>
-    {{ movie.category }}
-</p> -->
-<p>
-  <strong>Director</strong><br>
-  {{ movie.director }}
-</p>
-<p>
-  <strong>Certificate</strong><br>
-  {{ movie.certificate }}
-</p>
-<p>
-  <strong>Plot summary</strong><br>
-  {{ movie.plot_summary }} (Source: <a href="{{ movie.url }}" target="_blank">imdb.com</a>)
-</p>
-<p>
-  <strong>Rating</strong><br>
-  {{ movie.rating_value }}
-</p>
-<p>
-  <strong>Runtime</strong><br>
-  {{ movie.runtime }}
-</p>
-<p>
-  <strong>Poster</strong><br>
-  <img src="{{ movie.poster_url }}" alt="Poster">
-</p>
+<div class="bg-white shadow overflow-hidden sm:rounded-lg">
+  <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+    <h3 class="text-md leading-6 font-bold text-gray-900">
+      Details
+    </h3>
+    <!-- <p class="mt-1 max-w-2xl text-sm leading-5 text-gray-500">
+      Personal details and application.
+    </p> -->
+  </div>
+  <div>
+    <dl>
+      <div>
+        <dt> Title </dt>
+        <dd> {{ movie.title }} </dd>
+      </div>
+      <div>
+        <dt> Year </dt>
+        <dd> {{ movie.year }} </dd>
+      </div>
+      <div>
+        <dt> Director </dt>
+        <dd> {{ movie.director }} </dd>
+      </div>
+      <div>
+        <dt> Category </dt>
+        <dd> {{ movie.category }} </dd>
+      </div>
+      <div>
+        <dt> Poster </dt>
+        <dd>
+          <img src="{{ movie.poster_url }}" alt="Poster">
+        </dd>
+      </div>
+      <div>
+        <dt> Plot summary </dt>
+        <dd>
+          {{ movie.plot_summary }} <br>Source: <a href="{{ movie.url }}" target="_blank"
+            class="inline-link">imdb.com</a>
+        </dd>
+      </div>
+      <div>
+        <dt> Certificate </dt>
+        <dd> {{ movie.certificate }} </dd>
+      </div>
+      <div>
+        <dt> Rating </dt>
+        <dd>
+          {{ movie.rating_value }} <span class="ml-1 text-gray-500">(based on {{ movie.rating_count }} ratings)</span>
+        </dd>
+      </div>
+      <div>
+        <dt> Runtime </dt>
+        <dd> {{ movie.runtime }} </dd>
+      </div>
+    </dl>
+  </div>
+</div>
 {% endblock %}
