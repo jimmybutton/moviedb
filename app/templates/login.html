@@ -5,7 +5,6 @@ Login
 {% endblock %}
 
 {% block content %}
-<div class="min-h-screen flex items-center bg-gray-200 justify-center">
     <div class="w-full max-w-sm">
         <div>
             <!-- <img class="mx-auto h-12 w-auto -mb-4" src="{{ url_for('static', filename='logo-text.png')}}" alt="moviedb" /> -->
@@ -43,7 +42,7 @@ Login
                 </div>
             </div>
             <div class="mt-6">
-                {{ form.submit(class_='btn w-full') }}
+                {{ form.submit(class_='btn btn-indigo w-full') }}
             </div>
             <div class="mt-4 text-center text-gray-700 text-sm">
                 New User?
@@ -57,5 +56,4 @@ Login
             &copy;2020 Acme Corp. All rights reserved.
         </p> -->
     </div>
-</div>
 {% endblock %}

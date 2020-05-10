@@ -151,11 +151,14 @@
       <!-- Replace with your content -->
       {% with messages = get_flashed_messages() %}
       {% if messages %}
-      <ul>
+      <div class="mb-3 -mt-2">
         {% for message in messages %}
-        <li>{{ message }}</li>
+        <div class="bg-indigo-100 border border-indigo-400 text-indigo-700 px-4 py-3 rounded relative" role="alert">
+          <!-- <strong class="font-bold">Holy smokes!</strong> -->
+          <span class="block sm:inline">{{ message }}</span>
+        </div>
         {% endfor %}
-      </ul>
+      </div>
       {% endif %}
       {% endwith %}
 

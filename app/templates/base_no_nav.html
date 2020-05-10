@@ -2,28 +2,31 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
-    <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='tailwind.css')}}" />
-    {{ moment.include_jquery() }}
-    {{ moment.include_moment() }}
+  <meta charset="utf-8" />
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='tailwind.css')}}" />
+  {{ moment.include_jquery() }}
+  {{ moment.include_moment() }}
 </head>
 
-<body class="bg-gray-200">
-
+<body class="min-h-screen bg-gray-200 flex items-center justify-center">
+  <div class="w-full max-w-sm">
     {% with messages = get_flashed_messages() %}
     {% if messages %}
-    <ul>
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
+    <div class="mb-3 -mt-2">
+      {% for message in messages %}
+      <div class="bg-indigo-100 border border-indigo-400 text-indigo-700 px-4 py-3 rounded relative mb-1" role="alert">
+        <!-- <strong class="font-bold">Holy smokes!</strong> -->
+        <span class="block sm:inline">{{ message }}</span>
+      </div>
+      {% endfor %}
+    </div>
     {% endif %}
     {% endwith %}
-
+    
     {% block content %}
     {% endblock %}
-
+  </div>
 </body>
 
 </html>

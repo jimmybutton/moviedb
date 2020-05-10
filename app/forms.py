@@ -48,9 +48,9 @@ class EditProfileForm(FlaskForm):
 class EditMovieForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     year = IntegerField('Year', validators=[DataRequired()])
-    certificate = SelectField('Certificate', choices=['U','12','12A','15','18','R18','A','PG','U/A','S','X'])
-    category = SelectField('Certificate', choices=['U','12','12A','15','18','R18','A','PG','U/A','S','X'])
-    release_date = DateField('Release date')
+    certificate = SelectField('Certificate', choices=[('U','U'),('12','12'),('12A','12A'),('15','15'),('18','18'),('R18','R18'),('A','A'),('PG','PG'),('U/A','U/A'),('S','S'),('X','X')])
+    category = SelectField('Category', choices=[('Action','Action'),('Adventure','Adventure'),('Animation','Animation'),('Biography','Biography'),('Comedy','Comedy'),('Crime','Crime'),('Drama','Drama'),('Film-Noir','Film-Noir'),('Horror','Horror'),('Mystery','Mystery'),('Western','Western')])
+    release_date = StringField('Release date')
     director = StringField('Director', validators=[DataRequired()])
     plot_summary = TextAreaField('Plot summary', validators=[Length(min=0, max=300)])
     rating_value = DecimalField(label='Rating', validators=[DataRequired()])

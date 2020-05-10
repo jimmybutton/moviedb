@@ -10,38 +10,45 @@
 </h2>
 {% endblock %}
 {% block content %}
-<div class="bg-white shadow overflow-hidden sm:rounded-lg">
+<div class="bg-gray-50 shadow overflow-hidden sm:rounded-lg">
   <form action="" method="post">
     {{ form.hidden_tag() }}
     {% for field in form %}
-    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+      <div class="px-4 py-2">
       {% if field.type == "BooleanField" %}
-      {{ field }} {{ field.label }}<br>
+      {{ field }} {{ field.label }}
       {% elif field.type == "StringField" %}
-      {{ field.label }}
-      {{ field(size=64) }}
+      {{ field.label(class_="block text-gray-700 text-sm font-bold mb-2") }}
+      {{ field(size=64, class_="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline") }}
       {% elif field.type == "TextAreaField" %}
-      {{ field.label }}<br>
-      {{ field(cols=64, rows=4) }}<br>
+      {{ field.label(class_="block text-gray-700 text-sm font-bold mb-2") }}
+      {{ field(cols=64, rows=4, class_="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline") }}
       {% elif field.type == "DecimalField" %}
-      {{ field.label }}<br>
-      {{ field }}<br>
+      {{ field.label(class_="block text-gray-700 text-sm font-bold mb-2") }}
+      {{ field(class_="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline") }}
       {% elif field.type == "IntegerField" %}
-      {{ field.label }}<br>
-      {{ field }}<br>
+      {{ field.label(class_="block text-gray-700 text-sm font-bold mb-2") }}
+      {{ field(class_="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline") }}
+      {% elif field.type == "DateField" %}
+      {{ field.label(class_="block text-gray-700 text-sm font-bold mb-2") }}
+      {{ field(class_="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline") }}
+      {% elif field.type == "SelectField" %}
+      {{ field.label(class_="block text-gray-700 text-sm font-bold mb-2") }}
+      {{ field(class_="form-select appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline") }}
       {% endif %}
       {% for error in field.errors %}
       <span style="color: red;">[{{ error }}]</span>
       {% endfor %}
-    </div>
+      </div>
     {% endfor %}
-    <p>{{ form.submit(class_="btn btn-indigo") }}
+    <div class="px-4 py-5 text-right">
       {% if movie %}
-      <a class="btn ml-1" href="{{ url_for('movie', id=movie.id) }}">Cancel</a>
+      <a class="btn-indigo mr-1" href="{{ url_for('movie', id=movie.id) }}">Cancel</a>
       {% else %}
-      <a href="{{ url_for('movies') }}" class="btn ml-1"></a>
+      <a href="{{ url_for('movies') }}" class="btn-white mr-1">Cancel</a>
       {% endif %}
-    </p>
+      {{ form.submit(class_="btn-indigo") }}
+    </div>
   </form>
 </div>
 {% endblock %}

@@ -1,36 +1,36 @@
 @tailwind base;
 @tailwind components;
 
-.btn {
-    @apply py-2 px-4 rounded-md border border-transparent font-medium bg-gray-500 text-white font-bold transition duration-150;
+.btn-white {
+    @apply py-2 px-4 text-sm rounded-md border border-gray-300 leading-5 font-medium bg-white text-gray-700 font-medium transition duration-150;
 }
 
-.btn:hover {
-    @apply bg-gray-700;
+.btn-white:hover {
+    @apply text-gray-500;
 }
 
-.btn:focus {
-    @apply outline-none shadow-outline-gray;
+.btn-white:focus {
+    @apply outline-none shadow-outline-indigo border-indigo-300;
 }
 
-.btn:active {
-    @apply bg-gray-600;
+.btn-white:active {
+    @apply bg-gray-50 text-gray-800;
 }
 
 .btn-indigo {
+    @apply px-4 py-2 text-sm border border-transparent leading-5 font-medium rounded-md text-white bg-indigo-600 transition duration-150 ease-in-out;
+}
+
+.btn-indigo:hover {
     @apply bg-indigo-500;
 }
 
-.btn:hover {
+.btn-indigo:focus {
+    @apply outline-none shadow-outline-indigo border-indigo-700;
+}
+
+.btn-indigo:active {
     @apply bg-indigo-700;
-}
-
-.btn:focus {
-    @apply shadow-outline-indigo;
-}
-
-.btn:active {
-    @apply bg-indigo-600;
 }
 
 .inline-link {
@@ -100,20 +100,11 @@ dl>div>dt {
 dl>div>dd {
     @apply mt-1 text-sm leading-5 text-gray-900;
 }
-label {
-    @apply block text-sm leading-5 font-medium text-gray-700;
-}
-input {
-    @apply mt-1 relative rounded-md form-input block pl-7 pr-12;
-}
 @screen sm{
     dl>div {
         @apply grid grid-cols-3 gap-4 px-6;
     }
     dl>div>dd {
-        @apply mt-0 col-span-2;
-    }
-    input {
         @apply mt-0 col-span-2;
     }
 }
