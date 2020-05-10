@@ -86,27 +86,15 @@ tr:hover {
 }
 
 dl>div {
-    @apply bg-white px-4 py-5;
-}
-
-dl>div:nth-child(odd) {
-    @apply bg-gray-50;
+    @apply w-full mb-6;
 }
 
 dl>div>dt {
-    @apply text-sm leading-5 font-medium text-gray-500;
+    @apply block leading-5 font-medium text-gray-500 mb-1;
 }
 
 dl>div>dd {
-    @apply mt-1 text-sm leading-5 text-gray-900;
-}
-@screen sm{
-    dl>div {
-        @apply grid grid-cols-3 gap-4 px-6;
-    }
-    dl>div>dd {
-        @apply mt-0 col-span-2;
-    }
+    @apply text-gray-900;
 }
 
 
