@@ -989,8 +989,8 @@ video {
 
 .inline-link:hover {
   --text-opacity: 1;
-  color: #6875f5;
-  color: rgba(104, 117, 245, var(--text-opacity));
+  color: #362f78;
+  color: rgba(54, 47, 120, var(--text-opacity));
 }
 
 .inline-link:focus {
@@ -1072,7 +1072,11 @@ table th {
   letter-spacing: 0.05em;
 }
 
-table th:hover {
+table th.clickable {
+  cursor: pointer;
+}
+
+table th.clickable:hover {
   --bg-opacity: 1;
   background-color: #f4f5f7;
   background-color: rgba(244, 245, 247, var(--bg-opacity));

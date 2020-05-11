@@ -41,18 +41,16 @@
   </div>
   <div class="mt-5 flex lg:mt-0 lg:ml-4">
     <span class="hidden sm:block shadow-sm rounded-md">
-      <a href="{{ url_for('delete_movie', id=movie.id) }}" type="button"
-        class="inline-flex items-center btn-white">
+      <a href="{{ url_for('delete_movie', id=movie.id) }}" type="button" class="inline-flex items-center btn-white">
         <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M6 2l2-2h4l2 2h4v2H2V2h4zM3 6h14l-1 14H4L3 6zm5 2v10h1V8H8zm3 0v10h1V8h-1z"/>
+          <path d="M6 2l2-2h4l2 2h4v2H2V2h4zM3 6h14l-1 14H4L3 6zm5 2v10h1V8H8zm3 0v10h1V8h-1z" />
         </svg>
         Delete
       </a>
     </span>
 
     <span class="sm:ml-3 shadow-sm rounded-md">
-      <a href="{{ url_for('edit_movie', id=movie.id) }}" type="button"
-        class="inline-flex items-center btn-indigo">
+      <a href="{{ url_for('edit_movie', id=movie.id) }}" type="button" class="inline-flex items-center btn-indigo">
         <svg class="-ml-1 mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
           <path
             d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
@@ -167,132 +165,94 @@
                 <table class="min-w-full">
                   <thead>
                     <tr>
-                      <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                      <th>
                         Name
                       </th>
-                      <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                        Title
-                      </th>
-                      <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                        Status
-                      </th>
-                      <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                      <th>
                         Role
                       </th>
-                      <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody class="bg-white">
                     <tr>
-                      <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                      <td>
                         <div class="flex items-center">
                           <div class="flex-shrink-0 h-10 w-10">
-                            <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+                            <img class="h-10 w-10 rounded-full"
+                              src="https://m.media-amazon.com/images/M/MV5BOGY2MjI5MDQtOThmMC00ZGIwLWFmYjgtYWU4MzcxOGEwMGVkXkEyXkFqcGdeQXVyMzM4MjM0Nzg@._V1_UY317_CR175,0,214,214_AL_.jpg"
+                              alt="" />
                           </div>
                           <div class="ml-4">
-                            <div class="text-sm leading-5 font-medium text-gray-900">Bernard Lane</div>
-                            <div class="text-sm leading-5 text-gray-500">bernardlane@example.com</div>
+                            <div class="text-sm leading-5 font-medium text-gray-900">
+                              <a href="#" class="inline-link">Mark Hamill</a>
+                            </div>
                           </div>
                         </div>
                       </td>
-                      <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                        <div class="text-sm leading-5 text-gray-900">Director</div>
-                        <div class="text-sm leading-5 text-gray-500">Human Resources</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                          Active
-                        </span>
-                      </td>
-                      <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500">
-                        Owner
-                      </td>
-                      <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                        <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                      <td>Luke Skywalker</td>
+                      <td>
+                        <a href="#" class="inline-link">Edit</a>
                       </td>
                     </tr>
                     <tr>
-                      <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                      <td>
                         <div class="flex items-center">
                           <div class="flex-shrink-0 h-10 w-10">
-                            <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1532910404247-7ee9488d7292?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+                            <img class="h-10 w-10 rounded-full"
+                              src="https://m.media-amazon.com/images/M/MV5BMTY4Mjg0NjIxOV5BMl5BanBnXkFtZTcwMTM2NTI3MQ@@._V1_UX214_CR0,6,214,214_AL_.jpg"
+                              alt="" />
                           </div>
                           <div class="ml-4">
-                            <div class="text-sm leading-5 font-medium text-gray-900">Bernard Lane</div>
-                            <div class="text-sm leading-5 text-gray-500">bernardlane@example.com</div>
+                            <div class="text-sm leading-5 font-medium text-gray-900">
+                              <a href="#" class="inline-link">Harrison Ford</a>
+                            </div>
                           </div>
                         </div>
                       </td>
-                      <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                        <div class="text-sm leading-5 text-gray-900">Director</div>
-                        <div class="text-sm leading-5 text-gray-500">Human Resources</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                          Active
-                        </span>
-                      </td>
-                      <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500">
-                        Owner
-                      </td>
-                      <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                        <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                      <td>Han Solo</td>
+                      <td>
+                        <a href="#" class="inline-link">Edit</a>
                       </td>
                     </tr>
                     <tr>
-                      <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                      <td>
                         <div class="flex items-center">
                           <div class="flex-shrink-0 h-10 w-10">
-                            <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1505503693641-1926193e8d57?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+                            <img class="h-10 w-10 rounded-full"
+                              src="https://m.media-amazon.com/images/M/MV5BMjM4ODU5MDY4MV5BMl5BanBnXkFtZTgwODY1MjQ5MDI@._V1_UX214_CR0,0,214,214_AL_.jpg"
+                              alt="" />
                           </div>
                           <div class="ml-4">
-                            <div class="text-sm leading-5 font-medium text-gray-900">Bernard Lane</div>
-                            <div class="text-sm leading-5 text-gray-500">bernardlane@example.com</div>
+                            <div class="text-sm leading-5 font-medium text-gray-900">
+                              <a href="#" class="inline-link">Carrie Fisher</a>
+                            </div>
                           </div>
                         </div>
                       </td>
-                      <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                        <div class="text-sm leading-5 text-gray-900">Director</div>
-                        <div class="text-sm leading-5 text-gray-500">Human Resources</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                          Inactive
-                        </span>
-                      </td>
-                      <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500">
-                        Owner
-                      </td>
-                      <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                        <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                      <td>Princess Leia</td>
+                      <td>
+                        <a href="#" class="inline-link">Edit</a>
                       </td>
                     </tr>
                     <tr>
-                      <td class="px-6 py-4 whitespace-no-wrap">
+                      <td>
                         <div class="flex items-center">
                           <div class="flex-shrink-0 h-10 w-10">
-                            <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+                            <img class="h-10 w-10 rounded-full"
+                              src="https://m.media-amazon.com/images/M/MV5BNDI4MDQ2NTUzNV5BMl5BanBnXkFtZTYwNjA4NzUz._V1_UY317_CR6,0,214,214_AL_.jpg"
+                              alt="" />
                           </div>
                           <div class="ml-4">
-                            <div class="text-sm leading-5 font-medium text-gray-900">Bernard Lane</div>
-                            <div class="text-sm leading-5 text-gray-500">bernardlane@example.com</div>
+                            <div class="text-sm leading-5 font-medium text-gray-900">
+                              <a href="#" class="inline-link">Billy Dee Williams</a>
+                            </div>
                           </div>
                         </div>
                       </td>
-                      <td class="px-6 py-4 whitespace-no-wrap">
-                        <div class="text-sm leading-5 text-gray-900">Director</div>
-                        <div class="text-sm leading-5 text-gray-500">Human Resources</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-no-wrap">
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                          Inactive
-                        </span>
-                      </td>
-                      <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                        Owner
-                      </td>
-                      <td class="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
-                        <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                      <td>Lando Calrissian</td>
+                      <td>
+                        <a href="#" class="inline-link">Edit</a>
                       </td>
                     </tr>
                   </tbody>
