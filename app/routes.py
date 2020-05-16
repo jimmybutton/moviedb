@@ -8,6 +8,7 @@ from datetime import datetime
 import csv
 from io import StringIO
 from werkzeug.wrappers import Response
+from app.utils import paginate
 
 
 @app.route("/")
@@ -20,10 +21,10 @@ def home():
 @login_required
 def movies():
     page = request.args.get("page", 1, type=int)
-    order_by = request.args.get("order_by", "title", type=str)
-    sort = request.args.get("sort", "asc", type=str)
+    order_by = request.args.get("order_by", "rating_value", type=str)
+    sort = request.args.get("sort", "desc", type=str)
     if order_by not in [i for i in Movie.__dict__.keys() if i[:1] != '_']:
-        order_by = "title"
+        order_by = "rating_value"
     order_by_field = Movie.__dict__[order_by]
     order_method = order_by_field.desc() if sort == "desc" else order_by_field.asc()
     movies = Movie.query.order_by(order_method).paginate(
@@ -31,6 +32,7 @@ def movies():
     )
     next_url = url_for("movies", page=movies.next_num, order_by=order_by, sort=sort) if movies.has_next else None
     prev_url = url_for("movies", page=movies.prev_num, order_by=order_by, sort=sort) if movies.has_prev else None
+    pages = [{'page': p, 'url': url_for("movies", page=p, order_by=order_by, sort=sort)} for p in paginate(current_page=page, total_pages=movies.pages, num_links=5)]
     return render_template(
         "movies.html",
         title="Movies",
@@ -38,7 +40,8 @@ def movies():
         next_url=next_url,
         prev_url=prev_url,
         order_by=order_by,
-        sort=sort
+        sort=sort,
+        pages=pages
     )
 
 

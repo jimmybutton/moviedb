@@ -15,10 +15,29 @@ def import_movies(movies):
         db.session.add(movie)
     db.session.commit()
 
-with open('movies.json', "r") as fp:
-    movies = json.load(fp)
+def paginate(current_page=1, total_pages=10, num_links=5):
+    m = total_pages
+    n = current_page
+    l = int((num_links - 1) / 2)  # number of page links to left and right
 
-user = User.query.get(1)
+    if n <= 0 or n > m:
+        raise ValueError(f'Current page {n} out of total page range {m}')
 
-delete_movies()
-import_movies(movies)
+    if m < num_links:
+        return list(range(1, m+1))
+    else:
+        if n <= l:
+            return list(range(1, 2*l + 2))
+        elif n > l and n <= m - l:
+            return list(range(n - l, n + l + 1))
+        elif n > m - l:
+            return list(range(m - 2 * l, m+1))
+
+if __name__ == "__main__":
+    with open('movies.json', "r") as fp:
+        movies = json.load(fp)
+
+    user = User.query.get(1)
+
+    delete_movies()
+    import_movies(movies)
