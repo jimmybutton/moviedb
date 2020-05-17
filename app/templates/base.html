@@ -20,13 +20,13 @@
           </div>
           <div class="hidden md:block">
             <div class="nav ml-10 flex items-baseline">
-              <a href="{{ url_for('home') }}" class="nav-item {% block nav_home %}{% endblock %}">
+              <a href="{{ url_for('main.home') }}" class="nav-item {% block nav_home %}{% endblock %}">
                 Dashboard</a>
-              <a href="{{ url_for('movies') }}" class="ml-4 nav-item {% block nav_movies %}{% endblock %}">
+              <a href="{{ url_for('main.movies') }}" class="ml-4 nav-item {% block nav_movies %}{% endblock %}">
                 Movies</a>
-              <a href="{{ url_for('actors') }}" class="ml-4 nav-item {% block nav_actors %}{% endblock %}">
+              <a href="{{ url_for('main.actors') }}" class="ml-4 nav-item {% block nav_actors %}{% endblock %}">
                 People</a>
-              <a href="{{ url_for('users') }}" class="ml-4 nav-item {% block nav_users %}{% endblock %}">
+              <a href="{{ url_for('main.users') }}" class="ml-4 nav-item {% block nav_users %}{% endblock %}">
                 User</a>
             </div>
           </div>
@@ -66,12 +66,12 @@
               <div class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg hidden" id="user-dropdown">
                 <div class="py-1 rounded-md bg-white shadow-xs" role="menu" aria-orientation="vertical"
                   aria-labelledby="user-menu">
-                  <a href="{{ url_for('user', username=current_user.username) }}"
+                  <a href="{{ url_for('main.user', username=current_user.username) }}"
                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
                     Your Profile</a>
                   <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
                     Settings</a>
-                  <a href="{{ url_for('logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     role="menuitem">
                     Sign out</a>
                 </div>

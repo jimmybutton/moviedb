@@ -43,9 +43,9 @@
     {% endfor %}
     <div class="px-4 py-5 text-right">
       {% if movie %}
-      <a class="btn-indigo mr-1" href="{{ url_for('movie', id=movie.id) }}">Cancel</a>
+      <a class="btn-indigo mr-1" href="{{ url_for('main.movie', id=movie.id) }}">Cancel</a>
       {% else %}
-      <a href="{{ url_for('movies') }}" class="btn-white mr-1">Cancel</a>
+      <a href="{{ url_for('main.movies') }}" class="btn-white mr-1">Cancel</a>
       {% endif %}
       {{ form.submit(class_="btn-indigo") }}
     </div>
