@@ -1,4 +1,4 @@
-from flask import render_template, flash, url_for, redirect, request, current_app
+from flask import render_template, flash, url_for, redirect, request, current_app, Markup
 from app import db
 from app.main import bp
 from app.main.forms import EditProfileForm, EditMovieForm, DeleteItemForm
@@ -104,17 +104,32 @@ def movie(id):
 def movie_create():
     form = EditMovieForm()
     if form.validate_on_submit():
-        movie = Movie(
-            title=form.title.data,
-            year=form.year.data,
-            description=form.description.data,
-            stars=form.stars.data,
-            created_by=current_user
-        )
+        movie = Movie()
+        # for k,v in form.__dict__.items():
+        #     if not k.startswith('_') and k not in ['meta', 'submit', 'csrf_token']:
+        #         if v.data:
+        #             movie.__dict__[k] = v.data
+        movie.title = form.title.data 
+        movie.year = form.year.data 
+        movie.certificate = form.certificate.data
+        movie.category = form.category.data
+        movie.release_date = form.release_date.data
+        movie.plot_summary = form.plot_summary.data
+        movie.director = form.director.data
+        movie.rating_value = form.rating_value.data
+        movie.rating_count = form.rating_count.data 
+        movie.poster_url = form.poster_url.data
+        movie.runtime = form.runtime.data 
+        movie.url = form.url.data
+
+        movie.created_by = current_user
         db.session.add(movie)
         db.session.commit()
-        flash("Movie {} added.".format(movie.title))
-        return redirect(url_for("main.movie", id=movie.id))
+        flash(Markup(f"""Movie <a href="{url_for('main.movie', id=movie.id)}" class="inline-link">{movie.title}</a> created.""".format()))
+        if form.submit._value() == 'Create and New':
+            return redirect(url_for("main.movie_create"))
+        else:
+            return redirect(url_for("main.movie", id=movie.id))
     return render_template("movie_create.html", form=form)
 
 
@@ -127,18 +142,45 @@ def edit_movie(id):
         flash("Movie with id={} not found.".format(id))
         return redirect(url_for("movies"))
     if form.validate_on_submit():
-        for k,v in movie.__dict__.items():
-            if not k.startswith('_') and k not in ['id', 'created_by', 'created_id', 'created_timestamp', 'modified_by', 'modified_id', 'modified_timestamp']:
-                v = form.__dict__[k].data
+        # for k,v in form.__dict__.items():
+        #     if not k.startswith('_') and k not in ['meta', 'submit', 'csrf_token']:
+        #         if v.data:
+        #             movie.__dict__[k] = v.data
+        movie.title = form.title.data 
+        movie.year = form.year.data 
+        movie.certificate = form.certificate.data
+        movie.category = form.category.data
+        movie.release_date = form.release_date.data
+        movie.plot_summary = form.plot_summary.data
+        movie.director = form.director.data
+        movie.rating_value = form.rating_value.data
+        movie.rating_count = form.rating_count.data 
+        movie.poster_url = form.poster_url.data
+        movie.runtime = form.runtime.data 
+        movie.url = form.url.data
+
         movie.modified_by = current_user
         db.session.add(movie)
         db.session.commit()
         flash("Movie {} has been updated.".format(movie.title))
         return redirect(url_for("main.movie", id=movie.id))
     elif request.method == "GET":
-        for k,v in movie.__dict__.items():
-            if not k.startswith('_') and k not in ['id', 'created_by', 'created_id', 'created_timestamp', 'modified_by', 'modified_id', 'modified_timestamp']:
-                form.__dict__[k].data = v
+        # for k,v in movie.__dict__.items():
+        #     if not k.startswith('_') and k not in ['id', 'created_by', 'created_id', 'created_timestamp', 'modified_by', 'modified_id', 'modified_timestamp']:
+        #         form.__dict__[k].data = v
+        form.title.data = movie.title
+        form.year.data = movie.year 
+        form.certificate.data = movie.certificate
+        form.category.data = movie.category
+        form.release_date.data = movie.release_date
+        form.plot_summary.data = movie.plot_summary
+        form.director.data = movie.director
+        form.rating_value.data = movie.rating_value
+        form.rating_count.data = movie.rating_count 
+        form.poster_url.data = movie.poster_url
+        form.runtime.data = movie.runtime 
+        form.url.data = movie.url
+
     return render_template("movie_create.html", form=form, movie=movie)
 
 @bp.route("/movie/<id>/delete", methods=["GET", "POST"])

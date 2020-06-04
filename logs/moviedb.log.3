@@ -1,0 +1,70 @@
+2020-05-19 09:03:47,363 ERROR: Exception on /create_movie [POST] [in C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py:1891]
+Traceback (most recent call last):
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1175, in _execute_context
+    context = constructor(dialect, self, conn, *args)
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\default.py", line 836, in _init_compiled
+    param.append(processors[key](compiled_params[key]))
+TypeError: float() argument must be a string or a number, not 'DecimalField'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\samul\projects\moviedb\app\main\routes.py", line 113, in movie_create
+    db.session.commit()
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\scoping.py", line 162, in do
+    return getattr(self.registry(), name)(*args, **kwargs)
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 1036, in commit
+    self.transaction.commit()
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 503, in commit
+    self._prepare_impl()
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 482, in _prepare_impl
+    self.session.flush()
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2496, in flush
+    self._flush(objects)
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2637, in _flush
+    transaction.rollback(_capture_exception=True)
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 68, in __exit__
+    compat.raise_(
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\util\compat.py", line 178, in raise_
+    raise exception
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2597, in _flush
+    flush_context.execute()
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 422, in execute
+    rec.execute(self)
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 586, in execute
+    persistence.save_obj(
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\persistence.py", line 239, in save_obj
+    _emit_insert_statements(
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\persistence.py", line 1135, in _emit_insert_statements
+    result = cached_connections[connection].execute(
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 984, in execute
+    return meth(self, multiparams, params)
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 293, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1097, in _execute_clauseelement
+    ret = self._execute_context(
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1177, in _execute_context
+    self._handle_dbapi_exception(
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1481, in _handle_dbapi_exception
+    util.raise_(
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\util\compat.py", line 178, in raise_
+    raise exception
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1175, in _execute_context
+    context = constructor(dialect, self, conn, *args)
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\default.py", line 836, in _init_compiled
+    param.append(processors[key](compiled_params[key]))
+sqlalchemy.exc.StatementError: (builtins.TypeError) float() argument must be a string or a number, not 'DecimalField'
+[SQL: INSERT INTO movie (created_timestamp, created_id, modified_timestamp, modified_id, title, year, certificate, category, release_date, plot_summary, director, rating_value, rating_count, poster_url, runtime, url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]
+[parameters: [{'certificate': <wtforms.fields.core.SelectField object at 0x05A1EAD8>, 'rating_value': <wtforms.fields.core.DecimalField object at 0x05A6C2E0>, 'url ... (572 characters truncated) ... forms.fields.core.StringField object at 0x05A6C310>, 'plot_summary': <wtforms.fields.simple.TextAreaField object at 0x05A6C538>, 'modified_id': None}]]

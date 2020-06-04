@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField, DecimalField, SelectField, DateField
-from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length
+from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length, NumberRange
 from app.models import User
 from datetime import date
 
@@ -22,28 +22,28 @@ class EditProfileForm(FlaskForm):
     
 class EditMovieForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
-    year = IntegerField('Year', validators=[DataRequired()])
+    year = SelectField('Year', validators=[DataRequired()], choices=[(str(y), str(y)) for y in range(int(date.today().year), 1900, -1)])
     certificate = SelectField('Certificate', choices=[('U','U'),('12','12'),('12A','12A'),('15','15'),('18','18'),('R18','R18'),('A','A'),('PG','PG'),('U/A','U/A'),('S','S'),('X','X')])
     category = SelectField('Category', choices=[('Action','Action'),('Adventure','Adventure'),('Animation','Animation'),('Biography','Biography'),('Comedy','Comedy'),('Crime','Crime'),('Drama','Drama'),('Film-Noir','Film-Noir'),('Horror','Horror'),('Mystery','Mystery'),('Western','Western')])
     release_date = StringField('Release date')
     director = StringField('Director', validators=[DataRequired()])
     plot_summary = TextAreaField('Plot summary', validators=[Length(min=0, max=300)])
-    rating_value = DecimalField(label='Rating', validators=[DataRequired()])
-    rating_count = IntegerField(label='Rating count', validators=[DataRequired()])
-    runtime = IntegerField(label='Runtime (min)', validators=[DataRequired()])
-    poster_url = StringField('Poster URL', validators=[DataRequired()])
-    url = StringField('URL', validators=[DataRequired()])
+    rating_value = DecimalField(label='Rating', validators=[NumberRange(min=0, max=10)])
+    rating_count = IntegerField(label='Rating count', validators=[NumberRange(min=0)])
+    runtime = IntegerField(label='Runtime (min)')
+    poster_url = StringField('Poster URL')
+    url = StringField('URL')
     submit = SubmitField('Submit')
 
-    def validate_year(self, year):
-        min_year = 1900
-        max_year = date.today().year
-        if year.data < min_year or year.data > max_year:
-            raise ValidationError('Please use a year between {} and {}.'.format(min_year, max_year))
+    # def validate_year(self, year):
+    #     min_year = 1800
+    #     max_year = date.today().year
+    #     if year.data < min_year or year.data > max_year:
+    #         raise ValidationError('Please use a year between {} and {}.'.format(min_year, max_year))
     
-    def validate_stars(self, stars):
-        if stars.data < 0 or stars.data > 10:
-            raise ValidationError('Please use a number between 0 and 10.')
+    # def validate_stars(self, stars):
+    #     if stars.data < 0 or stars.data > 10:
+    #         raise ValidationError('Please use a number between 0 and 10.')
 
 class DeleteItemForm(FlaskForm):
     submit = SubmitField('Delete')
