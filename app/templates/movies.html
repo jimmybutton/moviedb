@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block nav_movies %}active{% endblock %}
 {% block header %}
-<div class="lg:flex lg:items-center lg:justify-between">
+<div class="md:flex md:items-center md:justify-between">
   <div class="flex-1 min-w-0">
     <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:leading-9 sm:truncate">
       Movies
     </h2>
   </div>
-  <div class="mt-5 flex lg:mt-0 lg:ml-4">
+  <div class="mt-5 flex md:mt-0 md:ml-4">
     <span class="hidden sm:block shadow-sm rounded-md">
       <button type="button" class="inline-flex items-center btn-white">
         <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
@@ -71,12 +71,17 @@
 {% else %}
 {% set new_sort = 'desc' %}
 {% endif %}
+<!-- Set variables for pagination -->
+{% set page = movies.page %}
+{% set per_page = movies.per_page %}
+{% set total_pages = movies.total %}
 
-<div class="-mt-4">
-  {% set page = movies.page %}
-  {% set per_page = movies.per_page %}
-  {% set total_pages = movies.total %}
-  {% include '_pager.html' %}
+<div class="mb-2">
+  {% if search_form %}
+  <form action="{{ url_for('main.movies') }}" method="get">
+    {{ search_form.q(size=20, class='form-input', placeholder=search_form.q.label.text) }}
+  </form>
+  {% endif %}
 </div>
 
 <div class="flex flex-col">
@@ -84,7 +89,7 @@
     <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
       <table class="min-w-full">
         <thead>
-          <tr>
+          <tr class="">
             <th data-href="{{ url_for('main.movies', order_by='title', sort=new_sort) }}" class="clickable">
               <a href="{{ url_for('main.movies', order_by='title', sort=new_sort) }}">Title
                 {% if order_by == 'title' %}
@@ -132,15 +137,15 @@
         <tbody class="bg-white">
           {% for movie in movies.items %}
           <tr>
-            <td data-href="{{ url_for('main.movie', id=movie.id) }}" class="cursor-pointer">
+            <td data-href="{{ url_for('main.movie', id=movie.id) }}" class="cursor-pointer py-1">
               <div class="flex items-center">
-                <div class="flex-shrink-0 h-16">
-                  <img class="h-16"
+                <div class="flex-shrink-0">
+                  <img class="h-12"
                     src="{{ movie.poster_url }}"
                     alt="" />
                 </div>
                 <div class="ml-4">
-                  <div><a href="{{ url_for('main.movie', id=movie.id) }}" class="inline-link">{{ movie.title }}</a></div>
+                  <div><a href="{{ url_for('main.movie', id=movie.id) }}" class="inline-link sm:truncate">{{ movie.title }}</a></div>
                 </div>
               </div>
             </td>

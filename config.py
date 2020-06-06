@@ -10,6 +10,6 @@ class Config(object):
     ) or "sqlite:///" + os.path.join(basedir, "app.db")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    ITEMS_PER_PAGE = 25
+    ITEMS_PER_PAGE = 10
 
     ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')

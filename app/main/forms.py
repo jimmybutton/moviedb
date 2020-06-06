@@ -3,6 +3,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextA
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length, NumberRange
 from app.models import User
 from datetime import date
+from flask import request
 
 
 class EditProfileForm(FlaskForm):
@@ -47,3 +48,14 @@ class EditMovieForm(FlaskForm):
 
 class DeleteItemForm(FlaskForm):
     submit = SubmitField('Delete')
+
+class SearchForm(FlaskForm):
+    q = StringField('Search')
+
+    def __init__(self, *args, **kwargs):
+        if 'formdata' not in kwargs:
+            kwargs['formdata'] = request.args
+        if 'csrf_enabled' not in kwargs:
+            kwargs['csrf_enabled'] = False
+        super(SearchForm, self).__init__(*args, **kwargs)
+    

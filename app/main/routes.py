@@ -1,7 +1,7 @@
 from flask import render_template, flash, url_for, redirect, request, current_app, Markup
 from app import db
 from app.main import bp
-from app.main.forms import EditProfileForm, EditMovieForm, DeleteItemForm
+from app.main.forms import EditProfileForm, EditMovieForm, DeleteItemForm, SearchForm
 from flask_login import current_user, login_required
 from app.models import User, Movie
 from datetime import datetime
@@ -9,6 +9,7 @@ import csv
 from io import StringIO
 from werkzeug.wrappers import Response
 from app.utils import paginate
+from math import ceil
 
 
 @bp.route("/")
@@ -21,22 +22,36 @@ def home():
 @login_required
 def movies():
     page = request.args.get("page", 1, type=int)
+    per_page = request.args.get("per_page", current_app.config["ITEMS_PER_PAGE"], type=int)
     order_by = request.args.get("order_by", "rating_value", type=str)
     sort = request.args.get("sort", "desc", type=str)
-    if order_by not in [i for i in Movie.__dict__.keys() if i[:1] != '_']:
-        order_by = "rating_value"
-    order_by_field = Movie.__dict__[order_by]
-    order_method = order_by_field.desc() if sort == "desc" else order_by_field.asc()
-    movies = Movie.query.order_by(order_method).paginate(
-        page, current_app.config["ITEMS_PER_PAGE"], False
-    )
-    next_url = url_for("main.movies", page=movies.next_num, order_by=order_by, sort=sort) if movies.has_next else None
-    prev_url = url_for("main.movies", page=movies.prev_num, order_by=order_by, sort=sort) if movies.has_prev else None
-    pages = [{'page': p, 'url': url_for("main.movies", page=p, order_by=order_by, sort=sort)} for p in paginate(current_page=page, total_pages=movies.pages, num_links=5)]
+    q = request.args.get("q", "", type=str)
+    if q:
+        movies, total = Movie.search(q, page, per_page)
+        movies.items = movies
+        movies.page = page
+        movies.per_page = per_page
+        movies.total = total
+        movies.has_next = True if total > page * per_page else False
+        movies.has_prev = True if page > 1 else False
+        movies.pages = ceil(total / per_page)
+    else:
+        if order_by not in [i for i in Movie.__dict__.keys() if i[:1] != '_']:
+            order_by = "rating_value"
+        order_by_field = Movie.__dict__[order_by]
+        order_method = order_by_field.desc() if sort == "desc" else order_by_field.asc()
+        movies = Movie.query.order_by(order_method).paginate(
+            page, per_page, False
+        )
+    search_form = SearchForm()
+    next_url = url_for("main.movies", page=page-1, order_by=order_by, sort=sort, q=q) if movies.has_next else None
+    prev_url = url_for("main.movies", page=page+1, order_by=order_by, sort=sort, q=q) if movies.has_prev else None
+    pages = [{'page': p, 'url': url_for("main.movies", page=p, order_by=order_by, sort=sort, q=q)} for p in paginate(current_page=page, total_pages=movies.pages, num_links=5)]
     return render_template(
         "movies.html",
         title="Movies",
         movies=movies,
+        search_form=search_form,
         next_url=next_url,
         prev_url=prev_url,
         order_by=order_by,
