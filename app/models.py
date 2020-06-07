@@ -103,6 +103,22 @@ class Movie(SearchableMixin, db.Model):
     def displayname(self):
         return f"{self.title} ({self.year})"
 
+    def to_dict(self):
+        data = {
+            'id': self.id,
+            'title': self.title,
+            'year': self.year,
+            'certificate': self.certificate,
+            'category': self.category,
+            'release_date': self.release_date,
+            'plot_summary': self.plot_summary,
+            'director': self.director,
+            'rating_value': self.rating_value,
+            'poster_url': self.poster_url,
+            'runtime': self.runtime,
+            'modified_timestamp': self.modified_timestamp
+        }
+        return data
 
 @login.user_loader
 def load_user(id):

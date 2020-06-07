@@ -9,7 +9,7 @@ import csv
 from io import StringIO
 from werkzeug.wrappers import Response
 from app.utils import paginate
-from math import ceil
+from math import ceil, floor
 
 
 @bp.route("/")
@@ -17,8 +17,34 @@ from math import ceil
 def home():
     return render_template("home.html", title="Dashboard")
 
+@bp.route("/movies_json", methods=['GET'])
+@login_required
+def movies_json():
+    search = request.args.get("search", "", type=str)  # full text search
+    sort = request.args.get("sort", "", type=str)  # field to sort by
+    order = request.args.get("order", "desc", type=str)  # desc or asc
+    offset = request.args.get("offset", 0, type=int)  # start item
+    limit = request.args.get("limit", current_app.config["ITEMS_PER_PAGE"], type=int)  # per page
+    page = floor(offset / limit) + 1  # estimage page from offset
+    if search:
+        # in this case, sort by search score
+        movies, total = Movie.search(search, page, limit)
+    else:
+        if sort not in [i for i in Movie.__dict__.keys() if i[:1] != '_']:
+            sort = "rating_value"
+        sort_field = Movie.__dict__[sort]
+        order_method = sort_field.desc() if order == "desc" else sort_field.asc()
+        movies_query = Movie.query.order_by(order_method).paginate(
+            page, limit, False
+        )
+        movies = movies_query.items
+        total = movies_query.total
+    return {'total': total, 'rows': [m.to_dict() for m in movies]}
 
-@bp.route("/movies")
+
+
+
+@bp.route("/movies", methods=['GET'])
 @login_required
 def movies():
     page = request.args.get("page", 1, type=int)
