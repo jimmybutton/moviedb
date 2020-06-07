@@ -1,87 +1,231 @@
 {% extends "base.html" %}
+
 {% block nav_home %}active{% endblock %}
-{% block title %}
-Home
-{% endblock %}
+
 {% block header %}
-<div class="min-w-0">
-  <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:leading-9 sm:truncate">
-    Dashboard
-  </h2>
+<div>
+  <h3>Dashboard</h3>
+</div>
+<div class="d-flex align-items-center">
+  <div class="dropdown">
+    <button class="btn btn-light dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+      aria-haspopup="true" aria-expanded="false" style="height: 100%">
+      Menu
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" href="#">Action</a>
+      <a class="dropdown-item" href="#">Another action</a>
+      <a class="dropdown-item" href="#">Something else here</a>
+    </div>
+  </div>
+  <button class="btn btn-light ml-1 btn-sm">Refresh</button>
+  <button class="btn btn-primary ml-1 btn-sm">New</button>
 </div>
 {% endblock %}
+
 {% block content %}
-<div class="px-4 sm:px-0">
-  <h3 class="text-xl font-semibold text-gray-800 mb-2">Last 30 days</h3>
+<!-- Overview -->
+<div class="row">
+  <div class="col-sm-4">
+    <div class="card shadow-sm hover-shadow">
+      <div class="card-body py-2">
+        <div class="media">
+          <div
+            class="align-self-center d-flex align-items-center justify-content-center text-white bg-dark rounded-lg mr-3"
+            style="font-size: 18pt; width:48px; height:48px;">
+            <i class="fa fa-video-camera" aria-hidden="true"></i>
+          </div>
+          <div class="media-body my-0">
+            <span class="text-muted">Movies</span>
+            <div class="d-flex align-items-center">
+              <div class="h3 font-weight-bold mr-1">250</div>
+              <a href="#" class="badge badge-primary mb-1">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="{{ url_for('main.movies') }}">View all</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card shadow-sm hover-shadow">
+      <div class="card-body py-2">
+        <div class="media">
+          <div
+            class="align-self-center d-flex align-items-center justify-content-center text-white bg-dark rounded-lg mr-3"
+            style="font-size: 18pt; width:48px; height:48px;">
+            <i class="fa fa-suitcase" aria-hidden="true"></i>
+          </div>
+          <div class="media-body my-0">
+            <span class="text-muted">Cast</span>
+            <div class="d-flex align-items-center">
+              <div class="h3 font-weight-bold mr-1">11230</div>
+              <a href="#" class="badge badge-primary mb-1">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="#">View all</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card shadow-sm hover-shadow">
+      <div class="card-body py-2">
+        <div class="media">
+          <div
+            class="align-self-center d-flex align-items-center justify-content-center text-white bg-dark rounded-lg mr-3"
+            style="font-size: 18pt; width:48px; height:48px;">
+            <i class="fa fa-user" aria-hidden="true"></i>
+          </div>
+          <div class="media-body my-0">
+            <span class="text-muted">People</span>
+            <div class="d-flex align-items-center">
+              <div class="h3 font-weight-bold mr-1">7500</div>
+              <a href="#" class="badge badge-primary mb-1">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="#">View all</a>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="mt-2">
-  <ul class="sm:grid sm:grid-cols-2 md:grid-cols-3 sm:col-gap-4 sm:row-gap-4">
-    <li class="mb-3 md:mb-0">
-      <div
-        class="sm:rounded overflow-hidden shadow bg-white border-b border-gray-200 transition duration-200 ease-in-out hover:shadow-xl cursor-pointer">
-        <div class="flex items-center px-5 py-4 bg-white">
-          <div class="flex-shrink-0">
-            <div class="flex items-center justify-center h-12 w-12 bg-indigo-500 rounded-md text-white">
-              <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  d="M0 4c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm6 0v12h8V4H6zM2 5v2h2V5H2zm0 4v2h2V9H2zm0 4v2h2v-2H2zm14-8v2h2V5h-2zm0 4v2h2V9h-2zm0 4v2h2v-2h-2zM8 7l5 3-5 3V7z" />
-              </svg>
-            </div>
-          </div>
-          <div class="ml-5">
-            <div class="font-semibold tracking-wide -mb-2 text-gray-500">Total Movies</div>
-            <div class="text-4xl font-bold text-gray-900">250</div>
-          </div>
-        </div>
-        <div class="px-5 py-3 bg-gray-100">
-          <a href="#" class="inline-link">View all</a>
-        </div>
+
+<!-- Recent -->
+<div class="card mt-4 shadow-sm">
+  <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+          aria-selected="true">
+          Recent
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+          aria-selected="false">
+          Favourites
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card-body">
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+        Recent
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">Type</th>
+              <th scope="col">Name</th>
+              <th scope="col">Last modified</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><i class="fa fa-video-camera" aria-hidden="true"></i></td>
+              <td>Mark</td>
+              <td class="text-muted">2 days ago</td>
+            </tr>
+            <tr>
+              <td><i class="fa fa-suitcase" aria-hidden="true"></i></td>
+              <td>Jacob</td>
+              <td class="text-muted">2 days ago</td>
+            </tr>
+            <tr>
+              <td><i class="fa fa-user" aria-hidden="true"></i></td>
+              <td>Larry the Bird</td>
+              <td class="text-muted">2 days ago</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </li>
-    <li class="mb-3 md:mb-0">
-      <div
-        class="sm:rounded overflow-hidden shadow bg-white border-b border-gray-200 transition duration-200 ease-in-out hover:shadow-xl cursor-pointer">
-        <div class="flex items-center px-5 py-4">
-          <div class="flex-shrink-0">
-            <div class="flex items-center justify-center h-12 w-12 bg-indigo-500 rounded-md text-white">
-              <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  d="M7 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1c2.15 0 4.2.4 6.1 1.09L12 16h-1.25L10 20H4l-.75-4H2L.9 10.09A17.93 17.93 0 0 1 7 9zm8.31.17c1.32.18 2.59.48 3.8.92L18 16h-1.25L16 20h-3.96l.37-2h1.25l1.65-8.83zM13 0a4 4 0 1 1-1.33 7.76 5.96 5.96 0 0 0 0-7.52C12.1.1 12.53 0 13 0z" />
-              </svg>
-            </div>
-          </div>
-          <div class="ml-5">
-            <div class="font-semibold tracking-wide -mb-2 text-gray-500">Total People</div>
-            <div class="text-4xl font-bold text-gray-900">1387</div>
-          </div>
-        </div>
-        <div class="px-5 py-3 bg-gray-100">
-          <a href="#" class="inline-link">View all</a>
-        </div>
+      <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        Favourites
       </div>
-    </li>
-    <li class="mb-3 md:mb-0">
-      <div
-        class="sm:rounded overflow-hidden shadow bg-white border-b border-gray-200 transition duration-200 ease-in-out hover:shadow-xl cursor-pointer">
-        <div class="flex items-center px-5 py-4">
-          <div class="flex-shrink-0">
-            <div class="flex items-center justify-center h-12 w-12 bg-indigo-500 rounded-md text-white">
-              <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  d="M15 9a3 3 0 0 0 3-3h2a5 5 0 0 1-5.1 5 5 5 0 0 1-3.9 3.9V17l5 2v1H4v-1l5-2v-2.1A5 5 0 0 1 5.1 11H5a5 5 0 0 1-5-5h2a3 3 0 0 0 3 3V4H2v2H0V2h5V0h10v2h5v4h-2V4h-3v5z" />
-              </svg>
-            </div>
-          </div>
-          <div class="ml-5">
-            <div class="font-semibold tracking-wide -mb-2 text-gray-500">Awards</div>
-            <div class="text-4xl font-bold text-gray-900">25+</div>
-          </div>
-        </div>
-        <div class="px-5 py-3 bg-gray-100">
-          <a href="#" class="inline-link">View all</a>
-        </div>
-      </div>
-    </li>
-  </ul>
+    </div>
+  </div>
 </div>
+
+<!-- Chart -->
+<div class="card my-3 shadow-sm">
+  <div class="card-header">
+    <span class="mr-3">User stats</span>
+
+    <a class="mx-1" href="#">Last day</a>
+    <a class="mx-1" href="#">Last week</a>
+    <a class="mx-1" href="#">Last month</a>
+  </div>
+  <div class="card-body pt-1">
+    <canvas id="chLine" height="100"></canvas>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+<script>
+  $(document).ready(function () {
+    // card hover
+    $(".hover-shadow").hover(
+      function () {
+        $(this).addClass('shadow');
+      }, function () {
+        $(this).removeClass('shadow');
+      }
+    );
+
+    // chart
+    /* chart.js chart examples */
+
+    // chart colors
+    var colors = ['#007bff', '#28a745', '#333333', '#c3e6cb', '#dc3545', '#6c757d'];
+
+    /* large line chart */
+    var chLine = document.getElementById("chLine");
+    var chartData = {
+      labels: ["S", "M", "T", "W", "T", "F", "S"],
+      datasets: [{
+        data: [639, 465, 493, 478, 589, 632, 674],
+        backgroundColor: colors[3],
+        borderColor: colors[1],
+        borderWidth: 4,
+        pointBackgroundColor: colors[1]
+      }]
+    };
+
+    if (chLine) {
+      new Chart(chLine, {
+        type: 'line',
+        data: chartData,
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: false
+              }
+            }]
+          },
+          legend: {
+            display: false
+          }
+        }
+      });
+    }
+  });
+</script>
 {% endblock %}

@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+{% block nav_movies %}active{% endblock %}
+{% block header %}
+<div class="lg:flex lg:items-center lg:justify-between">
+  <div class="flex-1 min-w-0">
+    <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:leading-9 sm:truncate">
+      {{ movie.displayname }}
+    </h2>
+    <div class="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap">
+      {% if movie.created_by %}
+      <div class="mt-2 flex items-center text-sm leading-5 text-gray-500 sm:mr-6">
+        <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+            d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z"
+            clip-rule="evenodd" />
+          <path
+            d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
+        </svg>
+        <div>
+          Created by <a href="{{ url_for('main.user', username=movie.created_by.username) }}"
+            class="inline-link">{{ movie.created_by.username }}</a> on
+          {{ moment(movie.created_timestamp).format('LLL') }}
+        </div>
+      </div>
+      {% endif %}
+      {% if movie.modified_by %}
+      <div class="mt-2 flex items-center text-sm leading-5 text-gray-500 sm:mr-6">
+        <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+            d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+            clip-rule="evenodd" />
+        </svg>
+        <div>
+          Last modified by <a href="{{ url_for('main.user', username=movie.modified_by.username) }}"
+            class="inline-link">{{ movie.modified_by.username }}</a> on
+          {{ moment(movie.modified_timestamp).format('LLL') }}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="mt-5 flex lg:mt-0 lg:ml-4">
+    <span class="hidden sm:block shadow-sm rounded-md" x-data="{ open: false }">
+      <a href="{{ url_for('main.delete_movie', id=movie.id) }}" type="button" class="inline-flex items-center btn-white">
+        <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M6 2l2-2h4l2 2h4v2H2V2h4zM3 6h14l-1 14H4L3 6zm5 2v10h1V8H8zm3 0v10h1V8h-1z" />
+        </svg>
+        Delete
+      </a>
+    </span>
+
+    <span class="sm:ml-3 shadow-sm rounded-md">
+      <a href="{{ url_for('main.edit_movie', id=movie.id) }}" type="button" class="inline-flex items-center btn-indigo">
+        <svg class="-ml-1 mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+        </svg>
+        Edit
+      </a>
+    </span>
+
+    <!-- Dropdown -->
+    <span class="ml-3 relative shadow-sm rounded-md sm:hidden">
+      <button type="button"
+        class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:shadow-outline focus:border-blue-300 transition duration-150 ease-in-out"
+        id="mobile-menu" aria-haspopup="true">
+        More
+        <svg class="-mr-1 ml-2 h-5 w-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+            clip-rule="evenodd" />
+        </svg>
+      </button>
+
+      <!--
+        Dropdown panel, show/hide based on dropdown state.
+
+        Entering: "transition ease-out duration-200"
+          From: "transform opacity-0 scale-95"
+          To: "transform opacity-100 scale-100"
+        Leaving: "transition ease-in duration-75"
+          From: "transform opacity-100 scale-100"
+          To: "transform opacity-0 scale-95"
+      -->
+      <div class="origin-top-right absolute right-0 mt-2 -mr-1 w-48 rounded-md shadow-lg" aria-labelledby="mobile-menu"
+        role="menu">
+        <div class="py-1 rounded-md bg-white shadow-xs">
+          <a href="#"
+            class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+            role="menuitem">Edit</a>
+          <a href="#"
+            class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+            role="menuitem">View</a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="bg-white shadow overflow-hidden sm:rounded-lg">
+  <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+    <h3 class="text-md leading-6 font-bold text-gray-900">
+      Details
+    </h3>
+    <!-- <p class="mt-1 max-w-2xl text-sm leading-5 text-gray-500">
+      Personal details and application.
+    </p> -->
+  </div>
+  <div>
+    <dl class="flex flex-wrap mt-4 mb-6 px-4 sm:px-6">
+      <div class="md:w-1/2">
+        <dt> Title </dt>
+        <dd> {{ movie.title }} </dd>
+      </div>
+      <div class="md:w-1/2">
+        <dt> Year </dt>
+        <dd> {{ movie.year }} </dd>
+      </div>
+      <div class="md:w-1/2">
+        <dt> Director </dt>
+        <dd> {{ movie.director }} </dd>
+      </div>
+      <div class="md:w-1/2">
+        <dt> Category </dt>
+        <dd> {{ movie.category }} </dd>
+      </div>
+      <div>
+        <dt> Poster </dt>
+        <dd>
+          <img src="{{ movie.poster_url }}" alt="Poster">
+        </dd>
+      </div>
+      <div>
+        <dt> Plot summary </dt>
+        <dd>
+          {{ movie.plot_summary }} <br>Source: <a href="{{ movie.url }}" target="_blank"
+            class="inline-link">imdb.com</a>
+        </dd>
+      </div>
+      <div class="md:w-1/2">
+        <dt> Certificate </dt>
+        <dd> {{ movie.certificate }} </dd>
+      </div>
+      <div class="md:w-1/2">
+        <dt> Rating </dt>
+        <dd>
+          {{ movie.rating_value }} <span class="ml-1 text-gray-500">(based on {{ movie.rating_count }} ratings)</span>
+        </dd>
+      </div>
+      <div class="md:w-1/2">
+        <dt> Runtime </dt>
+        <dd> {{ movie.runtime }} </dd>
+      </div>
+      <div class="md:w-1/2">
+        <dt> Release date </dt>
+        <dd> {{ movie.release_date }} </dd>
+      </div>
+      <div>
+        <dt> Actors </dt>
+        <dd class="mt-2">
+          <div class="flex flex-col">
+            <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+              <div class="align-middle inline-block min-w-full overflow-hidden sm:rounded-lg border border-gray-200 shadow-xs">
+                <table class="min-w-full">
+                  <thead>
+                    <tr>
+                      <th>
+                        Name
+                      </th>
+                      <th>
+                        Role
+                      </th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white">
+                    <tr>
+                      <td>
+                        <div class="flex items-center">
+                          <div class="flex-shrink-0 h-10 w-10">
+                            <img class="h-10 w-10 rounded-full"
+                              src="https://m.media-amazon.com/images/M/MV5BOGY2MjI5MDQtOThmMC00ZGIwLWFmYjgtYWU4MzcxOGEwMGVkXkEyXkFqcGdeQXVyMzM4MjM0Nzg@._V1_UY317_CR175,0,214,214_AL_.jpg"
+                              alt="" />
+                          </div>
+                          <div class="ml-4">
+                            <div class="text-sm leading-5 font-medium text-gray-900">
+                              <a href="#" class="inline-link">Mark Hamill</a>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>Luke Skywalker</td>
+                      <td class="text-right">
+                        <a href="#" class="inline-link">Edit</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="flex items-center">
+                          <div class="flex-shrink-0 h-10 w-10">
+                            <img class="h-10 w-10 rounded-full"
+                              src="https://m.media-amazon.com/images/M/MV5BMTY4Mjg0NjIxOV5BMl5BanBnXkFtZTcwMTM2NTI3MQ@@._V1_UX214_CR0,6,214,214_AL_.jpg"
+                              alt="" />
+                          </div>
+                          <div class="ml-4">
+                            <div class="text-sm leading-5 font-medium text-gray-900">
+                              <a href="#" class="inline-link">Harrison Ford</a>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>Han Solo</td>
+                      <td class="text-right">
+                        <a href="#" class="inline-link">Edit</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="flex items-center">
+                          <div class="flex-shrink-0 h-10 w-10">
+                            <img class="h-10 w-10 rounded-full"
+                              src="https://m.media-amazon.com/images/M/MV5BMjM4ODU5MDY4MV5BMl5BanBnXkFtZTgwODY1MjQ5MDI@._V1_UX214_CR0,0,214,214_AL_.jpg"
+                              alt="" />
+                          </div>
+                          <div class="ml-4">
+                            <div class="text-sm leading-5 font-medium text-gray-900">
+                              <a href="#" class="inline-link">Carrie Fisher</a>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>Princess Leia</td>
+                      <td class="text-right">
+                        <a href="#" class="inline-link">Edit</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="flex items-center">
+                          <div class="flex-shrink-0 h-10 w-10">
+                            <img class="h-10 w-10 rounded-full"
+                              src="https://m.media-amazon.com/images/M/MV5BNDI4MDQ2NTUzNV5BMl5BanBnXkFtZTYwNjA4NzUz._V1_UY317_CR6,0,214,214_AL_.jpg"
+                              alt="" />
+                          </div>
+                          <div class="ml-4">
+                            <div class="text-sm leading-5 font-medium text-gray-900">
+                              <a href="#" class="inline-link">Billy Dee Williams</a>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>Lando Calrissian</td>
+                      <td class="text-right">
+                        <a href="#" class="inline-link">Edit</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </dd>
+      </div>
+    </dl>
+  </div>
+</div>
+
+
+{% endblock %}

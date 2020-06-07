@@ -31,7 +31,7 @@ def movies_json():
         movies, total = Movie.search(search, page, limit)
     else:
         if sort not in [i for i in Movie.__dict__.keys() if i[:1] != '_']:
-            sort = "rating_value"
+            sort = "title"
         sort_field = Movie.__dict__[sort]
         order_method = sort_field.desc() if order == "desc" else sort_field.asc()
         movies_query = Movie.query.order_by(order_method).paginate(
@@ -42,47 +42,12 @@ def movies_json():
     return {'total': total, 'rows': [m.to_dict() for m in movies]}
 
 
-
-
 @bp.route("/movies", methods=['GET'])
 @login_required
 def movies():
-    page = request.args.get("page", 1, type=int)
-    per_page = request.args.get("per_page", current_app.config["ITEMS_PER_PAGE"], type=int)
-    order_by = request.args.get("order_by", "rating_value", type=str)
-    sort = request.args.get("sort", "desc", type=str)
-    q = request.args.get("q", "", type=str)
-    if q:
-        movies, total = Movie.search(q, page, per_page)
-        movies.items = movies
-        movies.page = page
-        movies.per_page = per_page
-        movies.total = total
-        movies.has_next = True if total > page * per_page else False
-        movies.has_prev = True if page > 1 else False
-        movies.pages = ceil(total / per_page)
-    else:
-        if order_by not in [i for i in Movie.__dict__.keys() if i[:1] != '_']:
-            order_by = "rating_value"
-        order_by_field = Movie.__dict__[order_by]
-        order_method = order_by_field.desc() if sort == "desc" else order_by_field.asc()
-        movies = Movie.query.order_by(order_method).paginate(
-            page, per_page, False
-        )
-    search_form = SearchForm()
-    next_url = url_for("main.movies", page=page-1, order_by=order_by, sort=sort, q=q) if movies.has_next else None
-    prev_url = url_for("main.movies", page=page+1, order_by=order_by, sort=sort, q=q) if movies.has_prev else None
-    pages = [{'page': p, 'url': url_for("main.movies", page=p, order_by=order_by, sort=sort, q=q)} for p in paginate(current_page=page, total_pages=movies.pages, num_links=5)]
     return render_template(
         "movies.html",
-        title="Movies",
-        movies=movies,
-        search_form=search_form,
-        next_url=next_url,
-        prev_url=prev_url,
-        order_by=order_by,
-        sort=sort,
-        pages=pages
+        title="Movies"
     )
 
 

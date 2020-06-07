@@ -1,193 +1,124 @@
 {% extends "base.html" %}
+
 {% block nav_movies %}active{% endblock %}
+
 {% block header %}
-<div class="md:flex md:items-center md:justify-between">
-  <div class="flex-1 min-w-0">
-    <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:leading-9 sm:truncate">
-      Movies
-    </h2>
-  </div>
-  <div class="mt-5 flex md:mt-0 md:ml-4">
-    <span class="hidden sm:block shadow-sm rounded-md">
-      <button type="button" class="inline-flex items-center btn-white">
-        <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
-        </svg>
-        Import
-      </button>
-    </span>
-
-    <span class="hidden sm:block ml-3 shadow-sm rounded-md">
-      <a href="{{ url_for('main.movies_export', order_by=order_by, sort=sort) }}" type="button" class="inline-flex items-center btn-white">
-        <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd"/>
-        </svg>
-        Export
-      </a>
-    </span>
-
-    <span class="sm:ml-3 shadow-sm rounded-md">
-      <a href="{{ url_for('main.movie_create') }}" type="button" class="inline-flex items-center btn-indigo">
-        <svg class="-ml-1 mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M11 9V5H9v4H5v2h4v4h2v-4h4V9h-4zm-1 11a10 10 0 1 1 0-20 10 10 0 0 1 0 20z" clip-rule="evenodd"/>
-        </svg>
-        New
-      </a>
-    </span>
-
-    <!-- Dropdown -->
-    <span class="ml-3 relative shadow-sm rounded-md sm:hidden">
-      <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:shadow-outline focus:border-blue-300 transition duration-150 ease-in-out" id="mobile-menu" aria-haspopup="true">
-        More
-        <svg class="-mr-1 ml-2 h-5 w-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
-        </svg>
-      </button>
-
-      <!--
-        Dropdown panel, show/hide based on dropdown state.
-
-        Entering: "transition ease-out duration-200"
-          From: "transform opacity-0 scale-95"
-          To: "transform opacity-100 scale-100"
-        Leaving: "transition ease-in duration-75"
-          From: "transform opacity-100 scale-100"
-          To: "transform opacity-0 scale-95"
-      -->
-      <div class="origin-top-right absolute right-0 mt-2 -mr-1 w-48 rounded-md shadow-lg" aria-labelledby="mobile-menu" role="menu">
-        <div class="py-1 rounded-md bg-white shadow-xs">
-          <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">Edit</a>
-          <a href="#" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">View</a>
-        </div>
-      </div>
-    </span>
-  </div>
-</div>
-{% endblock %}
-{% block content %}
-<!-- Toggle sort for column headers -->
-{% if sort == 'desc' %}
-{% set new_sort = 'asc' %}
-{% else %}
-{% set new_sort = 'desc' %}
-{% endif %}
-<!-- Set variables for pagination -->
-{% set page = movies.page %}
-{% set per_page = movies.per_page %}
-{% set total_pages = movies.total %}
-
-<div class="mb-2">
-  {% if search_form %}
-  <form action="{{ url_for('main.movies') }}" method="get">
-    {{ search_form.q(size=20, class='form-input', placeholder=search_form.q.label.text) }}
-  </form>
-  {% endif %}
-</div>
-
-<div class="flex flex-col">
-  <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-    <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
-      <table class="min-w-full">
-        <thead>
-          <tr class="">
-            <th data-href="{{ url_for('main.movies', order_by='title', sort=new_sort) }}" class="clickable">
-              <a href="{{ url_for('main.movies', order_by='title', sort=new_sort) }}">Title
-                {% if order_by == 'title' %}
-                {% if sort == 'desc' %}&#9662;{% else %}&#9652;{% endif %}
-                {% endif %}
-              </a>
-            </th>
-            <th data-href="{{ url_for('main.movies', order_by='rating_value', sort=new_sort) }}" class="clickable">
-              <a href="{{ url_for('main.movies', order_by='rating_value', sort=new_sort) }}">Rating
-                {% if order_by == 'rating_value' %}
-                {% if sort == 'desc' %}&#9662;{% else %}&#9652;{% endif %}
-                {% endif %}
-              </a>
-            </th>
-            <th data-href="{{ url_for('main.movies', order_by='category', sort=new_sort) }}" class="clickable">
-              <a href="{{ url_for('main.movies', order_by='category', sort=new_sort) }}">Category
-                {% if order_by == 'category' %}
-                {% if sort == 'desc' %}&#9662;{% else %}&#9652;{% endif %}
-                {% endif %}
-              </a>
-            </th>
-            <th data-href="{{ url_for('main.movies', order_by='certificate', sort=new_sort) }}" class="clickable">
-              <a href="{{ url_for('main.movies', order_by='certificate', sort=new_sort) }}">Certificate
-                {% if order_by == 'certificate' %}
-                {% if sort == 'desc' %}&#9662;{% else %}&#9652;{% endif %}
-                {% endif %}
-              </a>
-            </th>
-            <th data-href="{{ url_for('main.movies', order_by='year', sort=new_sort) }}" class="clickable">
-              <a href="{{ url_for('main.movies', order_by='year', sort=new_sort) }}">Year
-                {% if order_by == 'year' %}
-                {% if sort == 'desc' %}&#9662;{% else %}&#9652;{% endif %}
-                {% endif %}
-              </a>
-            </th>
-            <th data-href="{{ url_for('main.movies', order_by='runtime', sort=new_sort) }}" class="clickable">
-              <a href="{{ url_for('main.movies', order_by='runtime', sort=new_sort) }}">Runtime (min)
-                {% if order_by == 'runtime' %}
-                {% if sort == 'desc' %}&#9662;{% else %}&#9652;{% endif %}
-                {% endif %}
-              </a>
-            </th>
-          </tr>
-        </thead>
-        <tbody class="bg-white">
-          {% for movie in movies.items %}
-          <tr>
-            <td data-href="{{ url_for('main.movie', id=movie.id) }}" class="cursor-pointer py-1">
-              <div class="flex items-center">
-                <div class="flex-shrink-0">
-                  <img class="h-12"
-                    src="{{ movie.poster_url }}"
-                    alt="" />
-                </div>
-                <div class="ml-4">
-                  <div><a href="{{ url_for('main.movie', id=movie.id) }}" class="inline-link sm:truncate">{{ movie.title }}</a></div>
-                </div>
-              </div>
-            </td>
-            <td>
-              <div>{{ movie.rating_value }}</div>
-            </td>
-            <td>
-              <div>{{ movie.category }}</div>
-            </td>
-            <td>
-              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                {{ movie.certificate }}
-              </span>
-            </td>
-            <td>
-              {{ movie.year }}
-            </td>
-            <td>
-              {{ movie.runtime }}
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      <div class="bg-white border-t border-gray-200">
-        {% include '_pager.html' %}
-      </div>
+<h3>Movies</h3>
+<div class="d-flex align-items-center">
+  <div class="dropdown">
+    <button class="btn btn-light dropdown-toggle btn-sm" type="button"
+      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 100%">
+      Menu
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" href="#">Action</a>
+      <a class="dropdown-item" href="#">Another action</a>
+      <a class="dropdown-item" href="#">Something else here</a>
     </div>
   </div>
+  <button id="myBtn" class="btn btn-light ml-1 btn-sm">Refresh</button>
+  <button class="btn btn-primary ml-1 btn-sm">New</button>
 </div>
+{% endblock %}
 
+{% block content %}
+<div id="toolbar">
+  <button id="btnGetSelected" class="btn btn-secondary btn-sm">getSelections</button>
+</div>
+<table id="table" data-toggle="table" data-url="{{ url_for('main.movies_json') }}" data-search="true" data-height="640"
+  data-show-columns="true" data-page-list="[10, 25, 50, 100]" data-icon-size="sm" data-pagination="true" data-toolbar="#toolbar" data-side-pagination="server">
+  <!-- data-side-pagination="server" -->
+  <thead class="text-muted">
+    <tr>
+      <th data-field="state" data-checkbox="true"></th>
+      <th data-field="fav" data-formatter="favFormatter" data-events="operateEvents" data-align="center"><i
+          class="fa fa-heart text-secondary"></i></th>
+      <th data-field="poster_url" data-formatter="posterFormatter" data-align="center">Poster</th>
+      <!-- data-cell-style="cellStyle" -->
+      <th data-field="title" data-formatter="titleFormatter" data-sortable="true">Title</th>
+      <th data-field="year" data-sortable="true">Year</th>
+      <th data-field="director" data-sortable="true">Director</th>
+      <th data-field="category" data-sortable="true">Category</th>
+      <th data-field="rating_value" data-sortable="true">Rating</th>
+      <th data-field="certificate" data-sortable="true" data-visible="false">Certificate</th>
+      <th data-field="runtime" data-sortable="true" data-visible="false">Runtime (min)</th>
+    </tr>
+  </thead>
+</table>
+{% endblock %}
 
-<!-- Script to make rows clickable -->
+{% block script %}
 <script>
-// Link to Movie details page
-$('td[data-href]').on("click", function() {
-  document.location = $(this).data('href');
-});
-// Link to sort list on column
-$('th[data-href]').on("click", function() {
-  document.location = $(this).data('href');
-});
-</script>
+  // cell formatters
+  function favFormatter(value, row, index) {
+    return [
+      '<a class="like text-secondary" href="javascript:void(0)" title="Like">',
+      '<i class="fa fa-heart fa-sm"></i>',
+      '</a>'
+    ].join('')
+  }
+  function titleFormatter(value, row, index) {
+    return [
+      // '<img src="',
+      // row.poster_url,
+      // '" alt="Poster" style="height:72px; margin: -8px 0; float: left;">',
+      '<a href="movie/', row.id, '" title="Show details">',
+      value,
+      '</a>',
+    ].join('')
+  }
+  function posterFormatter(value, row, index) {
+    return [
+      '<img src="',
+      value,
+      '" alt="Poster" style="height:72px;">',
+    ].join('')
+  }
 
+  window.operateEvents = {
+    'click .like': function (e, value, row, index) {
+      alert('You clicked like movie: ' + row.title)
+    },
+    'click .remove': function (e, value, row, index) {
+      $table.bootstrapTable('remove', {
+        field: 'id',
+        values: [row.id]
+      })
+    }
+  }
+
+  $(document).ready(function () {
+
+    var $table = $('#table')
+    var $btnGetSelected = $('#btnGetSelected')
+
+    // get selected rows and alert movie titles
+    $btnGetSelected.click(function () {
+      var list_of_names = $table.bootstrapTable('getSelections').map(
+        function (element) { return element.title; }
+      );
+      // alert('getSelections: ' + JSON.stringify($table.bootstrapTable('getSelections')))
+      alert('getSelections: ' + list_of_names)
+    })
+
+    // remove vertical borders
+    $table.bootstrapTable('refreshOptions', {
+      classes: 'table table-hover bg-white table-sm'
+    })
+
+    // adjust table height
+    function adjustTableHeight() {
+      let viewportHeight = $(window).height();
+      let tableHeight = viewportHeight - 140;
+      if (tableHeight < 480) {
+        tableHeight = 480
+      }
+      $('#table').bootstrapTable('resetView', { height: tableHeight });
+    }
+    adjustTableHeight();
+    $(window).resize(function () {
+      adjustTableHeight();
+    });
+  });
+</script>
 {% endblock %}
