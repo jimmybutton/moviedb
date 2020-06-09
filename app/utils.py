@@ -1,4 +1,21 @@
 import json
+import csv
+from io import StringIO
+
+def export_csv(items, fields):
+    """
+    Generate the data with csv.writer and stream the response. 
+    Use StringIO to write to an in-memory buffer rather than 
+    generating an intermediate file.
+    """
+    data = StringIO()
+    w = csv.writer(data)
+    w.writerow(fields)  # header
+    for i in items:
+        w.writerow([getattr(i, field) for field in fields])
+    return data.getvalue()
+
+
 
 def delete_movies():
     movies = Movie.query.all()
