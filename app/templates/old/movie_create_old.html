@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block nav_movies %}active{% endblock %}
+{% block header %}
+<h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:leading-9 sm:truncate">
+  {% if movie %}
+  Edit Movie: {{ movie.displayname }}
+  {% else %}
+  Create Movie
+  {% endif %}
+</h2>
+{% endblock %}
+{% block content %}
+<div class="bg-gray-50 shadow sm:rounded-lg">
+  <form action="" method="post">
+    {{ form.hidden_tag() }}
+    <div class="flex flex-wrap">
+      <div class="w-full lg:w-1/2 px-4 py-2">
+        {{ form.title.label(class_="block text-gray-700 text-sm font-bold mb-2") }}
+        {{ form.title(class_="form-input w-full") }}
+        {% for error in form.title.errors %}
+        <div style="color: red;">[{{ error }}]</div>
+        {% endfor %}
+      </div>
+      <div class="w-full lg:w-1/2 px-4 py-2">
+        {{ form.director.label(class_="block text-gray-700 text-sm font-bold mb-2") }}
+        {{ form.director(class_="form-input w-full") }}
+        {% for error in form.director.errors %}
+        <div style="color: red;">[{{ error }}]</div>
+        {% endfor %}
+      </div>
+      <div class="w-1/2 lg:w-1/4 px-4 py-2">
+        {{ form.year.label(class_="block text-gray-700 text-sm font-bold mb-2") }}
+        {{ form.year(class_="form-select w-full") }}
+        {% for error in form.year.errors %}
+        <div style="color: red;">[{{ error }}]</div>
+        {% endfor %}
+      </div>
+      <div class="w-1/2 lg:w-1/4 px-4 py-2">
+        {{ form.certificate.label(class_="block text-gray-700 text-sm font-bold mb-2") }}
+        {{ form.certificate(class_="form-select w-full") }}
+        {% for error in form.certificate.errors %}
+        <div style="color: red;">[{{ error }}]</div>
+        {% endfor %}
+      </div>
+      <div class="w-full lg:w-1/2 px-4 py-2">
+        {{ form.category.label(class_="block text-gray-700 text-sm font-bold mb-2") }}
+        {{ form.category(class_="form-select w-full") }}
+        {% for error in form.category.errors %}
+        <div style="color: red;">[{{ error }}]</div>
+        {% endfor %}
+      </div>
+      <div class="w-full lg:w-1/2 px-4 py-2">
+        {{ form.release_date.label(class_="block text-gray-700 text-sm font-bold mb-2") }}
+        {{ form.release_date(class_="form-input w-full") }}
+        {% for error in form.release_date.errors %}
+        <div style="color: red;">[{{ error }}]</div>
+        {% endfor %}
+      </div>
+      <div class="w-full px-4 py-2">
+        {{ form.plot_summary.label(class_="block text-gray-700 text-sm font-bold mb-2") }}
+        {{ form.plot_summary(class_="form-textarea w-full", rows="3") }}
+        {% for error in form.plot_summary.errors %}
+        <div style="color: red;">[{{ error }}]</div>
+        {% endfor %}
+      </div>
+      <div class="w-1/2 lg:w-1/4 px-4 py-2">
+        {{ form.rating_value.label(class_="block text-gray-700 text-sm font-bold mb-2") }}
+        {{ form.rating_value(class_="form-textarea w-full", rows="3") }}
+        {% for error in form.rating_value.errors %}
+        <div style="color: red;">[{{ error }}]</div>
+        {% endfor %}
+      </div>
+      <div class="w-1/2 lg:w-1/4 px-4 py-2">
+        {{ form.rating_count.label(class_="block text-gray-700 text-sm font-bold mb-2") }}
+        {{ form.rating_count(class_="form-textarea w-full", rows="3") }}
+        {% for error in form.rating_count.errors %}
+        <div style="color: red;">[{{ error }}]</div>
+        {% endfor %}
+      </div>
+      <div class="w-1/2 lg:w-1/4 px-4 py-2">
+        {{ form.runtime.label(class_="block text-gray-700 text-sm font-bold mb-2") }}
+        {{ form.runtime(class_="form-textarea w-full", rows="3") }}
+        {% for error in form.runtime.errors %}
+        <div style="color: red;">[{{ error }}]</div>
+        {% endfor %}
+      </div>
+      <div class="w-full px-4 py-2">
+        {{ form.poster_url.label(class_="block text-gray-700 text-sm font-bold mb-2") }}
+        {{ form.poster_url(class_="form-textarea w-full", rows="3") }}
+        {% for error in form.poster_url.errors %}
+        <div style="color: red;">[{{ error }}]</div>
+        {% endfor %}
+      </div>
+      <div class="w-full px-4 py-2">
+        {{ form.url.label(class_="block text-gray-700 text-sm font-bold mb-2") }}
+        {{ form.url(class_="form-textarea w-full", rows="3") }}
+        {% for error in form.url.errors %}
+        <div style="color: red;">[{{ error }}]</div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="px-4 py-5 text-right">
+      {% if movie %}
+      <a href="{{ url_for('main.movie', id=movie.id) }}" class="btn-white mr-1">Cancel</a>
+      {{ form.submit(class_="btn-indigo", value="Update") }}
+      {% else %}
+      <a href="{{ url_for('main.movies') }}" class="btn-white mr-1">Cancel</a>
+      {{ form.submit(class_="btn-indigo", value="Create") }}
+      {{ form.submit(class_="btn-indigo", value="Create and New") }}
+      {% endif %}
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base_no_nav.html" %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block content %}
+<div class="w-full max-w-sm">
+  <div>
+    <h1 class="text-center font-bold text-4xl">movie<span class="text-indigo-600">db</span></h1>
+    <h2 class="mb-6 text-center text-2xl leading-9 font-semibold text-gray-800">
+      Sign in to your account
+    </h2>
+  </div>
+  <form class="bg-white shadow-md rounded px-8 pt-6 pb-6 mb-4" action="" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="mb-4">
+      {{ form.username.label(class_='block text-gray-700 text-sm font-bold mb-2') }}
+      {{ form.username(size=32, class_='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline', placeholder="Username") }}<br>
+      {% for error in form.username.errors %}
+      <p class="text-red-500 text-xs italic">[{{ error }}]</p>
+      {% endfor %}
+    </div>
+    <div class="mb-6">
+      {{ form.password.label(class_='block text-gray-700 text-sm font-bold mb-2') }}
+      {{ form.password(size=32, class_='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline', placeholder="******************") }}<br>
+      {% for error in form.username.errors %}
+      <p class="text-red-500 text-xs italic">[{{ error }}]</p>
+      {% endfor %}
+    </div>
+    <div class="mt-6 flex items-center justify-between">
+      <div class="flex items-center">
+        {{ form.remember_me(class_='form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out') }}
+        {{ form.remember_me.label(class_='ml-2 block text-sm leading-5 text-gray-900') }}
+      </div>
+      <div class="text-sm leading-5">
+        <a class="inline-link" href="#">
+          Forgot Password?
+        </a>
+      </div>
+    </div>
+    <div class="mt-6">
+      {{ form.submit(class_='btn btn-indigo w-full') }}
+    </div>
+    <div class="mt-4 text-center text-gray-700 text-sm">
+      New User?
+      <a href="{{ url_for('auth.register') }}" class="inline-link">
+        Click to Register!
+      </a>
+    </div>
+  </form>
+  <!-- <p class="text-center text-gray-500 text-xs">
+            &copy;2020 Acme Corp. All rights reserved.
+        </p> -->
+</div>
+{% endblock %}

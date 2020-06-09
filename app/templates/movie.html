@@ -5,12 +5,12 @@
 {% block header %}
 <div>
   <h3>{{ movie.displayname }}</h3>
-  <p class="small text-muted">{{ movie.runtime }} min | {{ movie.category}} | {{ movie.release_date }} | <i
+  <p class="small text-muted">{{ movie.category}} | {{ movie.director }} | {{ movie.runtime }} min | <i
       class="fa fa-star" aria-hidden="true"></i> {{ movie.rating_value }} </p>
 </div>
 <div class="d-flex align-items-center">
   <div class="dropdown">
-    <button class="btn btn-light dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+    <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown"
       aria-haspopup="true" aria-expanded="false" style="height: 100%">
       Menu
     </button>
@@ -20,8 +20,14 @@
       <a class="dropdown-item" href="#">Something else here</a>
     </div>
   </div>
-  <button class="btn btn-light ml-1 btn-sm">Delete</button>
-  <button class="btn btn-primary ml-1 btn-sm">Edit</button>
+  <a href="{{ url_for('main.delete_movie', id=movie.id) }}" class="btn btn-secondary ml-1 btn-sm">
+    <i class="fa fa-trash-o" aria-hidden="true"></i>
+    Delete
+  </a>
+  <a href="{{ url_for('main.edit_movie', id=movie.id) }}" class="btn btn-primary ml-1 btn-sm">
+    <i class="fa fa-pencil" aria-hidden="true"></i>
+    Edit
+  </a>
 </div>
 {% endblock %}
 
@@ -36,29 +42,29 @@
   <dl class="card-body mb-0">
     <div class="row">
       <div class="col-md-6">
-        <div>
+        <div class="mb-4">
           <dt class="text-muted font-weight-normal">Title</dt>
           <dd>{{ movie.title }}</dd>
         </div>
-        <div>
+        <div class="mb-4">
           <dt class="text-muted font-weight-normal">Year</dt>
           <dd>{{ movie.year }}</dd>
         </div>
-        <div>
+        <div class="mb-4">
           <dt class="text-muted font-weight-normal">Director</dt>
           <dd>{{ movie.director }}</dd>
         </div>
-        <div>
+        <div class="mb-4">
           <dt class="text-muted font-weight-normal">Category</dt>
           <dd>{{ movie.category }}</dd>
         </div>
-        <div>
+        <div class="mb-4">
           <dt class="text-muted font-weight-normal">Certificate</dt>
           <dd>{{ movie.certificate }}</dd>
         </div>
       </div>
       <div class="col-md-6">
-        <div>
+        <div class="mb-4">
           <dt class="text-muted font-weight-normal">Poster</dt>
           <dd>
             <img src="{{ movie.poster_url }}" alt="">
@@ -66,27 +72,27 @@
         </div>
       </div>
     </div>
-    <div>
+    <div class="mb-4">
       <dt class="text-muted font-weight-normal">Plot summary</dt>
       <dd>{{ movie.plot_summary }}</dd>
     </div>
     <div class="row">
       <div class="col-md-6">
-        <div>
+        <div class="mb-4">
           <dt class="text-muted font-weight-normal">Runtime</dt>
           <dd>{{ movie.runtime }} min</dd>
         </div>
-        <div>
+        <div class="mb-4">
           <dt class="text-muted font-weight-normal">Release date</dt>
           <dd>{{ movie.release_date }}</dd>
         </div>
       </div>
       <div class="col-md-6">
-        <div>
+        <div class="mb-4">
           <dt class="text-muted font-weight-normal">Rating</dt>
           <dd>{{ movie.rating_value }}</dd>
         </div>
-        <div>
+        <div class="mb-4">
           <dt class="text-muted font-weight-normal">Number of ratings</dt>
           <dd>{{ movie.rating_count }}</dd>
         </div>

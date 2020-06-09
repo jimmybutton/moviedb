@@ -15,7 +15,7 @@ from math import ceil, floor
 @bp.route("/")
 @login_required
 def home():
-    return render_template("home.html", title="Dashboard")
+    return render_template("home.html", title="Home")
 
 @bp.route("/movies_json", methods=['GET'])
 @login_required
@@ -131,12 +131,12 @@ def movie_create():
         movie.created_by = current_user
         db.session.add(movie)
         db.session.commit()
-        flash(Markup(f"""Movie <a href="{url_for('main.movie', id=movie.id)}" class="inline-link">{movie.title}</a> created.""".format()))
-        if form.submit._value() == 'Create and New':
+        flash(Markup(f"""Movie <a href="{url_for('main.movie', id=movie.id)}">{movie.title}</a> created.""".format()))
+        if form.submit._value() == 'Save and New':
             return redirect(url_for("main.movie_create"))
         else:
             return redirect(url_for("main.movie", id=movie.id))
-    return render_template("movie_create.html", form=form)
+    return render_template("movie_create.html", title="Create movie", form=form)
 
 
 @bp.route("/movie/<id>/edit", methods=["GET", "POST"])
@@ -168,7 +168,7 @@ def edit_movie(id):
         movie.modified_by = current_user
         db.session.add(movie)
         db.session.commit()
-        flash("Movie {} has been updated.".format(movie.title))
+        flash(Markup(f"""Movie <a href="{url_for('main.movie', id=movie.id)}">{movie.title}</a> updated.""".format()))
         return redirect(url_for("main.movie", id=movie.id))
     elif request.method == "GET":
         # for k,v in movie.__dict__.items():

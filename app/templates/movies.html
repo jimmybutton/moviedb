@@ -6,7 +6,7 @@
 <h3>Movies</h3>
 <div class="d-flex align-items-center">
   <div class="dropdown">
-    <button class="btn btn-light dropdown-toggle btn-sm" type="button"
+    <button class="btn btn-secondary dropdown-toggle btn-sm" type="button"
       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 100%">
       Menu
     </button>
@@ -16,8 +16,14 @@
       <a class="dropdown-item" href="#">Something else here</a>
     </div>
   </div>
-  <button id="myBtn" class="btn btn-light ml-1 btn-sm">Refresh</button>
-  <button class="btn btn-primary ml-1 btn-sm">New</button>
+  <button id="myBtn" class="btn btn-secondary ml-1 btn-sm">
+    <i class="fa fa-refresh" aria-hidden="true"></i>
+    Refresh
+  </button>
+  <a href="{{ url_for('main.movie_create') }}" class="btn btn-primary ml-1 btn-sm">
+    <i class="fa fa-plus-square" aria-hidden="true"></i>
+    Create
+  </a>
 </div>
 {% endblock %}
 
