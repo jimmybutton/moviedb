@@ -127,6 +127,8 @@ class Movie(SearchableMixin, db.Model):
     runtime = db.Column(db.Integer)
     url = db.Column(db.String(64))
 
+    cast = db.relationship("Character", foreign_keys="Character.movie_id", backref="movie", lazy="dynamic")
+
     def __repr__(self):
         return "<Movie {}>".format(self.title)
 
@@ -162,6 +164,8 @@ class People(SearchableMixin, db.Model):
     height = db.Column(db.String(64))
     bio = db.Column(db.String(1024))
 
+    roles = db.relationship("Character", foreign_keys="Character.actor_id", backref="actor", lazy="dynamic")
+
     def __repr__(self):
         return "<Person {}>".format(self.name)
 
@@ -174,6 +178,45 @@ class People(SearchableMixin, db.Model):
                 data[f] = value.strftime(r"%a, %d %b %Y")
             else:
                 data[f] = value
+        return data
+
+class Character(SearchableMixin, db.Model):
+    __searchable__ = ["movie_title","actor_name","character_name", "movie_year"]
+    __formfields__ = ['name']
+    id = db.Column(db.Integer, primary_key=True)
+    created_timestamp = db.Column(db.DateTime, index=True, default=datetime.datetime.utcnow)
+    created_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    created_by = db.relationship("User", foreign_keys=[created_id])
+    modified_timestamp = db.Column(
+        db.DateTime, index=True, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow
+    )
+    modified_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    modified_by = db.relationship("User", foreign_keys=[modified_id])
+
+    movie_id = db.Column(db.Integer, db.ForeignKey("movie.id"))
+    actor_id = db.Column(db.Integer, db.ForeignKey("people.id"))
+    character_name = db.Column(db.String(128))
+    character_url = db.Column(db.String(128))
+
+    # read only fields, need to be updated when link changes
+    movie_title = db.Column(db.String(128))  # movie.title
+    movie_year = db.Column(db.Integer)       # movie.year
+    actor_name = db.Column(db.String(128))   # actor.name
+
+    def __repr__(self):
+        return "<Character {}>".format(self.character_name)
+
+    def to_dict(self):
+        data = {
+            "id": self.id,
+            "actor_id": self.actor_id,
+            "actor_image": self.actor.image_url,
+            "actor_name": self.actor_name,
+            "movie_id": self.movie_id,
+            "movie_name": self.movie_name,
+            "character_name": self.character_name,
+            "character_url": self.character_url
+        }
         return data
 
 @login.user_loader
