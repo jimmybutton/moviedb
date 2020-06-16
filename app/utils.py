@@ -1,6 +1,7 @@
 import json
 import csv
 from io import StringIO
+from datetime import datetime
 
 def export_csv(items, fields):
     """
@@ -30,6 +31,21 @@ def import_movies(movies):
             setattr(movie, k, v)
         movie.created_by=user
         db.session.add(movie)
+    db.session.commit()
+
+def import_people(people):
+    for p in people:
+        person = People()                                                             
+        for k, v in p.items():
+            if k == 'movie_url':
+                setattr(person, 'url', v)
+            elif k == 'dob':
+                # '1952-11-8'
+                dob = datetime.strptime(v, '%Y-%m-%d').date()
+                setattr(person, 'dob', dob)
+            else:
+                setattr(person, k, v)
+        db.session.add(person)
     db.session.commit()
 
 def paginate(current_page=1, total_pages=10, num_links=5):

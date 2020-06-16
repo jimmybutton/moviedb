@@ -37,10 +37,7 @@ def movies_json():
 @bp.route("/movies", methods=['GET'])
 @login_required
 def movies():
-    return render_template(
-        "movies.html",
-        title="Movies"
-    )
+    return render_template("movies.html", title="Movies")
 
 
 @bp.route("/movies/export", methods=['GET'])

@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block nav_people %}active{% endblock %}
+
+{% block header %}
+<h3>People</h3>
+<div class="d-flex align-items-center">
+  <div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle btn-sm" type="button"
+      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 100%">
+      Menu
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" href="#">Export .csv</a>
+      <a class="dropdown-item" href="#">Another action</a>
+      <a class="dropdown-item" href="#">Something else here</a>
+    </div>
+  </div>
+  <button id="myBtn" class="btn btn-secondary ml-1 btn-sm">
+    <i class="fa fa-refresh" aria-hidden="true"></i>
+    Refresh
+  </button>
+  <a href="#" class="btn btn-primary ml-1 btn-sm">
+    <i class="fa fa-plus-square" aria-hidden="true"></i>
+    Create
+  </a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="toolbar">
+  <button id="btnGetSelected" class="btn btn-secondary btn-sm">getSelections</button>
+</div>
+<table id="table" data-toggle="table" data-url="{{ url_for('main.people_json') }}" data-search="true" data-height="640"
+  data-show-columns="true" data-page-list="[10, 25, 50, 100]" data-icon-size="sm" data-pagination="true" data-toolbar="#toolbar" 
+  data-side-pagination="server">
+  <thead class="text-muted">
+    <tr>
+      <th data-field="state" data-checkbox="true"></th>
+      <th data-field="fav" data-formatter="favFormatter" data-events="operateEvents" data-align="center">
+        <i class="fa fa-heart text-secondary"></i>
+      </th>
+      <th data-field="image_url" data-formatter="imageFormatter" data-align="center">Image</th>
+      <!-- data-cell-style="cellStyle" -->
+      <th data-field="name" data-formatter="linkFormatter" data-sortable="true">Name</th>
+      <th data-field="dob" data-sortable="true">DOB</th>
+      <th data-field="birthname" data-sortable="true">Birth name</th>
+      <th data-field="height" data-sortable="true">Height</th>
+    </tr>
+  </thead>
+</table>
+{% endblock %}
+
+{% block script %}
+<script>
+  // cell formatters
+  function favFormatter(value, row, index) {
+    return [
+      '<a class="like text-secondary" href="javascript:void(0)" title="Like">',
+      '<i class="fa fa-heart fa-sm"></i>',
+      '</a>'
+    ].join('')
+  }
+  function linkFormatter(value, row, index) {
+    return [
+      '<a href="people/', row.id, '" title="Show details">', value, '</a>',
+    ].join('')
+  }
+  function imageFormatter(value, row, index) {
+    if (!!value) {
+      return [
+        '<img src="', value, '" alt="Poster" style="height:48px;">',
+      ].join('')
+    } else {
+      return '<img src="https://m.media-amazon.com/images/G/01/imdb/images/nopicture/32x44/name-2138558783._CB468460248_.png" alt="Poster" style="height:48px;">'
+    }
+  }
+
+  window.operateEvents = {
+    'click .like': function (e, value, row, index) {
+      alert('You clicked like movie: ' + row.title)
+    },
+    'click .remove': function (e, value, row, index) {
+      $table.bootstrapTable('remove', {
+        field: 'id',
+        values: [row.id]
+      })
+    }
+  }
+
+  $(document).ready(function () {
+
+    var $table = $('#table')
+    var $btnGetSelected = $('#btnGetSelected')
+
+    // get selected rows and alert movie titles
+    $btnGetSelected.click(function () {
+      var list_of_names = $table.bootstrapTable('getSelections').map(
+        function (element) { return element.name; }
+      );
+      // alert('getSelections: ' + JSON.stringify($table.bootstrapTable('getSelections')))
+      alert('getSelections: ' + list_of_names)
+    })
+
+    // remove vertical borders
+    $table.bootstrapTable('refreshOptions', {
+      classes: 'table table-hover bg-white table-sm'
+    })
+
+    // adjust table height
+    function adjustTableHeight() {
+      let viewportHeight = $(window).height();
+      let tableHeight = viewportHeight - 140;
+      if (tableHeight < 480) {
+        tableHeight = 480
+      }
+      $('#table').bootstrapTable('resetView', { height: tableHeight });
+    }
+    adjustTableHeight();
+    $(window).resize(function () {
+      adjustTableHeight();
+    });
+  });
+</script>
+{% endblock %}

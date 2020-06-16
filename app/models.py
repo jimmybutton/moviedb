@@ -1,5 +1,5 @@
 from app import db, login
-from datetime import datetime
+import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app.search import (
@@ -76,7 +76,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     about_me = db.Column(db.String(140))
-    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    last_seen = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     def __repr__(self):
         return "<User {}>".format(self.username)
@@ -105,11 +105,11 @@ class Movie(SearchableMixin, db.Model):
         "url",
     ]
     id = db.Column(db.Integer, primary_key=True)
-    created_timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    created_timestamp = db.Column(db.DateTime, index=True, default=datetime.datetime.utcnow)
     created_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     created_by = db.relationship("User", foreign_keys=[created_id])
     modified_timestamp = db.Column(
-        db.DateTime, index=True, default=datetime.utcnow, onupdate=datetime.utcnow
+        db.DateTime, index=True, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow
     )
     modified_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     modified_by = db.relationship("User", foreign_keys=[modified_id])
@@ -135,22 +135,46 @@ class Movie(SearchableMixin, db.Model):
         return f"{self.title} ({self.year})"
 
     def to_dict(self):
-        data = {
-            "id": self.id,
-            "title": self.title,
-            "year": self.year,
-            "certificate": self.certificate,
-            "category": self.category,
-            "release_date": self.release_date,
-            "plot_summary": self.plot_summary,
-            "director": self.director,
-            "rating_value": self.rating_value,
-            "poster_url": self.poster_url,
-            "runtime": self.runtime,
-            "modified_timestamp": self.modified_timestamp,
-        }
+        fields = ['id', 'modified_timestamp'] + self.__formfields__
+        data = {}
+        for f in fields:
+            data[f] = getattr(self, f)
         return data
 
+class People(SearchableMixin, db.Model):
+    __searchable__ = ["name", "birthname", "bio"]
+    __formfields__ = ['name','url','image_url','dob','birthname','height','bio']
+    id = db.Column(db.Integer, primary_key=True)
+    created_timestamp = db.Column(db.DateTime, index=True, default=datetime.datetime.utcnow)
+    created_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    created_by = db.relationship("User", foreign_keys=[created_id])
+    modified_timestamp = db.Column(
+        db.DateTime, index=True, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow
+    )
+    modified_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    modified_by = db.relationship("User", foreign_keys=[modified_id])
+
+    name = db.Column(db.String(64), index=True)
+    url = db.Column(db.String(64))
+    image_url = db.Column(db.String(256))
+    dob = db.Column(db.Date())
+    birthname = db.Column(db.String(128))
+    height = db.Column(db.String(64))
+    bio = db.Column(db.String(1024))
+
+    def __repr__(self):
+        return "<Person {}>".format(self.name)
+
+    def to_dict(self):
+        fields = ['id', 'modified_timestamp'] + self.__formfields__
+        data = {}
+        for f in fields:
+            value = getattr(self, f)
+            if type(value) is datetime.date:
+                data[f] = value.strftime(r"%a, %d %b %Y")
+            else:
+                data[f] = value
+        return data
 
 @login.user_loader
 def load_user(id):

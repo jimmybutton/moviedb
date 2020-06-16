@@ -13,7 +13,10 @@ def add_to_index(index, model):
 def remove_from_index(index, model):
     if not current_app.elasticsearch:
         return
-    current_app.elasticsearch.delete(index=index, id=model.id)
+    try:
+        current_app.elasticsearch.delete(index=index, id=model.id)
+    except current_app.elasticsearch.exceptions.NotFoundError as e:
+        print(e)
 
 
 def query_index_full_text(index, query, page, per_page):
