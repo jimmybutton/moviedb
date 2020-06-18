@@ -10,8 +10,8 @@
 </div>
 <div class="d-flex align-items-center">
   <div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-      aria-haspopup="true" aria-expanded="false" style="height: 100%">
+    <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton"
+      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 100%">
       Menu
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -103,6 +103,29 @@
       </div>
     </div>
   </dl>
+</div>
+
+<!-- Cast -->
+<div class="card mb-3">
+  <div class="card-header bg-white d-flex align-items-center py-3">
+    <h6 class="text-dark font-weight-bold mb-0">
+      Cast
+    </h6>
+  </div>
+  <div class="card-body mb-0">
+    <table id="table" data-toggle="table" data-url="{{ url_for('main.characters_json') }}"
+      data-sort-name="order" data-sort-order="asc"
+      data-page-list="[10, 25, 50, 100]" data-icon-size="sm" data-pagination="true" data-query-params="queryParams" data-side-pagination="server" >
+      <!-- data-side-pagination="server" -->
+      <thead class="text-muted">
+        <tr>
+          <th data-field="order" data-sortable="true" data-width="40">#</th>
+          <th data-field="actor_name" data-formatter="actorLinkFormatter" data-sortable="true">Actor</th>
+          <th data-field="character_name" data-sortable="true">Character</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
 </div>
 
 <!-- Review -->
@@ -205,4 +228,29 @@
 {% endblock %}
 
 {% block script %}
+<script>
+  function actorLinkFormatter(value, row, index) {
+    return [
+    '<div class="media">',
+    '  <img src="', row.actor_image, '" class="align-self-center mr-3" alt="Poster" style="height:48px;">',
+    '  <div class="media-body align-self-center">',
+    '    <a href="/people/', row.actor_id, '" title="Show details">', value, '</a>',
+    '  </div>',
+    '</div>',
+    ].join('')
+  }
+
+  function queryParams(params) {
+    params.movie_id = {{ movie.id }}
+    return params
+  }
+
+  $(document).ready(function () {
+    var $table = $('#table')
+    // remove vertical borders
+    $table.bootstrapTable('refreshOptions', {
+      classes: 'table table-hover bg-white table-sm'
+    })
+  });
+</script>
 {% endblock %}

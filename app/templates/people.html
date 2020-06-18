@@ -6,8 +6,8 @@
 <h3>People</h3>
 <div class="d-flex align-items-center">
   <div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle btn-sm" type="button"
-      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 100%">
+    <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true"
+      aria-expanded="false" style="height: 100%">
       Menu
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -32,8 +32,8 @@
   <button id="btnGetSelected" class="btn btn-secondary btn-sm">getSelections</button>
 </div>
 <table id="table" data-toggle="table" data-url="{{ url_for('main.people_json') }}" data-search="true" data-height="640"
-  data-show-columns="true" data-page-list="[10, 25, 50, 100]" data-icon-size="sm" data-pagination="true" data-toolbar="#toolbar" 
-  data-side-pagination="server">
+  data-show-columns="true" data-page-list="[10, 25, 50, 100]" data-icon-size="sm" data-pagination="true"
+  data-toolbar="#toolbar" data-side-pagination="server">
   <thead class="text-muted">
     <tr>
       <th data-field="state" data-checkbox="true"></th>
@@ -67,13 +67,9 @@
     ].join('')
   }
   function imageFormatter(value, row, index) {
-    if (!!value) {
-      return [
-        '<img src="', value, '" alt="Poster" style="height:48px;">',
-      ].join('')
-    } else {
-      return '<img src="https://m.media-amazon.com/images/G/01/imdb/images/nopicture/32x44/name-2138558783._CB468460248_.png" alt="Poster" style="height:48px;">'
-    }
+    return [
+      '<img src="', value, '" alt="Poster" style="height:48px;">',
+    ].join('')
   }
 
   window.operateEvents = {

@@ -7,6 +7,7 @@ from app.search import (
     remove_from_index,
     query_index,
     query_index_full_text,
+    clear_index
 )
 
 
@@ -62,6 +63,7 @@ class SearchableMixin(object):
 
     @classmethod
     def reindex(cls):
+        clear_index(cls.__tablename__)
         for obj in cls.query:
             add_to_index(cls.__tablename__, obj)
 
@@ -146,6 +148,7 @@ class Movie(SearchableMixin, db.Model):
 class People(SearchableMixin, db.Model):
     __searchable__ = ["name", "birthname", "bio"]
     __formfields__ = ['name','url','image_url','dob','birthname','height','bio']
+    _image_url_fallback = "https://m.media-amazon.com/images/G/01/imdb/images/nopicture/32x44/name-2138558783._CB468460248_.png"
     id = db.Column(db.Integer, primary_key=True)
     created_timestamp = db.Column(db.DateTime, index=True, default=datetime.datetime.utcnow)
     created_id = db.Column(db.Integer, db.ForeignKey("user.id"))
@@ -174,6 +177,8 @@ class People(SearchableMixin, db.Model):
         data = {}
         for f in fields:
             value = getattr(self, f)
+            if f == 'image_url' and value is None:
+                value = _image_url_fallback
             if type(value) is datetime.date:
                 data[f] = value.strftime(r"%a, %d %b %Y")
             else:
@@ -197,6 +202,7 @@ class Character(SearchableMixin, db.Model):
     actor_id = db.Column(db.Integer, db.ForeignKey("people.id"))
     character_name = db.Column(db.String(128))
     character_url = db.Column(db.String(128))
+    order = db.Column(db.Integer)  # order in which to show character per movie
 
     # read only fields, need to be updated when link changes
     movie_title = db.Column(db.String(128))  # movie.title
@@ -204,16 +210,19 @@ class Character(SearchableMixin, db.Model):
     actor_name = db.Column(db.String(128))   # actor.name
 
     def __repr__(self):
-        return "<Character {}>".format(self.character_name)
+        return "<Character {}, Actor {}, Movie {}, Order {}>".format(self.character_name, self.actor_name, self.movie_title, self.order)
 
     def to_dict(self):
         data = {
             "id": self.id,
+            "order": self.order,
             "actor_id": self.actor_id,
-            "actor_image": self.actor.image_url,
+            "actor_image": self.actor.image_url if self.actor.image_url else self.actor._image_url_fallback,
             "actor_name": self.actor_name,
             "movie_id": self.movie_id,
-            "movie_name": self.movie_name,
+            "movie_title": self.movie_title,
+            "movie_year": self.movie.year,
+            "movie_image": self.movie.poster_url,
             "character_name": self.character_name,
             "character_url": self.character_url
         }

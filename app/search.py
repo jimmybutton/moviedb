@@ -1,4 +1,5 @@
 from flask import current_app
+from elasticsearch import NotFoundError
 
 
 def add_to_index(index, model):
@@ -15,7 +16,7 @@ def remove_from_index(index, model):
         return
     try:
         current_app.elasticsearch.delete(index=index, id=model.id)
-    except current_app.elasticsearch.exceptions.NotFoundError as e:
+    except NotFoundError as e:
         print(e)
 
 
@@ -47,3 +48,6 @@ def query_index(index, query, page, per_page):
     ids = [int(hit['_id']) for hit in search['hits']['hits']]
     return ids, search['hits']['total']['value']
 
+
+def clear_index(index):
+    current_app.elasticsearch.indices.delete(index=index, ignore=[400, 404])

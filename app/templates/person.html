@@ -80,6 +80,30 @@
   </dl>
 </div>
 
+<!-- Cast -->
+<div class="card mb-3">
+  <div class="card-header bg-white d-flex align-items-center py-3">
+    <h6 class="text-dark font-weight-bold mb-0">
+      Cast
+    </h6>
+  </div>
+  <div class="card-body mb-0">
+    <table id="table" data-toggle="table" data-url="{{ url_for('main.characters_json') }}"
+      data-page-list="[10, 25, 50, 100]" data-icon-size="sm" data-pagination="true" 
+      data-sort-name="movie_year" data-sort-order="desc"
+      data-query-params="queryParams" data-side-pagination="server" >
+      <!-- data-side-pagination="server" -->
+      <thead class="text-muted">
+        <tr>
+          <th data-field="movie_year" data-sortable="true" data-width="60">Year</th>
+          <th data-field="movie_title" data-formatter="movieLinkFormatter" data-sortable="true">Movie</th>
+          <th data-field="character_name" data-sortable="true">Character</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+</div>
+
 <!-- Review -->
 <div class="card mb-3">
   <div class="card-header bg-white d-flex align-items-center py-3">
@@ -180,4 +204,29 @@
 {% endblock %}
 
 {% block script %}
+<script>
+  function movieLinkFormatter(value, row, index) {
+    return [
+    '<div class="media">',
+    '  <img src="', row.movie_image, '" class="align-self-center mr-3" alt="Poster" style="height:48px;">',
+    '  <div class="media-body align-self-center">',
+    '    <a href="/movie/', row.movie_id, '" title="Show details">', value, '</a>',
+    '  </div>',
+    '</div>',
+    ].join('')
+  }
+
+  function queryParams(params) {
+    params.actor_id = {{ person.id }}
+    return params
+  }
+
+  $(document).ready(function () {
+    var $table = $('#table')
+    // remove vertical borders
+    $table.bootstrapTable('refreshOptions', {
+      classes: 'table table-hover bg-white table-sm'
+    })
+  });
+</script>
 {% endblock %}

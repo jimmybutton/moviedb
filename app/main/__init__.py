@@ -2,4 +2,4 @@ from flask import Blueprint
 
 bp = Blueprint('main', __name__)
 
-from app.main import core, movies, people
+from app.main import core, movies, people, characters

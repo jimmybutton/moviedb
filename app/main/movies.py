@@ -61,6 +61,16 @@ def movie(id):
         return redirect(url_for("main.movies"))
     return render_template("movie.html", movie=movie, title="Movies")
 
+@bp.route("/movie/<id>/cast")
+@login_required
+def movie_cast(id):
+    movie = Movie.query.get(id)
+    if not movie:
+        flash("Movie with id={} not found.".format(id))
+        return redirect(url_for("main.movies"))
+    cast = movie.cast.all()
+    return {'rows': [c.to_dict() for c in cast]}
+
 
 @bp.route("/create_movie", methods=["GET", "POST"])
 def movie_create():
