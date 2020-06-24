@@ -241,7 +241,8 @@
   }
 
   function queryParams(params) {
-    params.movie_id = {{ movie.id }}
+    var jsonobj = [{"movie_id": {{ movie.id }} }]
+    params.filter = JSON.stringify(jsonobj)
     return params
   }
 

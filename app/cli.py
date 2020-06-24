@@ -16,7 +16,7 @@ def import_cast():
 
   with open('data/cast.json','r',encoding='utf8') as fp:
     movies = json.load(fp)
-  
+
   for m in movies[69:]:
     movie_url = m.get('movie_url')
     movie = Movie.query.filter_by(url=movie_url).first()
@@ -28,9 +28,7 @@ def import_cast():
       if c.get('actor_url'):
         actor_url = url_prefix + c.get("actor_url")
         actor = People.query.filter_by(url=actor_url).first()
-        if actor:
-          pass
-        else:
+        if not actor:
           print(f"ERROR actor {c.actor} not found.")
       character_name = c.get("role")
       char = None

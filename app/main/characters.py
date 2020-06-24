@@ -4,37 +4,37 @@ from app.main import bp
 from flask_login import current_user, login_required
 from app.models import User, People, Character
 from math import floor
+import json
+
+@bp.route("/characters", methods=['GET'])
+@login_required
+def characters():
+    return render_template("characters.html", title="Characters")
 
 @bp.route("/characters_json", methods=['GET'])
 @login_required
 def characters_json():
-    # search = request.args.get("search", "", type=str)  # full text search
+    search = request.args.get("search", "", type=str)  # full text search
     sort = request.args.get("sort", "", type=str)  # field to sort by
     order = request.args.get("order", "asc", type=str)  # desc or asc
     offset = request.args.get("offset", 0, type=int)  # start item
     limit = request.args.get("limit", current_app.config["ITEMS_PER_PAGE"], type=int)  # per page
     page = floor(offset / limit) + 1  # estimage page from offset
-    movie_id = request.args.get("movie_id", None, type=int)
-    actor_id = request.args.get("actor_id", None, type=int)
-    # if search:
-    #     # in this case, sort by search score
-    #     people, total = People.search(search, page, limit)
-    # else:
-    if sort not in [i for i in Character.__dict__.keys() if i[:1] != '_']:
+    filter_ = request.args.get("filter", None, type=str)
+    query = {"bool": {}}
+    if search:
+        query["bool"]["must"] = {}
+        query["bool"]["must"]["multi_match"] = {"query": search, "fields": ["*"]}
+    # filter options
+    if filter_:
+        filter_list = json.loads(filter_)
+        filters = [{"term": f} for f in filter_list]
+        query["bool"]["filter"] = filters
+    if not sort or sort not in Character.__sortable__:
         sort = "order"
-    sort_field = Character.__dict__[sort]
-    order_method = sort_field.desc() if order == "desc" else sort_field.asc()
-    if movie_id:
-        query = Character.query.filter_by(movie_id=movie_id)
-    elif actor_id:
-        query = Character.query.filter_by(actor_id=actor_id)
-    else:
-        query = Character.query
-    query = query.order_by(order_method).paginate(
-        page, limit, False
-    )
-    items = query.items
-    total = query.total
+    if order != "asc":
+        order = "desc"
+    items, total = Character.search_query(query, page, limit, sort, order)
     return {'total': total, 'rows': [item.to_dict() for item in items]}
 
 

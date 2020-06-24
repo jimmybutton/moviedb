@@ -32,7 +32,9 @@
   <button id="btnGetSelected" class="btn btn-secondary btn-sm">getSelections</button>
 </div>
 <table id="table" data-toggle="table" data-url="{{ url_for('main.movies_json') }}" data-search="true" data-height="640"
-  data-show-columns="true" data-page-list="[10, 25, 50, 100]" data-icon-size="sm" data-pagination="true" data-toolbar="#toolbar" data-side-pagination="server">
+  data-sort-name="rating_value" data-sort-order="desc"
+  data-show-columns="true" data-page-list="[10, 25, 50, 100]" data-icon-size="sm" 
+  data-pagination="true" data-toolbar="#toolbar" data-side-pagination="server">
   <!-- data-side-pagination="server" -->
   <thead class="text-muted">
     <tr>

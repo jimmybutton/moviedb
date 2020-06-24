@@ -7,34 +7,34 @@ from app.search import (
     remove_from_index,
     query_index,
     query_index_full_text,
-    clear_index
+    clear_index,
 )
 
 
 class SearchableMixin(object):
     @classmethod
     def search(cls, expression, page, per_page):
+        """full text search across all search in __searchable__"""
         ids, total = query_index_full_text(
             cls.__tablename__, expression, page, per_page
         )
         if total == 0:
             return cls.query.filter_by(id=0), 0
-        when = []
-        for i in range(len(ids)):
-            when.append((ids[i], i))
+        when = [(ids[i], i) for i in range(len(ids))]
         return (
             cls.query.filter(cls.id.in_(ids)).order_by(db.case(when, value=cls.id)),
             total,
         )
 
     @classmethod
-    def search_by_fields(cls, expression, page, per_page):
-        ids, total = query_index(cls.__tablename__, expression, page, per_page)
+    def search_query(cls, query, page, per_page, sort_by=None, order="asc"):
+        """allows for complex queries with elasticsearch dsl"""
+        ids, total = query_index(
+            cls.__tablename__, query, page, per_page, sort_by, order
+        )
         if total == 0:
             return cls.query.filter_by(id=0), 0
-        when = []
-        for i in range(len(ids)):
-            when.append((ids[i], i))
+        when = [(ids[i], i) for i in range(len(ids))]  # sort by search score
         return (
             cls.query.filter(cls.id.in_(ids)).order_by(db.case(when, value=cls.id)),
             total,
@@ -63,7 +63,7 @@ class SearchableMixin(object):
 
     @classmethod
     def reindex(cls):
-        clear_index(cls.__tablename__)
+        clear_index(cls.__tablename__, cls.__searchable__)
         for obj in cls.query:
             add_to_index(cls.__tablename__, obj)
 
@@ -107,11 +107,16 @@ class Movie(SearchableMixin, db.Model):
         "url",
     ]
     id = db.Column(db.Integer, primary_key=True)
-    created_timestamp = db.Column(db.DateTime, index=True, default=datetime.datetime.utcnow)
+    created_timestamp = db.Column(
+        db.DateTime, index=True, default=datetime.datetime.utcnow
+    )
     created_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     created_by = db.relationship("User", foreign_keys=[created_id])
     modified_timestamp = db.Column(
-        db.DateTime, index=True, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow
+        db.DateTime,
+        index=True,
+        default=datetime.datetime.utcnow,
+        onupdate=datetime.datetime.utcnow,
     )
     modified_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     modified_by = db.relationship("User", foreign_keys=[modified_id])
@@ -129,7 +134,9 @@ class Movie(SearchableMixin, db.Model):
     runtime = db.Column(db.Integer)
     url = db.Column(db.String(64))
 
-    cast = db.relationship("Character", foreign_keys="Character.movie_id", backref="movie", lazy="dynamic")
+    cast = db.relationship(
+        "Character", foreign_keys="Character.movie_id", backref="movie", lazy="dynamic"
+    )
 
     def __repr__(self):
         return "<Movie {}>".format(self.title)
@@ -139,22 +146,28 @@ class Movie(SearchableMixin, db.Model):
         return f"{self.title} ({self.year})"
 
     def to_dict(self):
-        fields = ['id', 'modified_timestamp'] + self.__formfields__
+        fields = ["id", "modified_timestamp"] + self.__formfields__
         data = {}
         for f in fields:
             data[f] = getattr(self, f)
         return data
 
+
 class People(SearchableMixin, db.Model):
     __searchable__ = ["name", "birthname", "bio"]
-    __formfields__ = ['name','url','image_url','dob','birthname','height','bio']
+    __formfields__ = ["name", "url", "image_url", "dob", "birthname", "height", "bio"]
     _image_url_fallback = "https://m.media-amazon.com/images/G/01/imdb/images/nopicture/32x44/name-2138558783._CB468460248_.png"
     id = db.Column(db.Integer, primary_key=True)
-    created_timestamp = db.Column(db.DateTime, index=True, default=datetime.datetime.utcnow)
+    created_timestamp = db.Column(
+        db.DateTime, index=True, default=datetime.datetime.utcnow
+    )
     created_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     created_by = db.relationship("User", foreign_keys=[created_id])
     modified_timestamp = db.Column(
-        db.DateTime, index=True, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow
+        db.DateTime,
+        index=True,
+        default=datetime.datetime.utcnow,
+        onupdate=datetime.datetime.utcnow,
     )
     modified_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     modified_by = db.relationship("User", foreign_keys=[modified_id])
@@ -167,33 +180,69 @@ class People(SearchableMixin, db.Model):
     height = db.Column(db.String(64))
     bio = db.Column(db.String(1024))
 
-    roles = db.relationship("Character", foreign_keys="Character.actor_id", backref="actor", lazy="dynamic")
+    roles = db.relationship(
+        "Character", foreign_keys="Character.actor_id", backref="actor", lazy="dynamic"
+    )
 
     def __repr__(self):
         return "<Person {}>".format(self.name)
 
     def to_dict(self):
-        fields = ['id', 'modified_timestamp'] + self.__formfields__
+        fields = ["id", "modified_timestamp"] + self.__formfields__
         data = {}
         for f in fields:
             value = getattr(self, f)
-            if f == 'image_url' and value is None:
-                value = _image_url_fallback
+            if f == "image_url" and value is None:
+                value = self._image_url_fallback
             if type(value) is datetime.date:
                 data[f] = value.strftime(r"%a, %d %b %Y")
             else:
                 data[f] = value
         return data
 
+
 class Character(SearchableMixin, db.Model):
-    __searchable__ = ["movie_title","actor_name","character_name", "movie_year"]
-    __formfields__ = ['name']
+    # __searchable__ = ["movie_title","actor_name","character_name", "movie_year"]
+    __searchable__ = {
+        "movie_id": {"type": "keyword"},
+        "actor_id": {"type": "keyword"},
+        "movie_title": {
+            "type": "text",
+            "fields": {
+                "raw": { 
+                    "type":  "keyword"
+                }
+            }},
+        "movie_year": {"type": "keyword"},
+        "actor_name": {
+            "type": "text",
+            "fields": {
+                "raw": { 
+                    "type":  "keyword"
+                }
+            }},
+        "character_name": {
+            "type": "text",
+            "fields": {
+                "raw": { 
+                    "type":  "keyword"
+                }
+            }},
+        "order": {"type": "integer"}
+    }
+    __sortable__ = [k for k, v in __searchable__.items() if v.get("type") == "keyword"] + [k + ".raw" for k, v in __searchable__.items() if v.get("fields")]
+    __formfields__ = ["name"]
     id = db.Column(db.Integer, primary_key=True)
-    created_timestamp = db.Column(db.DateTime, index=True, default=datetime.datetime.utcnow)
+    created_timestamp = db.Column(
+        db.DateTime, index=True, default=datetime.datetime.utcnow
+    )
     created_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     created_by = db.relationship("User", foreign_keys=[created_id])
     modified_timestamp = db.Column(
-        db.DateTime, index=True, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow
+        db.DateTime,
+        index=True,
+        default=datetime.datetime.utcnow,
+        onupdate=datetime.datetime.utcnow,
     )
     modified_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     modified_by = db.relationship("User", foreign_keys=[modified_id])
@@ -206,27 +255,31 @@ class Character(SearchableMixin, db.Model):
 
     # read only fields, need to be updated when link changes
     movie_title = db.Column(db.String(128))  # movie.title
-    movie_year = db.Column(db.Integer)       # movie.year
-    actor_name = db.Column(db.String(128))   # actor.name
+    movie_year = db.Column(db.Integer)  # movie.year
+    actor_name = db.Column(db.String(128))  # actor.name
 
     def __repr__(self):
-        return "<Character {}, Actor {}, Movie {}, Order {}>".format(self.character_name, self.actor_name, self.movie_title, self.order)
+        return "<Character {}, Actor {}, Movie {}, Order {}>".format(
+            self.character_name, self.actor_name, self.movie_title, self.order
+        )
 
     def to_dict(self):
-        data = {
+        return {
             "id": self.id,
             "order": self.order,
             "actor_id": self.actor_id,
-            "actor_image": self.actor.image_url if self.actor.image_url else self.actor._image_url_fallback,
+            "actor_image": self.actor.image_url
+            if self.actor.image_url
+            else self.actor._image_url_fallback,
             "actor_name": self.actor_name,
             "movie_id": self.movie_id,
             "movie_title": self.movie_title,
             "movie_year": self.movie.year,
             "movie_image": self.movie.poster_url,
             "character_name": self.character_name,
-            "character_url": self.character_url
+            "character_url": self.character_url,
         }
-        return data
+
 
 @login.user_loader
 def load_user(id):
