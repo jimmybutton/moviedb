@@ -30,8 +30,12 @@ def characters_json():
         filter_list = json.loads(filter_)
         filters = [{"term": f} for f in filter_list]
         query["bool"]["filter"] = filters
-    if not sort or sort not in Character.__sortable__:
-        sort = "order"
+    if not search:
+        if not sort or sort not in Character.__searchable__.keys():
+            sort = "order"
+        else:
+            if Character.__searchable__[sort].get('fields',{}).get('raw',{}).get('type','') == 'keyword':
+                sort = sort + '.raw'
     if order != "asc":
         order = "desc"
     items, total = Character.search_query(query, page, limit, sort, order)

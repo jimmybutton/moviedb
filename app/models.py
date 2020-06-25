@@ -9,6 +9,7 @@ from app.search import (
     query_index_full_text,
     clear_index,
 )
+import progressbar
 
 
 class SearchableMixin(object):
@@ -64,7 +65,7 @@ class SearchableMixin(object):
     @classmethod
     def reindex(cls):
         clear_index(cls.__tablename__, cls.__searchable__)
-        for obj in cls.query:
+        for obj in progressbar.progressbar(cls.query, max_value=cls.query.count()):
             add_to_index(cls.__tablename__, obj)
 
 
@@ -91,7 +92,24 @@ class User(UserMixin, db.Model):
 
 
 class Movie(SearchableMixin, db.Model):
-    __searchable__ = ["title", "plot_summary"]
+    __searchable__ = {
+        "id": {"type": "keyword"},
+        "title": {
+            "type": "text",
+            "fields": {"raw": {"type":  "keyword"}}},  # later add a search_as_you_type field
+        "year": {"type": "short"},
+        "director": {
+            "type": "text",
+            "fields": {"raw": {"type":  "keyword"}}},
+        "category": {"type": "keyword"},
+        "certificate": {"type": "keyword"},
+        "release_date": {"type": "text"},  # this should be date and needs to be cleaned!
+        "plot_summary": {"type": "text"},
+        "rating_value": {"type": "short"},
+        "rating_count": {"type": "integer"},
+        "runtime": {"type": "short"},
+    }
+    __default_sort__ = ("rating_value", "desc")
     __formfields__ = [
         "title",
         "year",
@@ -154,7 +172,16 @@ class Movie(SearchableMixin, db.Model):
 
 
 class People(SearchableMixin, db.Model):
-    __searchable__ = ["name", "birthname", "bio"]
+    __searchable__ = {
+        "id": {"type": "keyword"},
+        "modified_timestamp": {"type": "date"},
+        "name": {
+            "type": "text",
+            "fields": {"raw": {"type":  "keyword"}}},
+        "bio": {"type": "text"},
+        "dob": {"type": "date"}
+    }
+    __default_sort__ = ("name.raw", "asc")
     __formfields__ = ["name", "url", "image_url", "dob", "birthname", "height", "bio"]
     _image_url_fallback = "https://m.media-amazon.com/images/G/01/imdb/images/nopicture/32x44/name-2138558783._CB468460248_.png"
     id = db.Column(db.Integer, primary_key=True)
@@ -230,6 +257,7 @@ class Character(SearchableMixin, db.Model):
             }},
         "order": {"type": "integer"}
     }
+    __default_sort__ = ("character_name.raw", "asc")
     __sortable__ = [k for k, v in __searchable__.items() if v.get("type") == "keyword"] + [k + ".raw" for k, v in __searchable__.items() if v.get("fields")]
     __formfields__ = ["name"]
     id = db.Column(db.Integer, primary_key=True)

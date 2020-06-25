@@ -113,13 +113,13 @@
     </h6>
   </div>
   <div class="card-body mb-0">
-    <table id="table" data-toggle="table" data-url="{{ url_for('main.characters_json') }}"
+    <table id="table" data-toggle="table" data-url="{{ url_for('main.api', doctype='characters') }}"
       data-sort-name="order" data-sort-order="asc"
       data-page-list="[10, 25, 50, 100]" data-icon-size="sm" data-pagination="true" data-query-params="queryParams" data-side-pagination="server" >
       <!-- data-side-pagination="server" -->
       <thead class="text-muted">
         <tr>
-          <th data-field="order" data-sortable="true" data-width="40">#</th>
+          <th data-field="order" data-sortable="true" data-width="30">#</th>
           <th data-field="actor_name" data-formatter="actorLinkFormatter" data-sortable="true">Actor</th>
           <th data-field="character_name" data-sortable="true">Character</th>
         </tr>
@@ -232,7 +232,7 @@
   function actorLinkFormatter(value, row, index) {
     return [
     '<div class="media">',
-    '  <img src="', row.actor_image, '" class="align-self-center mr-3" alt="Poster" style="height:48px;">',
+    '  <img src="', row.actor_image, '" class="align-self-center mr-2" alt="Poster" style="height:48px;">',
     '  <div class="media-body align-self-center">',
     '    <a href="/people/', row.actor_id, '" title="Show details">', value, '</a>',
     '  </div>',

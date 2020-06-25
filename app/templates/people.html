@@ -31,7 +31,7 @@
 <div id="toolbar">
   <button id="btnGetSelected" class="btn btn-secondary btn-sm">getSelections</button>
 </div>
-<table id="table" data-toggle="table" data-url="{{ url_for('main.people_json') }}" data-search="true" data-height="640"
+<table id="table" data-toggle="table" data-url="{{ url_for('main.api', doctype='people') }}" data-search="true"
   data-show-columns="true" data-page-list="[10, 25, 50, 100]" data-icon-size="sm" data-pagination="true"
   data-toolbar="#toolbar" data-side-pagination="server">
   <thead class="text-muted">
@@ -40,18 +40,16 @@
       <th data-field="fav" data-formatter="favFormatter" data-events="operateEvents" data-align="center">
         <i class="fa fa-heart text-secondary"></i>
       </th>
-      <th data-field="image_url" data-formatter="imageFormatter" data-align="center">Image</th>
-      <!-- data-cell-style="cellStyle" -->
-      <th data-field="name" data-formatter="linkFormatter" data-sortable="true">Name</th>
-      <th data-field="dob" data-sortable="true">DOB</th>
-      <th data-field="birthname" data-sortable="true">Birth name</th>
-      <th data-field="height" data-sortable="true">Height</th>
+      <th data-field="name" data-formatter="nameFormatter" data-sortable="true">Name</th>
+      <th data-field="dob" data-sortable="true">Date of birth</th>
+      <th data-field="height">Height</th>
     </tr>
   </thead>
 </table>
 {% endblock %}
 
 {% block script %}
+<script src="{{url_for('static', filename='table_utils.js')}}"></script>
 <script>
   // cell formatters
   function favFormatter(value, row, index) {
@@ -61,61 +59,15 @@
       '</a>'
     ].join('')
   }
-  function linkFormatter(value, row, index) {
+  function nameFormatter(value, row, index) {
     return [
-      '<a href="people/', row.id, '" title="Show details">', value, '</a>',
+    '<div class="media">',
+    '  <img src="', row.image_url, '" class="align-self-center mr-2" alt="Poster" style="height:48px;">',
+    '  <div class="media-body align-self-center">',
+    '    <a href="/movie/', row.id, '" title="Show details">', value, '</a>',
+    '  </div>',
+    '</div>',
     ].join('')
   }
-  function imageFormatter(value, row, index) {
-    return [
-      '<img src="', value, '" alt="Poster" style="height:48px;">',
-    ].join('')
-  }
-
-  window.operateEvents = {
-    'click .like': function (e, value, row, index) {
-      alert('You clicked like movie: ' + row.title)
-    },
-    'click .remove': function (e, value, row, index) {
-      $table.bootstrapTable('remove', {
-        field: 'id',
-        values: [row.id]
-      })
-    }
-  }
-
-  $(document).ready(function () {
-
-    var $table = $('#table')
-    var $btnGetSelected = $('#btnGetSelected')
-
-    // get selected rows and alert movie titles
-    $btnGetSelected.click(function () {
-      var list_of_names = $table.bootstrapTable('getSelections').map(
-        function (element) { return element.name; }
-      );
-      // alert('getSelections: ' + JSON.stringify($table.bootstrapTable('getSelections')))
-      alert('getSelections: ' + list_of_names)
-    })
-
-    // remove vertical borders
-    $table.bootstrapTable('refreshOptions', {
-      classes: 'table table-hover bg-white table-sm'
-    })
-
-    // adjust table height
-    function adjustTableHeight() {
-      let viewportHeight = $(window).height();
-      let tableHeight = viewportHeight - 140;
-      if (tableHeight < 480) {
-        tableHeight = 480
-      }
-      $('#table').bootstrapTable('resetView', { height: tableHeight });
-    }
-    adjustTableHeight();
-    $(window).resize(function () {
-      adjustTableHeight();
-    });
-  });
 </script>
 {% endblock %}

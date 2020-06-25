@@ -3,8 +3,10 @@ from app import db
 from app.main import bp
 from app.main.forms import EditProfileForm
 from flask_login import current_user, login_required
-from app.models import User
+from app.models import User, Movie, People, Character
 from datetime import datetime
+from math import floor
+import json
 
 @bp.route("/")
 @login_required
@@ -38,3 +40,41 @@ def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
+
+@bp.route("/json/<doctype>", methods=['GET'])
+@login_required
+def api(doctype):
+    if doctype == "movies":
+        doctype_class = Movie
+    elif doctype == "characters":
+        doctype_class = Character
+    elif doctype == "people":
+        doctype_class = People
+    else:
+        return {'total': 0, 'rows': []}
+    search = request.args.get("search", "", type=str)  # full text search
+    sort = request.args.get("sort", "", type=str)  # field to sort by
+    order = request.args.get("order", None, type=str)  # desc or asc
+    offset = request.args.get("offset", 0, type=int)  # start item
+    limit = request.args.get("limit", current_app.config["ITEMS_PER_PAGE"], type=int)  # per page
+    page = floor(offset / limit) + 1  # estimage page from offset
+    filter_ = request.args.get("filter", None, type=str)
+    query = {"bool": {}}
+    if search:
+        query["bool"]["must"] = {}
+        query["bool"]["must"]["multi_match"] = {"query": search, "fields": ["*"]}
+    # filter options
+    if filter_:
+        filter_list = json.loads(filter_)
+        filters = [{"term": f} for f in filter_list]
+        query["bool"]["filter"] = filters
+    if not search:
+        if not sort or sort not in doctype_class.__searchable__.keys():
+            sort = doctype_class.__default_sort__[0]
+        else:
+            if doctype_class.__searchable__[sort].get('fields',{}).get('raw',{}).get('type','') == 'keyword':
+                sort = sort + '.raw'
+    if not order or order not in ['asc', 'desc']:
+        order = doctype_class.__default_sort__[1]
+    items, total = doctype_class.search_query(query, page, limit, sort, order)
+    return {'total': total, 'rows': [item.to_dict() for item in items]}
