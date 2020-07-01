@@ -1,75 +1,4 @@
-2020-05-19 09:04:14,382 ERROR: Exception on /create_movie [POST] [in C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py:1891]
-Traceback (most recent call last):
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1175, in _execute_context
-    context = constructor(dialect, self, conn, *args)
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\default.py", line 836, in _init_compiled
-    param.append(processors[key](compiled_params[key]))
-TypeError: float() argument must be a string or a number, not 'DecimalField'
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
-    response = self.full_dispatch_request()
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
-    reraise(exc_type, exc_value, tb)
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
-    raise value
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
-    return self.view_functions[rule.endpoint](**req.view_args)
-  File "C:\Users\samul\projects\moviedb\app\main\routes.py", line 113, in movie_create
-    db.session.commit()
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\scoping.py", line 162, in do
-    return getattr(self.registry(), name)(*args, **kwargs)
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 1036, in commit
-    self.transaction.commit()
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 503, in commit
-    self._prepare_impl()
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 482, in _prepare_impl
-    self.session.flush()
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2496, in flush
-    self._flush(objects)
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2637, in _flush
-    transaction.rollback(_capture_exception=True)
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 68, in __exit__
-    compat.raise_(
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\util\compat.py", line 178, in raise_
-    raise exception
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2597, in _flush
-    flush_context.execute()
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 422, in execute
-    rec.execute(self)
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 586, in execute
-    persistence.save_obj(
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\persistence.py", line 239, in save_obj
-    _emit_insert_statements(
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\persistence.py", line 1135, in _emit_insert_statements
-    result = cached_connections[connection].execute(
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 984, in execute
-    return meth(self, multiparams, params)
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 293, in _execute_on_connection
-    return connection._execute_clauseelement(self, multiparams, params)
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1097, in _execute_clauseelement
-    ret = self._execute_context(
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1177, in _execute_context
-    self._handle_dbapi_exception(
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1481, in _handle_dbapi_exception
-    util.raise_(
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\util\compat.py", line 178, in raise_
-    raise exception
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1175, in _execute_context
-    context = constructor(dialect, self, conn, *args)
-  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\default.py", line 836, in _init_compiled
-    param.append(processors[key](compiled_params[key]))
-sqlalchemy.exc.StatementError: (builtins.TypeError) float() argument must be a string or a number, not 'DecimalField'
-[SQL: INSERT INTO movie (created_timestamp, created_id, modified_timestamp, modified_id, title, year, certificate, category, release_date, plot_summary, director, rating_value, rating_count, poster_url, runtime, url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]
-[parameters: [{'certificate': <wtforms.fields.core.SelectField object at 0x05C6D118>, 'rating_value': <wtforms.fields.core.DecimalField object at 0x05C6D328>, 'url ... (572 characters truncated) ... forms.fields.core.StringField object at 0x05C6D6E8>, 'plot_summary': <wtforms.fields.simple.TextAreaField object at 0x05C6D448>, 'modified_id': None}]]
-2020-05-19 09:05:14,207 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:52]
-2020-05-19 09:05:18,690 ERROR: Exception on /create_movie [POST] [in C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py:1891]
+2020-05-19 09:06:35,847 ERROR: Exception on /create_movie [POST] [in C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py:1891]
 Traceback (most recent call last):
   File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -86,7 +15,11 @@ Traceback (most recent call last):
   File "C:\Users\samul\projects\moviedb\app\main\routes.py", line 110, in movie_create
     if v.data:
 AttributeError: 'Meta' object has no attribute 'data'
-2020-05-19 09:05:36,235 ERROR: Exception on /create_movie [POST] [in C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py:1891]
+2020-05-19 09:09:11,766 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:52]
+2020-05-19 09:18:42,925 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:52]
+2020-05-21 09:06:56,451 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:52]
+2020-05-21 09:18:08,491 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:52]
+2020-05-21 09:18:14,708 ERROR: Exception on /movie/252/edit [POST] [in C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py:1891]
 Traceback (most recent call last):
   File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -100,11 +33,14 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "C:\Users\samul\projects\moviedb\app\main\routes.py", line 110, in movie_create
-    if v.data:
-AttributeError: 'Meta' object has no attribute 'data'
-2020-05-19 09:05:49,384 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:52]
-2020-05-19 09:06:01,013 ERROR: Exception on /create_movie [POST] [in C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py:1891]
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\samul\projects\moviedb\app\main\routes.py", line 133, in edit_movie
+    movie.title = form.title.value
+AttributeError: 'StringField' object has no attribute 'value'
+2020-05-21 09:20:19,584 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:52]
+2020-05-21 09:22:50,470 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:52]
+2020-05-21 09:23:19,400 ERROR: Exception on /movie/252/edit [GET] [in C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py:1891]
 Traceback (most recent call last):
   File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -118,6 +54,63 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "C:\Users\samul\projects\moviedb\app\main\routes.py", line 110, in movie_create
-    if v.data:
-AttributeError: 'Meta' object has no attribute 'data'
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\samul\projects\moviedb\app\main\routes.py", line 168, in edit_movie
+    fomr.title.data = movie.title
+NameError: name 'fomr' is not defined
+2020-05-21 09:23:50,880 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:52]
+2020-05-22 09:18:09,535 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:52]
+2020-05-22 09:22:30,277 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:52]
+2020-05-22 09:25:31,495 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:52]
+2020-06-06 10:29:51,998 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:56]
+2020-06-09 08:44:28,688 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:56]
+2020-06-09 08:55:14,591 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:56]
+2020-06-09 08:58:20,950 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:56]
+2020-06-09 08:59:12,773 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:56]
+2020-06-09 17:07:51,954 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:56]
+2020-06-09 17:11:04,264 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:56]
+2020-06-09 18:11:22,392 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:56]
+2020-06-11 17:22:05,425 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:56]
+2020-06-11 17:29:32,110 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:56]
+2020-06-11 17:33:58,882 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:56]
+2020-06-11 17:35:17,782 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:56]
+2020-06-16 18:11:44,562 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:56]
+2020-06-23 09:05:32,210 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:59]
+2020-06-25 17:40:51,472 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:59]
+2020-06-25 17:42:26,264 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:59]
+2020-06-25 17:44:45,751 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:59]
+2020-06-30 09:41:18,968 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:59]
+2020-06-30 09:47:05,632 ERROR: Exception on /json/movies [GET] [in C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py:1891]
+Traceback (most recent call last):
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\samul\projects\moviedb\app\main\core.py", line 84, in api
+    items, total = doctype_class.search_query(query, page, limit, sort, order)
+  File "C:\Users\samul\projects\moviedb\app\models.py", line 33, in search_query
+    ids, total = query_index(
+  File "C:\Users\samul\projects\moviedb\app\search.py", line 45, in query_index
+    search = current_app.elasticsearch.search(
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\elasticsearch\client\utils.py", line 92, in _wrapped
+    return func(*args, params=params, headers=headers, **kwargs)
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\elasticsearch\client\__init__.py", line 1618, in search
+    return self.transport.perform_request(
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\elasticsearch\transport.py", line 355, in perform_request
+    status, headers_response, data = connection.perform_request(
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\elasticsearch\connection\http_urllib3.py", line 252, in perform_request
+    self._raise_error(response.status, raw_data)
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\elasticsearch\connection\base.py", line 281, in _raise_error
+    raise HTTP_EXCEPTIONS.get(status_code, TransportError)(
+elasticsearch.exceptions.RequestError: RequestError(400, 'x_content_parse_exception', '[match] query malformed, no start_object after query name')

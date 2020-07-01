@@ -1,5 +1,6 @@
 from flask import current_app
 from elasticsearch import NotFoundError
+from datetime import datetime
 
 
 def add_to_index(index, model):
@@ -7,7 +8,11 @@ def add_to_index(index, model):
         return
     payload = {}
     for field in model.__searchable__.keys():
-        payload[field] = getattr(model, field)
+        value = getattr(model, field)
+        if isinstance(value, datetime):
+            payload[field] = value.isoformat()
+        else:
+            payload[field] = value
     current_app.elasticsearch.index(index=index, id=model.id, body=payload)
 
 

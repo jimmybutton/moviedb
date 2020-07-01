@@ -78,39 +78,62 @@
     </div>
   </form>
 </div> -->
-<div id="toolbar">
+<div id="toolbar" class="form-row">
   <!-- <button id="btnGetSelected" class="btn btn-secondary btn-sm">getSelections</button> -->
-  <select id="category" class="custom-select custom-select-sm">
-    <option selected>Select Category</option>
-    <option>Action</option>
-    <option>Adventure</option>
-    <option>Animation</option>
-    <option>Biography</option>
-    <option>Comedy</option>
-    <option>Crime</option>
-    <option>Drama</option>
-    <option>Film-Noir</option>
-    <option>Horror</option>
-    <option>Mystery</option>
-    <option>Western</option>
-  </select>
+  <div class="col col-auto">
+    <input id="searchInput" type="text" class="form-control form-control-sm" placeholder="Search">
+  </div>
+  <div class="col col-auto">
+    <input id="titleInput" type="text" class="form-control form-control-sm" placeholder="Title">
+  </div>
+  <div class="col col-auto">
+    <select id="selectCategory" class="custom-select custom-select-sm">
+      <option selected>Select Category</option>
+      <option>Action</option>
+      <option>Adventure</option>
+      <option>Animation</option>
+      <option>Biography</option>
+      <option>Comedy</option>
+      <option>Crime</option>
+      <option>Drama</option>
+      <option>Film-Noir</option>
+      <option>Horror</option>
+      <option>Mystery</option>
+      <option>Western</option>
+    </select>
+  </div>
+  <div class="input-group col">
+    <select id="sortFieldSelect" class="custom-select custom-select-sm" aria-label="Field to sort by">
+      <option value="title">Title</option>
+      <option value="year">Year</option>
+      <option value="director">Director</option>
+      <option value="category">Category</option>
+      <option value="rating_value">Rating</option>
+      <option value="modified_timestamp" selected>Last modified</option>
+      <option value="score">Search score</option>
+    </select>
+    <div class="input-group-append">
+      <button id="sortOrderButton" class="btn btn-secondary btn-sm"><i class="fa fa-arrow-down"></i></button>
+    </div>
+  </div>
 </div>
-<table id="table" data-toggle="table" data-url="{{ url_for('main.api', doctype='movies') }}" data-search="true"
-  data-sort-name="rating_value" data-sort-order="desc" data-show-columns="true" data-page-list="[10, 25, 50, 100]"
-  data-icon-size="sm" data-pagination="true" data-side-pagination="server" data-show-refresh="true"
-  data-toolbar="#toolbar" data-query-params="queryParams">
+<table id="table" data-toggle="table" data-url="{{ url_for('main.api', doctype='movies') }}" data-show-columns="true"
+  data-page-list="[10, 25, 50, 100]" data-icon-size="sm" data-pagination="true" data-side-pagination="server"
+  data-show-refresh="true" data-toolbar="#toolbar" data-query-params="queryParams">
+  <!-- data-search="true" data-sort-name="rating_value" data-sort-order="desc"-->
   <thead class="text-muted">
     <tr>
       <th data-field="state" data-checkbox="true"></th>
       <th data-field="fav" data-formatter="favFormatter" data-events="operateEvents" data-align="center"><i
           class="fa fa-heart text-secondary"></i></th>
-      <th data-field="title" data-formatter="titleFormatter" data-sortable="true">Title</th>
-      <th data-field="year" data-sortable="true">Year</th>
-      <th data-field="director" data-sortable="true">Director</th>
-      <th data-field="category" data-sortable="true">Category</th>
-      <th data-field="rating_value" data-sortable="true">Rating</th>
-      <th data-field="certificate" data-sortable="true" data-visible="false">Certificate</th>
-      <th data-field="runtime" data-sortable="true" data-visible="false">Runtime (min)</th>
+      <th data-field="title" data-formatter="titleFormatter">Title</th>
+      <th data-field="year">Year</th>
+      <th data-field="director">Director</th>
+      <th data-field="category">Category</th>
+      <th data-field="rating_value">Rating</th>
+      <th data-field="certificate" data-visible="false">Certificate</th>
+      <th data-field="runtime" data-visible="false">Runtime (min)</th>
+      <th data-field="modified_timestamp" data-visible="true" data-formatter="lastModFormatter">Last Modified</th>
     </tr>
   </thead>
 </table>
@@ -137,14 +160,76 @@
       '</div>',
     ].join('')
   }
+  function lastModFormatter(value, row, index) {
+    return moment(value).fromNow();
+    // return value
+  }
+
+  var $table = $('#table')
+  var $selectCategory = $('#selectCategory')
+  var $searchInput = $('#searchInput')
+  var $titleInput = $('#titleInput')
+  var $sortOrderButton = $('#sortOrderButton')
+  var $sortFieldSelect = $('#sortFieldSelect')
+  var sortOrder = "desc"
+
+  function toggleSortOrder() {
+    if (sortOrder == "asc") {
+      sortOrder = "desc"
+    } else {
+      sortOrder = "asc"
+    }
+    $sortOrderButton.children("i").toggleClass("fa-arrow-up fa-arrow-down")
+  }
 
   function queryParams(params) {
-    var category = $( "#category option:selected" ).text();
+    var category = $("#selectCategory option:selected").text();
     if (category != "Select Category") {
-      var jsonobj = [{"category": category }]
+      var jsonobj = [{ "category": category }]
       params.filter = JSON.stringify(jsonobj)
     }
+    var sortField = $sortFieldSelect.val()
+    if (sortField != "score") {
+      params.sort = sortField
+    }
+    var searchValue = $searchInput.val()
+    if (searchValue != "") {
+      params.search = searchValue
+    }
+    var titleValue = $titleInput.val()
+    if (titleValue != "") {
+      var jsonobj = [{ "title": titleValue }]
+      params.match = JSON.stringify(jsonobj)
+    }
+    params.order = sortOrder
     return params
   }
+
+  function tableRefresh() {
+    $table.bootstrapTable('refresh', {
+      'offset': 0
+    })
+  }
+
+  function tableRefreshSearch(searchValue) {
+    if (sortOrder == "asc") { toggleSortOrder() }
+    if (searchValue != "") {
+      $sortFieldSelect.val("score")
+    } else {
+      $sortFieldSelect.val("modified_timestamp")
+    }
+    tableRefresh()
+  }
+
+  $(function () {
+    $searchInput.change(() => tableRefreshSearch($searchInput.val()) )
+    $titleInput.change(() => tableRefreshSearch($titleInput.val()) )
+    $sortFieldSelect.change(() => tableRefresh() )
+    $sortOrderButton.click(function () {
+      toggleSortOrder()
+      tableRefresh()
+    })
+  })
+
 </script>
 {% endblock %}

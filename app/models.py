@@ -108,6 +108,7 @@ class Movie(SearchableMixin, db.Model):
         "rating_value": {"type": "short"},
         "rating_count": {"type": "integer"},
         "runtime": {"type": "short"},
+        "modified_timestamp": {"type": "date"}
     }
     __default_sort__ = ("rating_value", "desc")
     __formfields__ = [
@@ -164,10 +165,12 @@ class Movie(SearchableMixin, db.Model):
         return f"{self.title} ({self.year})"
 
     def to_dict(self):
-        fields = ["id", "modified_timestamp"] + self.__formfields__
+        fields = ["id"] + self.__formfields__
         data = {}
         for f in fields:
             data[f] = getattr(self, f)
+        data["modified_timestamp"] = self.modified_timestamp.strftime("%Y/%m/%d %H:%M:%S")
+
         return data
 
 

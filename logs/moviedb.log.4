@@ -1,92 +1,70 @@
-2020-04-23 18:44:47,131 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:35]
-2020-04-23 18:45:02,665 ERROR: Exception on /edit_profile [POST] [in c:\users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py:1891]
+2020-05-19 09:03:47,363 ERROR: Exception on /create_movie [POST] [in C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py:1891]
 Traceback (most recent call last):
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1247, in _execute_context
-    self.dialect.do_execute(
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\default.py", line 590, in do_execute
-    cursor.execute(statement, parameters)
-sqlite3.IntegrityError: UNIQUE constraint failed: user.username
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1175, in _execute_context
+    context = constructor(dialect, self, conn, *args)
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\default.py", line 836, in _init_compiled
+    param.append(processors[key](compiled_params[key]))
+TypeError: float() argument must be a string or a number, not 'DecimalField'
 
 The above exception was the direct cause of the following exception:
 
 Traceback (most recent call last):
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
     rv = self.handle_user_exception(e)
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
     reraise(exc_type, exc_value, tb)
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
     raise value
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
     rv = self.dispatch_request()
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
-    return func(*args, **kwargs)
-  File "C:\Users\samul\projects\moviedb\app\routes.py", line 112, in edit_profile
+  File "C:\Users\samul\projects\moviedb\app\main\routes.py", line 113, in movie_create
     db.session.commit()
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\scoping.py", line 162, in do
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\scoping.py", line 162, in do
     return getattr(self.registry(), name)(*args, **kwargs)
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 1036, in commit
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 1036, in commit
     self.transaction.commit()
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 503, in commit
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 503, in commit
     self._prepare_impl()
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 482, in _prepare_impl
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 482, in _prepare_impl
     self.session.flush()
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2496, in flush
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2496, in flush
     self._flush(objects)
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2637, in _flush
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2637, in _flush
     transaction.rollback(_capture_exception=True)
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 68, in __exit__
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 68, in __exit__
     compat.raise_(
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\util\compat.py", line 178, in raise_
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\util\compat.py", line 178, in raise_
     raise exception
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2597, in _flush
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2597, in _flush
     flush_context.execute()
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 422, in execute
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 422, in execute
     rec.execute(self)
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 586, in execute
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 586, in execute
     persistence.save_obj(
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\persistence.py", line 230, in save_obj
-    _emit_update_statements(
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\persistence.py", line 994, in _emit_update_statements
-    c = cached_connections[connection].execute(
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 984, in execute
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\persistence.py", line 239, in save_obj
+    _emit_insert_statements(
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\orm\persistence.py", line 1135, in _emit_insert_statements
+    result = cached_connections[connection].execute(
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 984, in execute
     return meth(self, multiparams, params)
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 293, in _execute_on_connection
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 293, in _execute_on_connection
     return connection._execute_clauseelement(self, multiparams, params)
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1097, in _execute_clauseelement
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1097, in _execute_clauseelement
     ret = self._execute_context(
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1287, in _execute_context
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1177, in _execute_context
     self._handle_dbapi_exception(
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1481, in _handle_dbapi_exception
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1481, in _handle_dbapi_exception
     util.raise_(
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\util\compat.py", line 178, in raise_
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\util\compat.py", line 178, in raise_
     raise exception
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1247, in _execute_context
-    self.dialect.do_execute(
-  File "c:\users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\default.py", line 590, in do_execute
-    cursor.execute(statement, parameters)
-sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: user.username
-[SQL: UPDATE user SET username=?, about_me=? WHERE user.id = ?]
-[parameters: ('susan', 'This is some text about myself.', 2)]
-(Background on this error at: http://sqlalche.me/e/gkpj)
-2020-04-23 18:49:25,274 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:35]
-2020-04-25 18:43:21,928 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:35]
-2020-04-25 18:50:41,353 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:35]
-2020-04-25 18:53:00,552 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:35]
-2020-04-27 22:07:35,888 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:38]
-2020-05-05 08:53:50,969 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:38]
-2020-05-07 17:37:38,914 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:38]
-2020-05-07 17:48:04,310 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:38]
-2020-05-11 22:10:21,765 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:38]
-2020-05-12 16:57:16,411 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:38]
-2020-05-12 16:57:39,526 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:38]
-2020-05-12 17:01:07,371 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:38]
-2020-05-12 17:03:31,551 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:38]
-2020-05-16 23:27:30,326 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:40]
-2020-05-16 23:28:34,468 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:40]
-2020-05-18 09:04:04,286 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:52]
-2020-05-19 09:02:01,933 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:52]
-2020-05-19 09:03:43,810 INFO: Moviedb startup [in C:\Users\samul\projects\moviedb\app\__init__.py:52]
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1175, in _execute_context
+    context = constructor(dialect, self, conn, *args)
+  File "C:\Users\samul\projects\moviedb\venv\lib\site-packages\sqlalchemy\engine\default.py", line 836, in _init_compiled
+    param.append(processors[key](compiled_params[key]))
+sqlalchemy.exc.StatementError: (builtins.TypeError) float() argument must be a string or a number, not 'DecimalField'
+[SQL: INSERT INTO movie (created_timestamp, created_id, modified_timestamp, modified_id, title, year, certificate, category, release_date, plot_summary, director, rating_value, rating_count, poster_url, runtime, url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]
+[parameters: [{'certificate': <wtforms.fields.core.SelectField object at 0x05A1EAD8>, 'rating_value': <wtforms.fields.core.DecimalField object at 0x05A6C2E0>, 'url ... (572 characters truncated) ... forms.fields.core.StringField object at 0x05A6C310>, 'plot_summary': <wtforms.fields.simple.TextAreaField object at 0x05A6C538>, 'modified_id': None}]]

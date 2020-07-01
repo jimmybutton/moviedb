@@ -53,16 +53,21 @@ def api(doctype):
     else:
         return {'total': 0, 'rows': []}
     search = request.args.get("search", "", type=str)  # full text search
+    match = request.args.get("match", None, type=str)  # specific field match
     sort = request.args.get("sort", "", type=str)  # field to sort by
     order = request.args.get("order", None, type=str)  # desc or asc
     offset = request.args.get("offset", 0, type=int)  # start item
     limit = request.args.get("limit", current_app.config["ITEMS_PER_PAGE"], type=int)  # per page
     page = floor(offset / limit) + 1  # estimage page from offset
-    filter_ = request.args.get("filter", None, type=str)
+    filter_ = request.args.get("filter", None, type=str)  #  fields to filter by, not included in search score
     query = {"bool": {}}
+    query["bool"]["must"] = []
     if search:
-        query["bool"]["must"] = {}
-        query["bool"]["must"]["multi_match"] = {"query": search, "fields": ["*"]}
+        query["bool"]["must"].append({"multi_match": {"query": search, "fields": ["*"]}})
+    if match:
+        match_dict = json.loads(match)
+        for m in match_dict:
+            query["bool"]["must"].append({"match": m})
     # filter options
     if filter_:
         filter_list = json.loads(filter_)

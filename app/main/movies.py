@@ -1,4 +1,4 @@
-from flask import render_template, flash, url_for, redirect, request, current_app, Markup
+from flask import render_template, flash, url_for, redirect, request, current_app, Markup, jsonify
 from app import db
 from app.main import bp
 from app.main.forms import EditProfileForm, EditMovieForm, DeleteItemForm, SearchForm
@@ -32,6 +32,11 @@ def movies_json():
         movies = movies_query.items
         total = movies_query.total
     return {'total': total, 'rows': [m.to_dict() for m in movies]}
+
+@bp.route("/directors", methods=['GET'])
+@login_required
+def unique_directors():
+    return jsonify([m.director for m in db.session.query(Movie.director).distinct()])
 
 
 @bp.route("/movies", methods=['GET'])
