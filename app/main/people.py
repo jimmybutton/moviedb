@@ -37,7 +37,7 @@ def people():
     return render_template("people.html", title="People")
 
 
-@bp.route("/people/<id>")
+@bp.route("/person/<id>")
 @login_required
 def person(id):
     person = People.query.get(id)

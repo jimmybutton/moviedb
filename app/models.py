@@ -165,12 +165,14 @@ class Movie(SearchableMixin, db.Model):
         return f"{self.title} ({self.year})"
 
     def to_dict(self):
-        fields = ["id"] + self.__formfields__
+        fields = ["id", "modified_timestamp"] + self.__formfields__
         data = {}
         for f in fields:
-            data[f] = getattr(self, f)
-        data["modified_timestamp"] = self.modified_timestamp.strftime("%Y/%m/%d %H:%M:%S")
-
+            value = getattr(self, f)
+            if isinstance(value, datetime.datetime):
+                data[f] = value.isoformat()
+            else:
+                data[f] = value
         return data
 
 

@@ -216,7 +216,7 @@
   }
 
   function queryParams(params) {
-    var jsonobj = [{"actor_id": {{ person.id }} }]
+    var jsonobj = {"actor_id": {{ person.id }} }
     params.filter = JSON.stringify(jsonobj)
     return params
   }

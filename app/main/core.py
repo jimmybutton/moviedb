@@ -70,8 +70,12 @@ def api(doctype):
             query["bool"]["must"].append({"match": m})
     # filter options
     if filter_:
-        filter_list = json.loads(filter_)
-        filters = [{"term": f} for f in filter_list]
+        filter_dict = json.loads(filter_)
+        filters = []
+        for k, v in filter_dict.items():
+            if doctype_class.__searchable__[k].get('fields',{}).get('raw',{}).get('type','') == 'keyword':
+                k = k + '.raw'
+            filters.append({"term": {k: v}})
         query["bool"]["filter"] = filters
     if not search:
         if not sort or sort not in doctype_class.__searchable__.keys():

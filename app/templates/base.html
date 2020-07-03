@@ -8,11 +8,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
   <link href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css" rel="stylesheet">
   <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  <style>
-    body {
-      background-color: #f5f5f5;
-    }
-  </style>
+  <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
 </head>
 
 <body>
@@ -119,6 +115,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
   <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
+  <script src="{{ url_for('static', filename='typeahead.bundle.min.js') }}"></script>
   {{ moment.include_moment() }}
 
   <script>

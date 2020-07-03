@@ -234,14 +234,14 @@
     '<div class="media">',
     '  <img src="', row.actor_image, '" class="align-self-center mr-2" alt="Poster" style="height:48px;">',
     '  <div class="media-body align-self-center">',
-    '    <a href="/people/', row.actor_id, '" title="Show details">', value, '</a>',
+    '    <a href="/person/', row.actor_id, '" title="Show details">', value, '</a>',
     '  </div>',
     '</div>',
     ].join('')
   }
 
   function queryParams(params) {
-    var jsonobj = [{"movie_id": {{ movie.id }} }]
+    var jsonobj = {"movie_id": {{ movie.id }} }
     params.filter = JSON.stringify(jsonobj)
     return params
   }

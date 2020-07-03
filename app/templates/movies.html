@@ -102,6 +102,9 @@
       <option>Western</option>
     </select>
   </div>
+  <div id="directorTypeahead" class="col col-auto">
+    <input id="directorInput" type="text" class="typeahead form-control form-control-sm" placeholder="Director">
+  </div>
   <div class="input-group col">
     <select id="sortFieldSelect" class="custom-select custom-select-sm" aria-label="Field to sort by">
       <option value="title">Title</option>
@@ -167,6 +170,8 @@
 
   var $table = $('#table')
   var $selectCategory = $('#selectCategory')
+  var $directorTypeahead = $('#directorTypeahead')
+  var $directorInput = $('#directorInput')
   var $searchInput = $('#searchInput')
   var $titleInput = $('#titleInput')
   var $sortOrderButton = $('#sortOrderButton')
@@ -183,11 +188,20 @@
   }
 
   function queryParams(params) {
+    // get filter options
+    var filter = {};
     var category = $("#selectCategory option:selected").text();
     if (category != "Select Category") {
-      var jsonobj = [{ "category": category }]
-      params.filter = JSON.stringify(jsonobj)
+      filter["category"] = category
     }
+    var director = $directorInput.val()
+    if (director != "") {
+      filter["director"] = director
+    }
+    if (!$.isEmptyObject(filter)) {
+      params.filter = JSON.stringify(filter)
+    }
+    // get search fields
     var sortField = $sortFieldSelect.val()
     if (sortField != "score") {
       params.sort = sortField
@@ -222,9 +236,30 @@
   }
 
   $(function () {
-    $searchInput.change(() => tableRefreshSearch($searchInput.val()) )
-    $titleInput.change(() => tableRefreshSearch($titleInput.val()) )
-    $sortFieldSelect.change(() => tableRefresh() )
+    var directors = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.whitespace,
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      // url points to a json file that contains an array of country names, see
+      // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
+      prefetch: "{{ url_for('main.unique_directors') }}"
+    });
+
+    // passing in `null` for the `options` arguments will result in the default
+    // options being used
+    $('#directorInput').typeahead({
+      hint: true,
+      highlight: true,
+      minLength: 1
+    }, {
+      name: 'directors',
+      source: directors
+    });
+
+    $searchInput.change(() => tableRefreshSearch($searchInput.val()))
+    $titleInput.change(() => tableRefreshSearch($titleInput.val()))
+    $directorInput.change(() => tableRefresh())
+    $selectCategory.change(() => tableRefresh())
+    $sortFieldSelect.change(() => tableRefresh())
     $sortOrderButton.click(function () {
       toggleSortOrder()
       tableRefresh()
