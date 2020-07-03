@@ -5,6 +5,7 @@
 {% block header %}
 <div>
   <h3>{{ movie.displayname }}</h3>
+  <input type=hidden id="itemId" value="{{ movie.id }}">
   <p class="small text-muted">{{ movie.category}} | {{ movie.director }} | {{ movie.runtime }} min | <i
       class="fa fa-star" aria-hidden="true"></i> {{ movie.rating_value }} </p>
 </div>
@@ -241,8 +242,8 @@
   }
 
   function queryParams(params) {
-    var jsonobj = {"movie_id": {{ movie.id }} }
-    params.filter = JSON.stringify(jsonobj)
+    itemId = $('#itemId').val()
+    params.filter = JSON.stringify({"movie_id": itemId })
     return params
   }
 
