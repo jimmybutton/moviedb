@@ -27,6 +27,7 @@ $(document).ready(function () {
   // remove vertical borders
   $table.bootstrapTable('refreshOptions', {
     classes: 'table table-hover bg-white table-sm',
+    theadClasses: 'text-muted',
     icons: {
       "refresh": "fa-refresh",
       "columns": "fa-th-list"

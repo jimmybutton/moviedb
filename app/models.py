@@ -73,6 +73,47 @@ db.event.listen(db.session, "before_commit", SearchableMixin.before_commit)
 db.event.listen(db.session, "after_commit", SearchableMixin.after_commit)
 
 
+def get_columns(columndef: list, fields: dict):
+    columns = [dict(c, **{"title": fields[c.get("field")]["label"]}) for c in columndef]
+    pre = [
+        {"title": "", "field": "state", "checkbox": True},
+        {"title": "", "field": "fav", "formatter": "favFormatter", "align": "center",},
+    ]
+    post = [
+        {
+            "title": "Last modified",
+            "field": "modified_timestamp",
+            "formatter": "lastModFormatter",
+        },
+    ]
+    return pre + columns + post
+
+
+def get_search_fields(fields):
+    searchable = {
+        "id": {"type": "keyword"},
+        "modified_timestamp": {"type": "date"},
+    }
+    for name, definition in fields.items():
+        ftype = definition.get("type")
+        if ftype == "string":
+            searchable[name] = {
+                "type": "text",
+                "fields": {"raw": {"type": "keyword"}},
+            }
+        elif ftype == "text":
+            searchable[name] = {"type": "text"}
+        elif ftype == "discrete":
+            searchable[name] = {"type": "keyword"}
+        elif ftype == "integer":
+            searchable[name] = {"type": "integer"}
+        elif ftype == "float":
+            searchable[name] = {"type": "float"}
+        elif ftype in ["date", "datetime"]:
+            searchable[name] = {"type": "date"}
+    return searchable
+
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
@@ -92,39 +133,76 @@ class User(UserMixin, db.Model):
 
 
 class Movie(SearchableMixin, db.Model):
-    __searchable__ = {
-        "id": {"type": "keyword"},
+    __fields__ = {
         "title": {
-            "type": "text",
-            "fields": {"raw": {"type":  "keyword"}}},  # later add a search_as_you_type field
-        "year": {"type": "short"},
-        "director": {
-            "type": "text",
-            "fields": {"raw": {"type":  "keyword"}}},
-        "category": {"type": "keyword"},
-        "certificate": {"type": "keyword"},
-        "release_date": {"type": "text"},  # this should be date and needs to be cleaned!
-        "plot_summary": {"type": "text"},
-        "rating_value": {"type": "short"},
-        "rating_count": {"type": "integer"},
-        "runtime": {"type": "short"},
-        "modified_timestamp": {"type": "date"}
+            "label": "Title",
+            "type": "string",
+            "column": {"order": 1, "formatter": "titleFormatter"},
+        },
+        "year": {"label": "Year", "type": "integer", "column": {"order": 2}},
+        "director": {"label": "Director", "type": "string", "column": {"order": 3}},
+        "category": {
+            "label": "Category",
+            "type": "discrete",
+            "column": {"order": 4},
+            "options": [
+                "Action",
+                "Adventure",
+                "Animation",
+                "Biography",
+                "Comedy",
+                "Crime",
+                "Drama",
+                "Film-Noir",
+                "Horror",
+                "Mystery",
+                "Western",
+            ],
+        },
+        "certificate": {
+            "label": "Certificate",
+            "type": "discrete",
+            "column": {"order": 4, "visible": False},
+            "options": [
+                "U",
+                "12",
+                "12A",
+                "15",
+                "18",
+                "R18",
+                "A",
+                "PG",
+                "U/A",
+                "S",
+                "X",
+            ],
+        },
+        "release_date": {"label": "Release date", "type": "string"},
+        "plot_summary": {"label": "Plot summary", "type": "text"},
+        "rating_value": {"label": "Rating", "type": "float", "column": {"order": 5}},
+        "rating_count": {"label": "Rating count", "type": "integer"},
+        "poster_url": {"label": "Poster", "type": "image_url"},
+        "runtime": {
+            "label": "Runtime (min)",
+            "type": "integer",
+            "column": {"order": 6, "visible": False},
+        },
+        "url": {"label": "Url (imdb)", "type": "url"},
     }
-    __default_sort__ = ("rating_value", "desc")
-    __formfields__ = [
-        "title",
-        "year",
-        "director",
-        "category",
-        "certificate",
-        "release_date",
-        "plot_summary",
-        "rating_value",
-        "rating_count",
-        "poster_url",
-        "runtime",
-        "url",
+    __searchable__ = get_search_fields(__fields__)
+    __formfields__ = list(__fields__.keys())
+    __columndef__ = [
+        {"field": "title", "formatter": "imageLinkFormatter"},
+        {"field": "year"},
+        {"field": "director"},
+        {"field": "category"},
+        {"field": "certificate", "visible": False},
+        {"field": "rating_value"},
+        {"field": "runtime", "visible": False},
     ]
+    __columns__ = get_columns(__columndef__, __fields__)
+    __default_sort__ = ("rating_value", "desc")
+
     id = db.Column(db.Integer, primary_key=True)
     created_timestamp = db.Column(
         db.DateTime, index=True, default=datetime.datetime.utcnow
@@ -164,8 +242,15 @@ class Movie(SearchableMixin, db.Model):
     def displayname(self):
         return f"{self.title} ({self.year})"
 
+    @property
+    def default_image_url(self):
+        if self.poster_url:
+            return self.poster_url
+        else:
+            return "https://m.media-amazon.com/images/G/01/imdb/images/nopicture/small/film-293970583._CB469775754_.png"
+
     def to_dict(self):
-        fields = ["id", "modified_timestamp"] + self.__formfields__
+        fields = ["id", "modified_timestamp", "default_image_url"] + list(self.__fields__.keys())
         data = {}
         for f in fields:
             value = getattr(self, f)
@@ -180,11 +265,9 @@ class People(SearchableMixin, db.Model):
     __searchable__ = {
         "id": {"type": "keyword"},
         "modified_timestamp": {"type": "date"},
-        "name": {
-            "type": "text",
-            "fields": {"raw": {"type":  "keyword"}}},
+        "name": {"type": "text", "fields": {"raw": {"type": "keyword"}}},
         "bio": {"type": "text"},
-        "dob": {"type": "date"}
+        "dob": {"type": "date"},
     }
     __default_sort__ = ("name.raw", "asc")
     __formfields__ = ["name", "url", "image_url", "dob", "birthname", "height", "bio"]
@@ -234,36 +317,19 @@ class People(SearchableMixin, db.Model):
 
 
 class Character(SearchableMixin, db.Model):
-    # __searchable__ = ["movie_title","actor_name","character_name", "movie_year"]
     __searchable__ = {
         "movie_id": {"type": "keyword"},
         "actor_id": {"type": "keyword"},
-        "movie_title": {
-            "type": "text",
-            "fields": {
-                "raw": { 
-                    "type":  "keyword"
-                }
-            }},
+        "movie_title": {"type": "text", "fields": {"raw": {"type": "keyword"}}},
         "movie_year": {"type": "keyword"},
-        "actor_name": {
-            "type": "text",
-            "fields": {
-                "raw": { 
-                    "type":  "keyword"
-                }
-            }},
-        "character_name": {
-            "type": "text",
-            "fields": {
-                "raw": { 
-                    "type":  "keyword"
-                }
-            }},
-        "order": {"type": "integer"}
+        "actor_name": {"type": "text", "fields": {"raw": {"type": "keyword"}}},
+        "character_name": {"type": "text", "fields": {"raw": {"type": "keyword"}}},
+        "order": {"type": "integer"},
     }
     __default_sort__ = ("character_name.raw", "asc")
-    __sortable__ = [k for k, v in __searchable__.items() if v.get("type") == "keyword"] + [k + ".raw" for k, v in __searchable__.items() if v.get("fields")]
+    __sortable__ = [
+        k for k, v in __searchable__.items() if v.get("type") == "keyword"
+    ] + [k + ".raw" for k, v in __searchable__.items() if v.get("fields")]
     __formfields__ = ["name"]
     id = db.Column(db.Integer, primary_key=True)
     created_timestamp = db.Column(

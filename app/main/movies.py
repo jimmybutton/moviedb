@@ -1,4 +1,13 @@
-from flask import render_template, flash, url_for, redirect, request, current_app, Markup, jsonify
+from flask import (
+    render_template,
+    flash,
+    url_for,
+    redirect,
+    request,
+    current_app,
+    Markup,
+    jsonify,
+)
 from app import db
 from app.main import bp
 from app.main.forms import EditProfileForm, EditMovieForm, DeleteItemForm, SearchForm
@@ -9,49 +18,51 @@ from werkzeug.wrappers import Response
 from app.utils import paginate, export_csv
 from math import ceil, floor
 
-@bp.route("/movies_json", methods=['GET'])
+
+@bp.route("/movies_json", methods=["GET"])
 @login_required
 def movies_json():
     search = request.args.get("search", "", type=str)  # full text search
     sort = request.args.get("sort", "", type=str)  # field to sort by
     order = request.args.get("order", "desc", type=str)  # desc or asc
     offset = request.args.get("offset", 0, type=int)  # start item
-    limit = request.args.get("limit", current_app.config["ITEMS_PER_PAGE"], type=int)  # per page
+    limit = request.args.get(
+        "limit", current_app.config["ITEMS_PER_PAGE"], type=int
+    )  # per page
     page = floor(offset / limit) + 1  # estimage page from offset
     if search:
         # in this case, sort by search score
         movies, total = Movie.search(search, page, limit)
     else:
-        if sort not in [i for i in Movie.__dict__.keys() if i[:1] != '_']:
+        if sort not in [i for i in Movie.__dict__.keys() if i[:1] != "_"]:
             sort = "title"
         sort_field = Movie.__dict__[sort]
         order_method = sort_field.desc() if order == "desc" else sort_field.asc()
-        movies_query = Movie.query.order_by(order_method).paginate(
-            page, limit, False
-        )
+        movies_query = Movie.query.order_by(order_method).paginate(page, limit, False)
         movies = movies_query.items
         total = movies_query.total
-    return {'total': total, 'rows': [m.to_dict() for m in movies]}
+    return {"total": total, "rows": [m.to_dict() for m in movies]}
 
-@bp.route("/directors", methods=['GET'])
+
+@bp.route("/directors", methods=["GET"])
 @login_required
 def unique_directors():
     return jsonify([m.director for m in db.session.query(Movie.director).distinct()])
 
 
-@bp.route("/movies", methods=['GET'])
+@bp.route("/movies", methods=["GET"])
 @login_required
 def movies():
-    return render_template("movies.html", title="Movies")
+    return render_template("movies.html", title="Movies", doctype="movies", columns=Movie.__columns__)
 
 
-@bp.route("/movies/export", methods=['GET'])
+@bp.route("/movies/export", methods=["GET"])
 @login_required
 def movies_export():
     movies = Movie.query.all()
-    fields = ['id'] + Movie.__formfields__
+    fields = ["id"] + Movie.__formfields__
     # stream the response as the data is generated
-    response = Response(export_csv(movies, fields), mimetype='text/csv')
+    response = Response(export_csv(movies, fields), mimetype="text/csv")
     # add a filename
     response.headers.set("Content-Disposition", "attachment", filename="movies.csv")
     return response
@@ -66,6 +77,7 @@ def movie(id):
         return redirect(url_for("main.movies"))
     return render_template("movie.html", movie=movie, title="Movies")
 
+
 @bp.route("/movie/<id>/cast")
 @login_required
 def movie_cast(id):
@@ -74,7 +86,7 @@ def movie_cast(id):
         flash("Movie with id={} not found.".format(id))
         return redirect(url_for("main.movies"))
     cast = movie.cast.all()
-    return {'rows': [c.to_dict() for c in cast]}
+    return {"rows": [c.to_dict() for c in cast]}
 
 
 @bp.route("/create_movie", methods=["GET", "POST"])
@@ -88,8 +100,12 @@ def movie_create():
         movie.created_by = current_user
         db.session.add(movie)
         db.session.commit()
-        flash(Markup(f"""Movie <a href="{url_for('main.movie', id=movie.id)}">{movie.title}</a> created.""".format()))
-        if form.submit._value() == 'Save and New':
+        flash(
+            Markup(
+                f"""Movie <a href="{url_for('main.movie', id=movie.id)}">{movie.title}</a> created.""".format()
+            )
+        )
+        if form.submit._value() == "Save and New":
             return redirect(url_for("main.movie_create"))
         else:
             return redirect(url_for("main.movie", id=movie.id))
@@ -111,13 +127,18 @@ def edit_movie(id):
         movie.modified_by = current_user
         db.session.add(movie)
         db.session.commit()
-        flash(Markup(f"""Movie <a href="{url_for('main.movie', id=movie.id)}">{movie.title}</a> updated.""".format()))
+        flash(
+            Markup(
+                f"""Movie <a href="{url_for('main.movie', id=movie.id)}">{movie.title}</a> updated.""".format()
+            )
+        )
         return redirect(url_for("main.movie", id=movie.id))
     elif request.method == "GET":
         for field in movie.__formfields__:
             getattr(form, field).data = getattr(movie, field)
 
     return render_template("movie_create.html", form=form, movie=movie)
+
 
 @bp.route("/movie/<id>/delete", methods=["GET", "POST"])
 @login_required

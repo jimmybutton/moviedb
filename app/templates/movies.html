@@ -3,7 +3,7 @@
 {% block nav_movies %}active{% endblock %}
 
 {% block header %}
-<h3>Movies</h3>
+<h3>{{ title }}</h3>
 <div class="d-flex align-items-center">
   <div class="dropdown">
     <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true"
@@ -11,7 +11,7 @@
       Menu
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <a class="dropdown-item" href="{{ url_for('main.movies_export') }}">Export .csv</a>
+      <a class="dropdown-item" href="#">Export .csv</a>
       <a class="dropdown-item" href="#">Another action</a>
       <a class="dropdown-item" href="#">Something else here</a>
     </div>
@@ -120,31 +120,26 @@
     </div>
   </div>
 </div>
-<table id="table" data-toggle="table" data-url="{{ url_for('main.api', doctype='movies') }}" data-show-columns="true"
+<table id="table" data-url="{{ url_for('main.api', doctype=doctype) }}" data-show-columns="true"
   data-page-list="[10, 25, 50, 100]" data-icon-size="sm" data-pagination="true" data-side-pagination="server"
   data-show-refresh="true" data-toolbar="#toolbar" data-query-params="queryParams">
   <!-- data-search="true" data-sort-name="rating_value" data-sort-order="desc"-->
-  <thead class="text-muted">
-    <tr>
-      <th data-field="state" data-checkbox="true"></th>
-      <th data-field="fav" data-formatter="favFormatter" data-events="operateEvents" data-align="center"><i
-          class="fa fa-heart text-secondary"></i></th>
-      <th data-field="title" data-formatter="titleFormatter">Title</th>
-      <th data-field="year">Year</th>
-      <th data-field="director">Director</th>
-      <th data-field="category">Category</th>
-      <th data-field="rating_value">Rating</th>
-      <th data-field="certificate" data-visible="false">Certificate</th>
-      <th data-field="runtime" data-visible="false">Runtime (min)</th>
-      <th data-field="modified_timestamp" data-visible="true" data-formatter="lastModFormatter">Last Modified</th>
-    </tr>
-  </thead>
 </table>
 {% endblock %}
 
 {% block script %}
-<script src="{{url_for('static', filename='table_utils.js')}}"></script>
+<!-- <script src="{{url_for('static', filename='table_utils.js')}}"></script> -->
 <script>
+  var $table = $('#table')
+  var $selectCategory = $('#selectCategory')
+  var $directorTypeahead = $('#directorTypeahead')
+  var $directorInput = $('#directorInput')
+  var $searchInput = $('#searchInput')
+  var $titleInput = $('#titleInput')
+  var $sortOrderButton = $('#sortOrderButton')
+  var $sortFieldSelect = $('#sortFieldSelect')
+  var sortOrder = "desc"
+
   // cell formatters
   function favFormatter(value, row, index) {
     return [
@@ -153,10 +148,10 @@
       '</a>'
     ].join('')
   }
-  function titleFormatter(value, row, index) {
+  function imageLinkFormatter(value, row, index) {
     return [
       '<div class="media">',
-      '  <img src="', row.poster_url, '" class="align-self-center mr-2" alt="Poster" style="height:48px;">',
+      '  <img src="', row.default_image_url, '" class="align-self-center mr-2" alt="Poster" style="height:48px;">',
       '  <div class="media-body align-self-center">',
       '    <a href="/movie/', row.id, '" title="Show details">', value, '</a>',
       '  </div>',
@@ -167,16 +162,6 @@
     return moment(value).fromNow();
     // return value
   }
-
-  var $table = $('#table')
-  var $selectCategory = $('#selectCategory')
-  var $directorTypeahead = $('#directorTypeahead')
-  var $directorInput = $('#directorInput')
-  var $searchInput = $('#searchInput')
-  var $titleInput = $('#titleInput')
-  var $sortOrderButton = $('#sortOrderButton')
-  var $sortFieldSelect = $('#sortFieldSelect')
-  var sortOrder = "desc"
 
   function toggleSortOrder() {
     if (sortOrder == "asc") {
@@ -236,6 +221,24 @@
   }
 
   $(function () {
+    const columns = {{columns | tojson}};
+
+    // init table
+    $table.bootstrapTable({
+      columns: columns
+    })
+
+    // remove vertical borders
+    $table.bootstrapTable('refreshOptions', {
+      classes: 'table table-hover bg-white table-sm',
+      theadClasses: 'text-muted',
+      icons: {
+        "refresh": "fa-refresh",
+        "columns": "fa-th-list"
+      }
+    })
+
+    // typeahead
     var directors = new Bloodhound({
       datumTokenizer: Bloodhound.tokenizers.whitespace,
       queryTokenizer: Bloodhound.tokenizers.whitespace,

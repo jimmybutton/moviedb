@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField, DecimalField, SelectField, DateField
-from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length, NumberRange
+from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length, NumberRange, Optional
 from app.models import User
 from datetime import date
 from flask import request
@@ -23,15 +23,15 @@ class EditProfileForm(FlaskForm):
     
 class EditMovieForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
-    year = SelectField('Year', validators=[DataRequired()], choices=[(str(y), str(y)) for y in range(int(date.today().year), 1900, -1)])
-    certificate = SelectField('Certificate', choices=[('U','U'),('12','12'),('12A','12A'),('15','15'),('18','18'),('R18','R18'),('A','A'),('PG','PG'),('U/A','U/A'),('S','S'),('X','X')])
-    category = SelectField('Category', choices=[('Action','Action'),('Adventure','Adventure'),('Animation','Animation'),('Biography','Biography'),('Comedy','Comedy'),('Crime','Crime'),('Drama','Drama'),('Film-Noir','Film-Noir'),('Horror','Horror'),('Mystery','Mystery'),('Western','Western')])
+    year = SelectField('Year', validators=[DataRequired()], choices=[(y, y) for y in range(int(date.today().year), 1900, -1)], coerce=int)
+    certificate = SelectField('Certificate', choices=[('',''),('U','U'),('12','12'),('12A','12A'),('15','15'),('18','18'),('R18','R18'),('A','A'),('PG','PG'),('U/A','U/A'),('S','S'),('X','X')])
+    category = SelectField('Category', choices=[('',''),('Action','Action'),('Adventure','Adventure'),('Animation','Animation'),('Biography','Biography'),('Comedy','Comedy'),('Crime','Crime'),('Drama','Drama'),('Film-Noir','Film-Noir'),('Horror','Horror'),('Mystery','Mystery'),('Western','Western')])
     release_date = StringField('Release date')
     director = StringField('Director', validators=[DataRequired()])
     plot_summary = TextAreaField('Plot summary', validators=[Length(min=0, max=300)])
-    rating_value = DecimalField(label='Rating', validators=[NumberRange(min=0, max=10)])
-    rating_count = IntegerField(label='Rating count', validators=[NumberRange(min=0)])
-    runtime = IntegerField(label='Runtime (min)')
+    rating_value = DecimalField(label='Rating', validators=[Optional(), NumberRange(min=0, max=10)])
+    rating_count = IntegerField(label='Rating count', validators=[Optional(), NumberRange(min=0)])
+    runtime = IntegerField(label='Runtime (min)', validators=[Optional()])
     poster_url = StringField('Poster URL')
     url = StringField('URL')
     submit = SubmitField('Submit')
