@@ -89,6 +89,13 @@ def get_columns(columndef: list, fields: dict):
     return pre + columns + post
 
 
+def get_sortable(columndef: list, fields: dict):
+    return [
+        {"field": c.get("field"), "title": fields[c.get("field")]["label"]}
+        for c in columndef
+    ]
+
+
 def get_search_fields(fields):
     searchable = {
         "id": {"type": "keyword"},
@@ -99,12 +106,12 @@ def get_search_fields(fields):
         if ftype == "string":
             searchable[name] = {
                 "type": "text",
-                "fields": {"raw": {"type": "keyword"}},
+                "fields": {"raw": {"type": "keyword", "normalizer": "my_normalizer"}},
             }
         elif ftype == "text":
             searchable[name] = {"type": "text"}
         elif ftype == "discrete":
-            searchable[name] = {"type": "keyword"}
+            searchable[name] = {"type": "keyword", "normalizer": "my_normalizer"}
         elif ftype == "integer":
             searchable[name] = {"type": "integer"}
         elif ftype == "float":
@@ -201,7 +208,7 @@ class Movie(SearchableMixin, db.Model):
         {"field": "runtime", "visible": False},
     ]
     __columns__ = get_columns(__columndef__, __fields__)
-    __default_sort__ = ("rating_value", "desc")
+    __sortfields__ = get_sortable(__columndef__, __fields__)
 
     id = db.Column(db.Integer, primary_key=True)
     created_timestamp = db.Column(
@@ -224,7 +231,7 @@ class Movie(SearchableMixin, db.Model):
     category = db.Column(db.String(64))
     certificate = db.Column(db.String(16))
     release_date = db.Column(db.String(128))
-    plot_summary = db.Column(db.String(512))
+    plot_summary = db.Column(db.Text())
     rating_value = db.Column(db.Float)
     rating_count = db.Column(db.Integer)
     poster_url = db.Column(db.String(256))
@@ -250,7 +257,9 @@ class Movie(SearchableMixin, db.Model):
             return "https://m.media-amazon.com/images/G/01/imdb/images/nopicture/small/film-293970583._CB469775754_.png"
 
     def to_dict(self):
-        fields = ["id", "modified_timestamp", "default_image_url"] + list(self.__fields__.keys())
+        fields = ["id", "modified_timestamp", "default_image_url"] + list(
+            self.__fields__.keys()
+        )
         data = {}
         for f in fields:
             value = getattr(self, f)
@@ -293,7 +302,7 @@ class People(SearchableMixin, db.Model):
     dob = db.Column(db.Date())
     birthname = db.Column(db.String(128))
     height = db.Column(db.String(64))
-    bio = db.Column(db.String(1024))
+    bio = db.Column(db.Text())
 
     roles = db.relationship(
         "Character", foreign_keys="Character.actor_id", backref="actor", lazy="dynamic"

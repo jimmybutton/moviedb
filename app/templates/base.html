@@ -17,31 +17,31 @@
   {% include '_toast.html' %}
 
   <!-- make nav and header sticky -->
-  <div class="sticky-top">
+  <!-- <div class="sticky-top"> -->
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-      <div class="container">
-        <a class="navbar-brand font-weight-bolder" href="{{ url_for('main.home') }}">movie<span
-            class="text-primary">db</span></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+    <div class="container">
+      <a class="navbar-brand font-weight-bolder" href="{{ url_for('main.movies') }}">movie<span
+          class="text-primary">db</span></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav mr-auto">
+          <!-- <li class="nav-item">
               <a class="nav-link {% block nav_home %}{% endblock %}" href="{{ url_for('main.home') }}">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link {% block nav_movies %}{% endblock %}" href="{{ url_for('main.movies') }}">Movies</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link {% block nav_cast %}{% endblock %}" href="#">Cast</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link {% block nav_people %}{% endblock %}" href="{{ url_for('main.people') }}">People</a>
-            </li>
-            <!-- <li class="nav-item dropdown">
+            </li> -->
+          <li class="nav-item">
+            <a class="nav-link {% block nav_movies %}{% endblock %}" href="{{ url_for('main.movies') }}">Movies</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% block nav_people %}{% endblock %}" href="{{ url_for('main.people') }}">People</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% block nav_cast %}{% endblock %}" href="#">Watchlist</a>
+          </li>
+          <!-- <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Profile
               </a>
@@ -52,54 +52,54 @@
                 <a class="dropdown-item" href="#">Something else here</a>
               </div>
             </li> -->
-          </ul>
-          <ul class="navbar-nav d-md-flex align-items-md-center">
-            <li class="nav-item">
-              <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <!-- <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
-              </form>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" style="position: relative;">
-                <div class="d-inline position-relative">
-                  <span class="badge badge-pill badge-danger px-1"
-                    style="position: absolute; top:-4px; left: 50%;">99</span>
-                  <i class="fa fa-bell fa-lg" aria-hidden="true"></i>
-                  <!-- <span class="d-md-none">Notifications </span> -->
-                </div>
-              </a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i>
-                <!-- d-none d-md-inline -->
-                <!-- <span class="d-md-none">User</span> -->
-              </a>
-              <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="{{ url_for('main.user', username=current_user.username) }}">Details</a>
-                <a class="dropdown-item" href="#">Settings</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a>
+        </ul>
+        <ul class="navbar-nav d-md-flex align-items-md-center">
+          <li class="nav-item">
+            <form class="form-inline my-2 my-lg-0">
+              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+              <!-- <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
+            </form>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" style="position: relative;">
+              <div class="d-inline position-relative">
+                <span class="badge badge-pill badge-danger px-1"
+                  style="position: absolute; top:-4px; left: 50%;">99</span>
+                <i class="fa fa-bell fa-lg" aria-hidden="true"></i>
+                <!-- <span class="d-md-none">Notifications </span> -->
               </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Header -->
-    <div class="container-fluid bg-white pb-2 pt-3 shadow-sm">
-      <div class="container">
-        <div class="d-flex justify-content-between">
-          {% block header %}
-          {% endblock %}
-        </div>
+            </a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">
+              <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i>
+              <!-- d-none d-md-inline -->
+              <!-- <span class="d-md-none">User</span> -->
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" href="{{ url_for('main.user', username=current_user.username) }}">Details</a>
+              <a class="dropdown-item" href="#">Settings</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
+  </nav>
 
+  <!-- Header -->
+  <div class="container-fluid bg-white pb-2 pt-3 shadow-sm">
+    <div class="container">
+      <div class="d-flex justify-content-between">
+        {% block header %}
+        {% endblock %}
+      </div>
+    </div>
   </div>
+
+  <!-- </div> -->
 
   <!-- Main content -->
   <div class="container-fluid pt-3">

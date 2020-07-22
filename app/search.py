@@ -36,9 +36,10 @@ def query_index_full_text(index, query, page, per_page):
             "size": per_page,
         },
     )
-    ids = [int(hit['_id']) for hit in search['hits']['hits']]
-    return ids, search['hits']['total']['value']
-  
+    ids = [int(hit["_id"]) for hit in search["hits"]["hits"]]
+    return ids, search["hits"]["total"]["value"]
+
+
 def query_index(index, query, page, per_page, sort_by=None, order="asc"):
     if not current_app.elasticsearch:
         return [], 0
@@ -48,13 +49,30 @@ def query_index(index, query, page, per_page, sort_by=None, order="asc"):
             "query": query,
             "from": (page - 1) * per_page,
             "size": per_page,
-            "sort": [{sort_by: order}] if sort_by else ["_score"]
+            "sort": [{sort_by: order}] if sort_by else ["_score"],
         },
     )
-    ids = [int(hit['_id']) for hit in search['hits']['hits']]
-    return ids, search['hits']['total']['value']
+    ids = [int(hit["_id"]) for hit in search["hits"]["hits"]]
+    return ids, search["hits"]["total"]["value"]
 
 
 def clear_index(index, mappings):
     current_app.elasticsearch.indices.delete(index=index, ignore=[400, 404])
-    current_app.elasticsearch.indices.create(index=index, body={"mappings": {"properties": mappings}})
+    current_app.elasticsearch.indices.create(
+        index=index,
+        body={
+            "settings": {
+                "analysis": {
+                    "normalizer": {
+                        "my_normalizer": {
+                            "type": "custom",
+                            "char_filter": [],
+                            "filter": ["lowercase", "asciifolding"],
+                        }
+                    }
+                }
+            },
+            "mappings": {"properties": mappings},
+        },
+    )
+

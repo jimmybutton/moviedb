@@ -50,10 +50,56 @@ def unique_directors():
     return jsonify([m.director for m in db.session.query(Movie.director).distinct()])
 
 
+@bp.route("/movies_old", methods=["GET"])
+@login_required
+def movies_old():
+    searchfields = [
+        {"field": "title", "type": "match"},
+        {
+            "field": "category",
+            "type": "select",
+            "options": Movie.__fields__["category"]["options"],
+        },
+        {
+            "field": "director",
+            "type": "typeahead",
+            "url": url_for("main.unique_directors"),
+        },
+    ]
+    sortable = Movie.__sortfields__
+    return render_template(
+        "movies.html",
+        title="Movies",
+        doctype="movies",
+        columns=Movie.__columns__,
+        sortable=sortable,
+    )
+
+
 @bp.route("/movies", methods=["GET"])
 @login_required
 def movies():
-    return render_template("movies.html", title="Movies", doctype="movies", columns=Movie.__columns__)
+    page = request.args.get("page", 0, type=int)
+    limit = 12  # current_app.config["ITEMS_PER_PAGE"]
+    movies = Movie.query.order_by(Movie.rating_value.desc()).paginate(
+        page, limit, False)
+    movies.next_url = (
+        url_for("main.movies", page=movies.next_num) if movies.has_next else None
+    )
+    movies.prev_url = (
+        url_for("main.movies", page=movies.prev_num) if movies.has_prev else None
+    )
+    movies.first_url = (
+        url_for("main.movies", page=1) if movies.has_prev else None
+    )
+    movies.last_url = (
+        url_for("main.movies", page=movies.pages) if movies.has_next else None
+    )
+    return render_template(
+        "movies.html",
+        title="Movies",
+        movies=movies
+    )
 
 
 @bp.route("/movies/export", methods=["GET"])
