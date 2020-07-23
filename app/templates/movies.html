@@ -4,32 +4,38 @@
 
 {% block header %}
 <h3>{{ title }}</h3>
+<div class="d-flex align-items-center">
+  <a href="{{ url_for('main.movie_create') }}" class="btn btn-primary ml-1">
+    <i class="fa fa-plus-square" aria-hidden="true"></i>
+    Create
+  </a>
+</div>
 {% endblock %}
 
 {% block content %}
-<div id="toolbar" class="form-row align-items-center justify-content-between mb-3">
-  <!-- <button id="btnGetSelected" class="btn btn-secondary btn-sm">getSelections</button> -->
-  <div class="col-auto">
-    <label class="sr-only">Search</label>
-    <input id="searchInput" type="text" class="form-control form-control-sm" placeholder="Search">
-  </div>
-  <div class="col-auto">
-    <div class="input-group">
-      <label class="sr-only">Sort by</label>
-      <select id="sortFieldSelect" class="custom-select custom-select-sm" aria-label="Field to sort by">
-        <option value="title" selected>Title</option>
-        <option value="year">Year</option>
-        <option value="relevance">Relevance</option>
-      </select>
-      <div class="input-group-append">
-        <button id="sortOrderButton" class="btn btn-secondary btn-sm"><i class="fa fa-arrow-down"></i></button>
-      </div>
+<form class="form-inline mb-2" method="get" action="{{ url_for('main.movies') }}">
+  <!-- <label class="sr-only" for="q">Search</label>
+  <input id="q" type="text" class="form-control mb-2 mr-sm-2" placeholder="Search"> -->
+  {{ search_form.q(size=20, class='form-control', placeholder=search_form.q.label.text) }}
+
+  <!-- <label for="sort" class="mb-2 mr-sm-2">Sort by</label>
+  <div class="input-group mb-2 mr-sm-2">
+    <select id="sort" class="custom-select">
+      <option value="score" selected>Search score</option>
+      <option value="title">Title</option>
+      <option value="year">Year</option>
+    </select>
+    <div class="input-group-append">
+      <button id="sortOrderButton" class="btn btn-secondary"><i class="fa fa-arrow-down"></i></button>
     </div>
   </div>
-</div>
+
+  <input type="hidden" id="order" name="order" value="asc">
+  <button type="submit" class="btn btn-primary mb-2">Search</button> -->
+</form>
 
 <div class="row">
-  {% for movie in movies.items %}
+  {% for movie in movies %}
   <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
     <div class="card shadow-sm h-100">
       <!-- <div class="row no-gutters h-100">
@@ -61,55 +67,7 @@
   {% endfor %}
 </div>
 
-<nav aria-label="Pagination" class="d-flex flex-column flex-sm-row align-items-center justify-content-between">
-  <div class="mb-2">Showing {{ (movies.page - 1) * movies.per_page + 1 }} to
-    {{ movies.page * movies.per_page }} of {{ movies.total }}</div>
-  <div class="">
-    <ul class="pagination">
-      {%if movies.prev_url %}
-      <li class="page-item">
-        <a class="page-link" href="{{ movies.first_url }}" aria-label="First"> &laquo; </a>
-      </li>
-      <li class="page-item">
-        <a class="page-link" href="{{ movies.prev_url }}" aria-label="Previous">&lsaquo;</a>
-      </li>
-      <li class="page-item"><a class="page-link" href="{{ movies.prev_url }}">{{ movies.prev_num }}</a></li>
-      {% else %}
-      <li class="page-item disabled">
-        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-          <span aria-hidden="true">&laquo;</span>
-        </a>
-      </li>
-      <li class="page-item disabled">
-        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&lsaquo;</a>
-      </li>
-      {% endif %}
-      <li class="page-item active" aria-current="page">
-        <a class="page-link" href="#">{{ movies.page }} <span class="sr-only">(current)</span></a>
-      </li>
-      {% if movies.next_url %}
-      <li class="page-item"><a class="page-link" href="{{ movies.next_url }}">{{ movies.next_num }}</a></li>
-      <li class="page-item">
-        <a class="page-link" href="{{ movies.next_url }}" aria-label="Next">&rsaquo;</a>
-      </li>
-      <li class="page-item">
-        <a class="page-link" href="{{ movies.last_url }}" aria-label="Last">
-          <span aria-hidden="true">&raquo;</span>
-        </a>
-      </li>
-      {% else %}
-      <li class="page-item disabled">
-        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&rsaquo;</a>
-      </li>
-      <li class="page-item disabled">
-        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-          <span aria-hidden="true">&raquo;</span>
-        </a>
-      </li>
-      {% endif %}
-    </ul>
-  </div>
-</nav>
+{% include '_pager.html' %}
 
 {% endblock %}
 

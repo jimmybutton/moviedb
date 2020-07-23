@@ -39,14 +39,16 @@ A web application based on flask and boostrap 4 to browse movies, actors and dir
 ### Step 2
 - DONE refactor using blueprints
 - DONE add a actor model
-- list view, details view and edit form for actors
-- filter and search for movies
 - DONE add association table
+- DONE search for movies
+- list view, details view and edit form for actors
+- create link for director
 - edit form for association table
-- users can add and remove movies to / from their watchlist
 - display dates and times locally
+- filter movies by category, sort order...
 
 ### Step 3
+- users can add and remove movies to / from their watchlist
 - user comments and ratings on movies
 - authorization (users can view, manage watchlist and write reviews, admins can edit and delete movies and actors)
 - export movies etc. to csv/json

@@ -17,6 +17,7 @@ from datetime import datetime
 from werkzeug.wrappers import Response
 from app.utils import paginate, export_csv
 from math import ceil, floor
+from types import SimpleNamespace
 
 
 @bp.route("/movies_json", methods=["GET"])
@@ -68,7 +69,7 @@ def movies_old():
     ]
     sortable = Movie.__sortfields__
     return render_template(
-        "movies.html",
+        "movies_old.html",
         title="Movies",
         doctype="movies",
         columns=Movie.__columns__,
@@ -79,26 +80,49 @@ def movies_old():
 @bp.route("/movies", methods=["GET"])
 @login_required
 def movies():
-    page = request.args.get("page", 0, type=int)
+    search_form = SearchForm()
+    page = request.args.get("page", 1, type=int)
     limit = 12  # current_app.config["ITEMS_PER_PAGE"]
-    movies = Movie.query.order_by(Movie.rating_value.desc()).paginate(
-        page, limit, False)
-    movies.next_url = (
-        url_for("main.movies", page=movies.next_num) if movies.has_next else None
+    if not search_form.validate():
+        return redirect('main.movies')
+        # movies = Movie.query.order_by(Movie.rating_value.desc()).paginate(page, limit, False)
+    search = search_form.q.data
+    if search:
+        query = {"bool": {}}
+        query["bool"]["must"] = []
+        query["bool"]["must"].append({"multi_match": {"query": search, "fields": ["*"]}})
+        sort = None
+    else:
+        query = {
+            "match_all": {}
+        }
+        sort = 'rating_value'
+    order = 'desc'
+    movies, total = Movie.search_query(query, page, limit, sort, order)
+    
+    total_pages = ceil(total/limit)
+    pager = SimpleNamespace()
+    pager.page = page
+    pager.per_page = 12
+    pager.total = total
+    pager.next_url = (
+        url_for("main.movies", page=page+1, q=search) if page < total_pages else None
     )
-    movies.prev_url = (
-        url_for("main.movies", page=movies.prev_num) if movies.has_prev else None
+    pager.prev_url = (
+        url_for("main.movies", page=page-1, q=search) if page > 1 else None
     )
-    movies.first_url = (
-        url_for("main.movies", page=1) if movies.has_prev else None
+    pager.first_url = (
+        url_for("main.movies", page=1, q=search) if page > 1 else None
     )
-    movies.last_url = (
-        url_for("main.movies", page=movies.pages) if movies.has_next else None
+    pager.last_url = (
+        url_for("main.movies", page=total_pages, q=search) if page < total_pages else None
     )
     return render_template(
         "movies.html",
         title="Movies",
-        movies=movies
+        movies=movies,
+        search_form=search_form,
+        pager=pager
     )
 
 
@@ -121,7 +145,7 @@ def movie(id):
     if not movie:
         flash("Movie with id={} not found.".format(id))
         return redirect(url_for("main.movies"))
-    return render_template("movie.html", movie=movie, title="Movies")
+    return render_template("movie.html", movie=movie, title=movie.displayname)
 
 
 @bp.route("/movie/<id>/cast")
