@@ -17,7 +17,8 @@ from datetime import datetime
 from werkzeug.wrappers import Response
 from app.utils import paginate, export_csv
 from math import ceil, floor
-from types import SimpleNamespace
+from sqlalchemy import or_
+
 
 
 @bp.route("/movies_json", methods=["GET"])
@@ -82,47 +83,53 @@ def movies_old():
 def movies():
     search_form = SearchForm()
     page = request.args.get("page", 1, type=int)
-    limit = 12  # current_app.config["ITEMS_PER_PAGE"]
+    per_page = 12  # current_app.config["ITEMS_PER_PAGE"]
     if not search_form.validate():
         return redirect('main.movies')
-        # movies = Movie.query.order_by(Movie.rating_value.desc()).paginate(page, limit, False)
-    search = search_form.q.data
-    if search:
-        query = {"bool": {}}
-        query["bool"]["must"] = []
-        query["bool"]["must"].append({"multi_match": {"query": search, "fields": ["*"]}})
-        sort = None
-    else:
-        query = {
-            "match_all": {}
-        }
-        sort = 'rating_value'
-    order = 'desc'
-    movies, total = Movie.search_query(query, page, limit, sort, order)
+    terms = search_form.q.data
+    query = Movie.query
+    if terms:
+        terms = terms.split(" ")
+        for term in terms:
+            if not term:
+                continue
+            query = query.filter(or_(Movie.title.ilike(f"%{term}%"), Movie.plot_summary.ilike(f"%{term}%")))
+    movies = query.order_by(Movie.rating_value.desc()).paginate(page, per_page, False)
+    # if search:
+    #     query = {"bool": {}}
+    #     query["bool"]["must"] = []
+    #     query["bool"]["must"].append({"multi_match": {"query": search, "fields": ["*"]}})
+    #     sort = None
+    # else:
+    #     query = {
+    #         "match_all": {}
+    #     }
+    #     sort = 'rating_value'
+    # order = 'desc'
+    # movies, total = Movie.search_query(query, page, limit, sort, order)
     
-    total_pages = ceil(total/limit)
-    pager = SimpleNamespace()
-    pager.page = page
-    pager.per_page = 12
-    pager.total = total
-    pager.next_url = (
-        url_for("main.movies", page=page+1, q=search) if page < total_pages else None
-    )
-    pager.prev_url = (
-        url_for("main.movies", page=page-1, q=search) if page > 1 else None
-    )
-    pager.first_url = (
-        url_for("main.movies", page=1, q=search) if page > 1 else None
-    )
-    pager.last_url = (
-        url_for("main.movies", page=total_pages, q=search) if page < total_pages else None
-    )
+    # total_pages = ceil(total/limit)
+    # pager = SimpleNamespace()
+    # pager.page = page
+    # pager.per_page = 12
+    # pager.total = total
+    # pager.next_url = (
+    #     url_for("main.movies", page=page+1, q=search) if page < total_pages else None
+    # )
+    # pager.prev_url = (
+    #     url_for("main.movies", page=page-1, q=search) if page > 1 else None
+    # )
+    # pager.first_url = (
+    #     url_for("main.movies", page=1, q=search) if page > 1 else None
+    # )
+    # pager.last_url = (
+    #     url_for("main.movies", page=total_pages, q=search) if page < total_pages else None
+    # )
     return render_template(
         "movies.html",
         title="Movies",
         movies=movies,
         search_form=search_form,
-        pager=pager
     )
 
 
