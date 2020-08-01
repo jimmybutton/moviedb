@@ -5,12 +5,17 @@
 {% block nav_movies %}active{% endblock %}
 
 {% block header %}
-<h3>{{ title }}</h3>
-<div class="d-flex align-items-center">
-  <a href="{{ url_for('main.movie_create') }}" class="btn btn-primary ml-1">
-    <i class="fa fa-plus-square" aria-hidden="true"></i>
-    Create
-  </a>
+<nav aria-label="breadcrumb" class="text-muted">
+  <a href="{{ url_for('main.movies') }}">Movies</a> / List
+</nav>
+<div class="d-flex justify-content-between">
+  <h3>{{ title }}</h3>
+  <div class="d-flex align-items-center">
+    <a href="{{ url_for('main.create_movie') }}" class="btn btn-primary ml-1">
+      <i class="fa fa-plus-square" aria-hidden="true"></i>
+      Create
+    </a>
+  </div>
 </div>
 {% endblock %}
 

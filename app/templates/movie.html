@@ -3,14 +3,17 @@
 {% block nav_movies %}active{% endblock %}
 
 {% block header %}
-<div>
-  <h3>{{ movie.displayname }}</h3>
-  <input type=hidden id="itemId" value="{{ movie.id }}">
-  <p class="small text-muted">{{ movie.category}} | {{ movie.director }} | {{ movie.runtime }} min | <i
-      class="fa fa-star" aria-hidden="true"></i> {{ movie.rating_value }} </p>
-</div>
-<div class="d-flex align-items-center">
-  <div class="dropdown">
+<nav aria-label="breadcrumb" class="text-muted">
+  <a href="{{ url_for('main.movies') }}">Movies</a> / Details
+</nav>
+<div class="d-flex justify-content-between">
+  <div>
+    <h3>{{ movie.displayname }}</h3>
+    <!-- <p class="small text-muted">{{ movie.category}} | {{ movie.director }} | {{ movie.runtime }} min | <i
+      class="fa fa-star" aria-hidden="true"></i> {{ movie.rating_value }} </p> -->
+  </div>
+  <div class="d-flex align-items-center">
+    <!-- <div class="dropdown">
     <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton"
       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 100%">
       Menu
@@ -20,15 +23,16 @@
       <a class="dropdown-item" href="#">Another action</a>
       <a class="dropdown-item" href="#">Something else here</a>
     </div>
+  </div> -->
+    <a href="{{ url_for('main.delete_movie', id=movie.id) }}" class="btn btn-secondary ml-1">
+      <i class="fa fa-trash-o" aria-hidden="true"></i>
+      Delete
+    </a>
+    <a href="{{ url_for('main.edit_movie', id=movie.id) }}" class="btn btn-primary ml-1 ">
+      <i class="fa fa-pencil" aria-hidden="true"></i>
+      Edit
+    </a>
   </div>
-  <a href="{{ url_for('main.delete_movie', id=movie.id) }}" class="btn btn-secondary ml-1 btn-sm">
-    <i class="fa fa-trash-o" aria-hidden="true"></i>
-    Delete
-  </a>
-  <a href="{{ url_for('main.edit_movie', id=movie.id) }}" class="btn btn-primary ml-1 btn-sm">
-    <i class="fa fa-pencil" aria-hidden="true"></i>
-    Edit
-  </a>
 </div>
 {% endblock %}
 
@@ -114,10 +118,10 @@
     </h6>
   </div>
   <div class="card-body mb-0">
-    <table id="table" data-toggle="table" data-url="{{ url_for('main.api', doctype='characters') }}"
-      data-sort-name="order" data-sort-order="asc"
-      data-page-list="[10, 25, 50, 100]" data-icon-size="sm" data-pagination="true" data-query-params="queryParams" data-side-pagination="server" >
-      <!-- data-side-pagination="server" -->
+    <table id="table" data-toggle="table" data-url="{{ url_for('main.movie_cast', id=movie.id) }}"
+      data-sort-name="order" data-sort-order="asc" data-page-list="[10, 25, 50, 100]" data-icon-size="sm"
+      data-pagination="true" data-side-pagination="server">
+      <!-- data-side-pagination="server"  data-query-params="queryParams" -->
       <thead class="text-muted">
         <tr>
           <th data-field="order" data-sortable="true" data-width="30">#</th>
@@ -130,7 +134,7 @@
 </div>
 
 <!-- Review -->
-<div class="card mb-3">
+<!-- <div class="card mb-3">
   <div class="card-header bg-white d-flex align-items-center py-3">
     <h6 class="text-dark font-weight-bold mb-0">
       <i class="fa fa-comments" aria-hidden="true"></i>
@@ -206,7 +210,6 @@
         </li>
       </ul>
     </nav>
-
   </div>
 
   <div class="border-top card-body">
@@ -217,35 +220,33 @@
       <div class="media-body">
         <form action="">
           <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" placeholder="Your review"></textarea>
-          <!-- <input type="text" class="form-control mr-sm-2" id="exampleFormControlInput1"
-                        placeholder="Leave a comment"> -->
           <button type="submit" class="btn btn-primary mt-2 float-right btn-sm">Submit</button>
         </form>
       </div>
     </div>
   </div>
 
-</div>
+</div> -->
 {% endblock %}
 
 {% block script %}
 <script>
   function actorLinkFormatter(value, row, index) {
     return [
-    '<div class="media">',
-    '  <img src="', row.actor_image, '" class="align-self-center mr-2" alt="Poster" style="height:48px;">',
-    '  <div class="media-body align-self-center">',
-    '    <a href="/person/', row.actor_id, '" title="Show details">', value, '</a>',
-    '  </div>',
-    '</div>',
+      '<div class="media">',
+      '  <img src="', row.actor_image, '" class="align-self-center mr-2" alt="Poster" style="height:48px;">',
+      '  <div class="media-body align-self-center">',
+      '    <a href="/person/', row.actor_id, '" title="Show details">', value, '</a>',
+      '  </div>',
+      '</div>',
     ].join('')
   }
 
-  function queryParams(params) {
-    itemId = $('#itemId').val()
-    params.filter = JSON.stringify({"movie_id": itemId })
-    return params
-  }
+  // function queryParams(params) {
+  //   itemId = $('#itemId').val()
+  //   params.filter = JSON.stringify({ "movie_id": itemId })
+  //   return params
+  // }
 
   $(document).ready(function () {
     var $table = $('#table')

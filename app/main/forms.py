@@ -34,7 +34,8 @@ class EditMovieForm(FlaskForm):
     runtime = IntegerField(label='Runtime (min)', validators=[Optional()])
     poster_url = StringField('Poster URL')
     url = StringField('URL')
-    submit = SubmitField('Submit')
+    submit = SubmitField('Save')
+    submit_and_new = SubmitField('Save and New')
 
     # def validate_year(self, year):
     #     min_year = 1800
