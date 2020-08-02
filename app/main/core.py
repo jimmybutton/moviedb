@@ -7,6 +7,24 @@ from app.models import User, Movie, People, Character
 from datetime import datetime
 from math import floor
 import json
+from sqlalchemy import or_
+
+def get_list(cls, request_args, search_form, search_fields, order):
+    query = cls.query
+    page = request_args.get("page", 1, type=int)
+    per_page = current_app.config["ITEMS_PER_PAGE"]
+    terms = search_form.q.data
+    if terms:
+        terms = terms.split(" ")
+        for term in terms:
+            if not term:
+                continue
+            filter_stmt = []
+            for f in search_fields:
+                field = getattr(cls, f)
+                filter_stmt.append(field.ilike(f"%{term}%"))
+            query = query.filter(or_(*filter_stmt))
+    return query.order_by(order).paginate(page, per_page, False)
 
 @bp.route("/")
 @login_required

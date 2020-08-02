@@ -6,7 +6,6 @@ from flask import (
     request,
     current_app,
     Markup,
-    jsonify,
 )
 from app import db
 from app.main import bp
@@ -17,30 +16,16 @@ from datetime import datetime
 from werkzeug.wrappers import Response
 from app.utils import export_csv
 from math import ceil, floor
-from sqlalchemy import or_
+from app.main.core import get_list
 
 
 @bp.route("/movies", methods=["GET"])
 @login_required
 def movies():
     search_form = SearchForm()
-    page = request.args.get("page", 1, type=int)
-    per_page = current_app.config["ITEMS_PER_PAGE"]
     if not search_form.validate():
         return redirect("main.movies")
-    terms = search_form.q.data
-    query = Movie.query
-    if terms:
-        terms = terms.split(" ")
-        for term in terms:
-            if not term:
-                continue
-            filter_stmt = []
-            for f in ["title", "plot_summary", "year"]:
-                field = getattr(Movie, f)
-                filter_stmt.append(field.ilike(f"%{term}%"))
-            query = query.filter(or_(*filter_stmt))
-    movies = query.order_by(Movie.rating_value.desc()).paginate(page, per_page, False)
+    movies = get_list(cls=Movie, request_args=request.args, search_form=search_form, search_fields=["title", "plot_summary", "year"], order=Movie.rating_value.desc())
     return render_template("movies.html", title="Movies", movies=movies, search_form=search_form,)
 
 

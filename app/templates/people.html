@@ -1,73 +1,55 @@
+{% from 'bootstrap/pagination.html' import render_pagination %}
 {% extends "base.html" %}
 
 {% block nav_people %}active{% endblock %}
 
 {% block header %}
-<h3>People</h3>
-<div class="d-flex align-items-center">
-  <div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true"
-      aria-expanded="false" style="height: 100%">
-      Menu
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <a class="dropdown-item" href="#">Export .csv</a>
-      <a class="dropdown-item" href="#">Another action</a>
-      <a class="dropdown-item" href="#">Something else here</a>
-    </div>
+<nav aria-label="breadcrumb" class="text-muted">
+  <a href="{{ url_for('main.people') }}">People</a> / List
+</nav>
+<div class="d-flex justify-content-between">
+  <h3>People</h3>
+  <div class="d-flex align-items-center">
+    <a href="#" class="btn btn-primary ml-1 btn-sm">
+      <i class="fa fa-plus-square" aria-hidden="true"></i>
+      Create
+    </a>
   </div>
-  <button id="myBtn" class="btn btn-secondary ml-1 btn-sm">
-    <i class="fa fa-refresh" aria-hidden="true"></i>
-    Refresh
-  </button>
-  <a href="#" class="btn btn-primary ml-1 btn-sm">
-    <i class="fa fa-plus-square" aria-hidden="true"></i>
-    Create
-  </a>
 </div>
 {% endblock %}
 
 {% block content %}
-<div id="toolbar">
-  <button id="btnGetSelected" class="btn btn-secondary btn-sm">getSelections</button>
+<form class="form-inline mb-2" method="get" action="{{ url_for('main.movies') }}">
+  {{ search_form.q(size=20, class='form-control', placeholder=search_form.q.label.text) }}
+</form>
+
+<div class="row">
+  {% for person in people.items %}
+  <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-3">
+    <div class="card shadow-sm h-100">
+      <!-- <div class="row no-gutters h-100">
+        <div class="col-6 col-sm-12"> -->
+      <a href="{{ url_for('main.person', id=person.id) }}" class="">
+        <img class="card-img-top img-opacity-hover w-100"
+          src="{{ person.default_image_url.replace(',67,98',',214,317').replace('UX67','UX214').replace('UY98','UY317') }}"
+          alt="">
+      </a>
+      <!-- </div>
+        <div class="col-6 col-sm-12"> -->
+      <div class="card-body">
+        <div class="card-title">
+          <a href="{{ url_for('main.person', id=person.id) }}">{{ person.name|truncate(44) }}</a>
+        </div>
+      </div>
+      <!-- </div>
+      </div> -->
+    </div>
+  </div>
+  {% endfor %}
 </div>
-<table id="table" data-toggle="table" data-url="{{ url_for('main.api', doctype='people') }}" data-search="true"
-  data-show-columns="true" data-page-list="[10, 25, 50, 100]" data-icon-size="sm" data-pagination="true"
-  data-toolbar="#toolbar" data-side-pagination="server">
-  <thead class="text-muted">
-    <tr>
-      <th data-field="state" data-checkbox="true"></th>
-      <th data-field="fav" data-formatter="favFormatter" data-events="operateEvents" data-align="center">
-        <i class="fa fa-heart text-secondary"></i>
-      </th>
-      <th data-field="name" data-formatter="nameFormatter" data-sortable="true">Name</th>
-      <th data-field="dob" data-sortable="true">Date of birth</th>
-      <th data-field="height">Height</th>
-    </tr>
-  </thead>
-</table>
+{{ render_pagination(people) }}
 {% endblock %}
 
 {% block script %}
-<script src="{{url_for('static', filename='table_utils.js')}}"></script>
-<script>
-  // cell formatters
-  function favFormatter(value, row, index) {
-    return [
-      '<a class="like text-secondary" href="javascript:void(0)" title="Like">',
-      '<i class="fa fa-heart fa-sm"></i>',
-      '</a>'
-    ].join('')
-  }
-  function nameFormatter(value, row, index) {
-    return [
-    '<div class="media">',
-    '  <img src="', row.image_url, '" class="align-self-center mr-2" alt="Poster" style="height:48px;">',
-    '  <div class="media-body align-self-center">',
-    '    <a href="/person/', row.id, '" title="Show details">', value, '</a>',
-    '  </div>',
-    '</div>',
-    ].join('')
-  }
-</script>
+
 {% endblock %}

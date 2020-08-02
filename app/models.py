@@ -161,6 +161,7 @@ class Character(db.Model, BaseModel):
         d = super().to_dict()
         d.update({
                 "movie_title": self.movie.title,
+                "movie_image": self.movie.default_image_url,
                 "movie_year": self.movie.year,
                 "actor_name": self.actor.name,
                 "actor_image": self.actor.default_image_url,

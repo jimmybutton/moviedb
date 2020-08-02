@@ -1,0 +1,17 @@
+{% macro render_field(name, value='', type='text', url='') -%}
+<div class="mb-4">
+  {% if type == 'markdown' %}
+  <dt class="text-muted font-weight-normal">{{ name }}</dt>
+  <dd>{{ value|markdown }}</dd>
+  {% elif type == 'link' %}
+  <dt class="text-muted font-weight-normal">{{ name }}</dt>
+  <dd><a href="{{ url }}">{{ value|e }}</a></dd>
+  {% elif type == 'image' %}
+  <dt class="text-muted font-weight-normal">{{ name }}</dt>
+  <dd><img src="{{ url }}" alt="{{ value }}"></dd>
+  {% else %}
+  <dt class="text-muted font-weight-normal">{{ name }}</dt>
+  <dd>{{ value|e }}</dd>
+  {% endif %}
+</div>
+{%- endmacro %}
