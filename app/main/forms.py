@@ -47,6 +47,17 @@ class EditMovieForm(FlaskForm):
     #     if stars.data < 0 or stars.data > 10:
     #         raise ValidationError('Please use a number between 0 and 10.')
 
+class EditPersonForm(FlaskForm):
+    name = StringField('Name')
+    birthname = StringField('Birthname')
+    dob = DateField('Date of Birth')
+    height = StringField('Height')
+    bio = TextAreaField('Biographie')
+    url = StringField('URL')
+    image_url = StringField('Image URL')
+    submit = SubmitField('Save')
+    submit_and_new = SubmitField('Save and New')
+
 class DeleteItemForm(FlaskForm):
     submit = SubmitField('Delete')
 

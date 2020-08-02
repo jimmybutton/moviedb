@@ -1,0 +1,46 @@
+{% from 'bootstrap/form.html' import render_form %}
+
+{% extends "base.html" %}
+
+{% block nav_people %}active{% endblock %}
+
+{% block header %}
+<nav aria-label="breadcrumb" class="text-muted">
+  <a href="{{ url_for('main.people') }}">People</a> /
+  {% if person %}
+  Edit
+  {% else %}
+  Create
+  {% endif %}
+</nav>
+<div class="d-flex justify-content-between">
+  <h3>
+    {% if person %}
+    {{ person.name }}
+    {% else %}
+    New Person
+    {% endif %}
+  </h3>
+</div>
+{% endblock %}
+
+{% block content %}
+{% from 'bootstrap/form.html' import render_form_row %}
+
+<form method="post" novalidate>
+  {{ form.csrf_token() }}
+  {{ render_form_row([form.name, form.birthname]) }}
+  {{ render_form_row([form.dob, form.height]) }}
+  {{ render_form_row([form.bio]) }}
+  {{ render_form_row([form.image_url]) }}
+  {{ render_form_row([form.url]) }}
+  {% if person %}
+  {{ render_form_row([form.submit]) }}
+  {% else %}
+  {{ render_form_row([form.submit, form.submit_and_new], col_class_default='col-auto') }}
+  {% endif %}
+</form>
+{% endblock %}
+
+{% block script %}
+{% endblock %}
