@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+
+{% block nav_home %}active{% endblock %}
+
+{% block header %}
+<h3>Home</h3>
+{% endblock %}
+
+{% block content %}
+<!-- Overview -->
+<div class="row">
+  <div class="col-sm-4">
+    <div class="card shadow-sm hover-shadow">
+      <div class="card-body py-2">
+        <div class="media">
+          <div
+            class="align-self-center d-flex align-items-center justify-content-center text-white bg-dark rounded-lg mr-3"
+            style="font-size: 18pt; width:48px; height:48px;">
+            <i class="fa fa-video-camera" aria-hidden="true"></i>
+          </div>
+          <div class="media-body my-0">
+            <span class="text-muted">Movies</span>
+            <div class="d-flex align-items-center">
+              <div class="h3 font-weight-bold mr-1">250</div>
+              <a href="#" class="badge badge-primary mb-1">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="{{ url_for('main.movies') }}">View all</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card shadow-sm hover-shadow">
+      <div class="card-body py-2">
+        <div class="media">
+          <div
+            class="align-self-center d-flex align-items-center justify-content-center text-white bg-dark rounded-lg mr-3"
+            style="font-size: 18pt; width:48px; height:48px;">
+            <i class="fa fa-suitcase" aria-hidden="true"></i>
+          </div>
+          <div class="media-body my-0">
+            <span class="text-muted">Cast</span>
+            <div class="d-flex align-items-center">
+              <div class="h3 font-weight-bold mr-1">11230</div>
+              <a href="#" class="badge badge-primary mb-1">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="#">View all</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card shadow-sm hover-shadow">
+      <div class="card-body py-2">
+        <div class="media">
+          <div
+            class="align-self-center d-flex align-items-center justify-content-center text-white bg-dark rounded-lg mr-3"
+            style="font-size: 18pt; width:48px; height:48px;">
+            <i class="fa fa-user" aria-hidden="true"></i>
+          </div>
+          <div class="media-body my-0">
+            <span class="text-muted">People</span>
+            <div class="d-flex align-items-center">
+              <div class="h3 font-weight-bold mr-1">7500</div>
+              <a href="#" class="badge badge-primary mb-1">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="#">View all</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recent -->
+<div class="card mt-4 shadow-sm">
+  <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+          aria-selected="true">
+          Recent
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+          aria-selected="false">
+          Favourites
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card-body">
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+        Recent
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">Type</th>
+              <th scope="col">Name</th>
+              <th scope="col">Last modified</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><i class="fa fa-video-camera" aria-hidden="true"></i></td>
+              <td>Mark</td>
+              <td class="text-muted">2 days ago</td>
+            </tr>
+            <tr>
+              <td><i class="fa fa-suitcase" aria-hidden="true"></i></td>
+              <td>Jacob</td>
+              <td class="text-muted">2 days ago</td>
+            </tr>
+            <tr>
+              <td><i class="fa fa-user" aria-hidden="true"></i></td>
+              <td>Larry the Bird</td>
+              <td class="text-muted">2 days ago</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        Favourites
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Chart -->
+<div class="card my-3 shadow-sm">
+  <div class="card-header">
+    <span class="mr-3">User stats</span>
+
+    <a class="mx-1" href="#">Last day</a>
+    <a class="mx-1" href="#">Last week</a>
+    <a class="mx-1" href="#">Last month</a>
+  </div>
+  <div class="card-body pt-1">
+    <canvas id="chLine" height="100"></canvas>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+<script>
+  $(document).ready(function () {
+    // card hover
+    $(".hover-shadow").hover(
+      function () {
+        $(this).addClass('shadow');
+      }, function () {
+        $(this).removeClass('shadow');
+      }
+    );
+
+    // chart
+    /* chart.js chart examples */
+
+    // chart colors
+    var colors = ['#007bff', '#28a745', '#333333', '#c3e6cb', '#dc3545', '#6c757d'];
+
+    /* large line chart */
+    var chLine = document.getElementById("chLine");
+    var chartData = {
+      labels: ["S", "M", "T", "W", "T", "F", "S"],
+      datasets: [{
+        data: [639, 465, 493, 478, 589, 632, 674],
+        backgroundColor: colors[3],
+        borderColor: colors[1],
+        borderWidth: 4,
+        pointBackgroundColor: colors[1]
+      }]
+    };
+
+    if (chLine) {
+      new Chart(chLine, {
+        type: 'line',
+        data: chartData,
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: false
+              }
+            }]
+          },
+          legend: {
+            display: false
+          }
+        }
+      });
+    }
+  });
+</script>
+{% endblock %}

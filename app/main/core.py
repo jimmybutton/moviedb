@@ -7,7 +7,7 @@ from app.models import User, Movie, People, Character
 from datetime import datetime
 from math import floor
 import json
-from sqlalchemy import or_
+from sqlalchemy import or_, func, text
 
 def get_list(cls, request_args, search_form, search_fields, order):
     query = cls.query
@@ -29,7 +29,11 @@ def get_list(cls, request_args, search_form, search_fields, order):
 @bp.route("/")
 @login_required
 def home():
-    return render_template("home.html", title="Home")
+    movies = Movie.query.order_by(Movie.rating_value.desc()).paginate(1, 4, False)
+    people = People.query.outerjoin(Character).group_by(People.id).order_by(db.func.count(Character.id).desc()).paginate(1, 6, False)
+    # people = db.session.query(People, func.count(People.roles.c.actir_id).label('total')).\
+    #     join(People.roles).group_by(People).order_by('total DESC').paginate(1, 4, False)
+    return render_template("home.html", title="Home", movies=movies, people=people)
   
 @bp.route("/user/<username>")
 @login_required

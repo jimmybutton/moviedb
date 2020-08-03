@@ -50,7 +50,7 @@ class EditMovieForm(FlaskForm):
 class EditPersonForm(FlaskForm):
     name = StringField('Name')
     birthname = StringField('Birthname')
-    dob = DateField('Date of Birth')
+    dob = DateField('Date of Birth', format='%d/%m/%Y')
     height = StringField('Height')
     bio = TextAreaField('Biographie')
     url = StringField('URL')
