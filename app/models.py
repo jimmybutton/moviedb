@@ -131,9 +131,8 @@ class People(db.Model, BaseModel):
         else:
             return "https://m.media-amazon.com/images/G/01/imdb/images/nopicture/32x44/name-2138558783._CB468460248_.png"
     
-    @hybrid_property
-    def score(self):
-        return sum(role.movie.rating_value / (role.order+1)^0.2 for role in self.roles)
+    def _get_score(self):
+        return sum(role.movie.rating_value * (100 - role.order) / 10 if role.order < 100 else 0.1 for role in self.roles)
 
 
 class Character(db.Model, BaseModel):
