@@ -14,7 +14,7 @@ def people():
     search_form = SearchForm()
     if not search_form.validate():
         return redirect("main.people")
-    people = get_list(cls=People, request_args=request.args, search_form=search_form, search_fields=["name"], order=People.name.asc())
+    people = get_list(cls=People, request_args=request.args, search_form=search_form, search_fields=["name"], order=People.score.desc())
     return render_template("people.html", title="People", people=people, search_form=search_form,)
 
 

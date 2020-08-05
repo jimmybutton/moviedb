@@ -5,6 +5,7 @@ from flask_login import UserMixin
 import sqlalchemy as sa
 from hashlib import md5
 from sqlalchemy.ext.hybrid import hybrid_property
+import progressbar
 
 
 class BaseModel(object):
@@ -116,6 +117,7 @@ class People(db.Model, BaseModel):
     birthname = db.Column(db.String(128))
     height = db.Column(db.String(64))
     bio = db.Column(db.Text())
+    score = db.Column(db.Float)
 
     roles = db.relationship(
         "Character", foreign_keys="Character.actor_id", backref="actor", lazy="dynamic"
@@ -132,8 +134,25 @@ class People(db.Model, BaseModel):
             return "https://m.media-amazon.com/images/G/01/imdb/images/nopicture/32x44/name-2138558783._CB468460248_.png"
     
     def _get_score(self):
-        return sum(role.movie.rating_value * (100 - role.order) / 10 if role.order < 100 else 0.1 for role in self.roles)
+        score = 0
+        for role in self.roles:
+            try:
+                score += role.movie.rating_value * (-0.9/50 * role.order + 1 if role.order < 50 else 0.1)
+            except Exception as e:
+                print(self, e)
+        return score
+    
+    def _update_score(self):
+        self.score = self._get_score()
+        db.session.add(self)
+        db.session.commit()
 
+    @classmethod
+    def update_score(cls):
+        for obj in progressbar.progressbar(cls.query, max_value=cls.query.count()):
+            obj.score = obj._get_score()
+            db.session.add(obj)
+            db.session.commit()
 
 class Character(db.Model, BaseModel):
     id = db.Column(db.Integer, primary_key=True)

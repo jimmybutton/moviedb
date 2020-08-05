@@ -6,8 +6,9 @@
         alt="">
     </a>
     <div class="card-body">
-      <a href="{{ url_for('main.person', id=person.id) }}">{{ person.name|truncate(44) }}</a>
-      <span class="badge badge-secondary">{{ person.roles.count() }}</span>
+      <a href="{{ url_for('main.person', id=person.id) }}">{{ person.name|truncate(44) }}</a><br>
+      <span class="badge badge-secondary"><i class="fa fa-bookmark" aria-hidden="true"></i>
+        {{ person.score|round(1) }}</span>
     </div>
   </div>
 </div>

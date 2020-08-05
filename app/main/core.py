@@ -30,9 +30,8 @@ def get_list(cls, request_args, search_form, search_fields, order):
 @login_required
 def home():
     movies = Movie.query.order_by(Movie.rating_value.desc()).paginate(1, 4, False)
-    people = People.query.outerjoin(Character).group_by(People.id).order_by(db.func.count(Character.id).desc()).paginate(1, 6, False)
-    # people = db.session.query(People, func.count(People.roles.c.actir_id).label('total')).\
-    #     join(People.roles).group_by(People).order_by('total DESC').paginate(1, 4, False)
+    people = People.query.order_by(People.score.desc()).paginate(1, 6, False)
+    # people = People.query.outerjoin(Character).group_by(People.id).order_by(db.func.count(Character.id).desc()).paginate(1, 6, False)
     return render_template("home.html", title="Home", movies=movies, people=people)
   
 @bp.route("/user/<username>")
