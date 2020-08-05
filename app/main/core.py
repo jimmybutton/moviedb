@@ -41,6 +41,13 @@ def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     return render_template("user.html", user=user)
 
+@bp.route("/users")
+@login_required
+def users():
+    page = request.args.get("page", 0, type=int)
+    users = User.query.order_by(User.last_seen.desc()).paginate(page, current_app.config["ITEMS_PER_PAGE"], False)
+    return render_template("users.html", title="Users", users=users)
+
 @bp.route("/edit_profile", methods=["GET", "POST"])
 @login_required
 def edit_profile():

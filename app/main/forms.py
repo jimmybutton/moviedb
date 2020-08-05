@@ -21,6 +21,7 @@ class EditProfileForm(FlaskForm):
             if user is not None:
                 raise ValidationError('Please use a different username.')
     
+    
 class EditMovieForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     year = SelectField('Year', validators=[DataRequired()], choices=[(y, y) for y in range(int(date.today().year), 1900, -1)], coerce=int)

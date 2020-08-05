@@ -11,6 +11,11 @@ body {
   opacity: 0.8;
 }
 
+.link-unstyled, .link-unstyled:link, .link-unstyled:hover {
+  color: inherit;
+  text-decoration: inherit;
+}
+
 /* Styles for the typeahead form field */
 
 .tt-query {

@@ -1,25 +1,21 @@
+{% from 'bootstrap/form.html' import render_form_row %}
 {% extends "base.html" %}
-{% block title %}
-Edit Profile
+
+{% block header %}
+<nav aria-label="breadcrumb" class="text-muted">
+    <a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a> / Edit
+</nav>
+<div class="d-flex justify-content-between">
+    <h3>{{ current_user.username }}</h3>
+</div>
 {% endblock %}
+
 {% block content %}
 <h1>Edit Profile</h1>
 <form action="" method="post">
-    {{ form.hidden_tag() }}
-    <p>
-        {{ form.username.label }}<br>
-        {{ form.username(size=32) }}<br>
-        {% for error in form.username.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.about_me.label }}<br>
-        {{ form.about_me(cols=50, rows=4) }}<br>
-        {% for error in form.about_me.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </p>
-    <p>{{ form.submit() }}</p>
+    {{ form.csrf_token() }}
+    {{ render_form_row([form.username]) }}
+    {{ render_form_row([form.about_me]) }}
+    {{ render_form_row([form.submit]) }}
 </form>
 {% endblock %}

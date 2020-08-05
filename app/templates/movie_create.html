@@ -1,4 +1,4 @@
-{% from 'bootstrap/form.html' import render_form %}
+{% from 'bootstrap/form.html' import render_form_row %}
 
 {% extends "base.html" %}
 
@@ -7,19 +7,11 @@
 {% block header %}
 <nav aria-label="breadcrumb" class="text-muted">
   <a href="{{ url_for('main.movies') }}">Movies</a> /
-  {% if movie %}
-  Edit
-  {% else %}
-  Create
-  {% endif %}
+  {% if movie %} Edit {% else %} Create {% endif %}
 </nav>
 <div class="d-flex justify-content-between">
   <h3>
-    {% if movie %}
-    {{ movie.displayname }}
-    {% else %}
-    New Movie
-    {% endif %}
+    {% if movie %} {{ movie.displayname }} {% else %} New Movie {% endif %}
   </h3>
 </div>
 {% endblock %}

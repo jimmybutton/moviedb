@@ -10,7 +10,7 @@
 <div class="d-flex justify-content-between">
   <h3>People</h3>
   <div class="d-flex align-items-center">
-    <a href="{{ url_for('main.create_person') }}" class="btn btn-primary ml-1 btn-sm">
+    <a href="{{ url_for('main.create_person') }}" class="btn btn-primary ml-1">
       <i class="fa fa-plus-square" aria-hidden="true"></i>
       Create
     </a>
@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block content %}
-<form class="form-inline mb-2" method="get" action="{{ url_for('main.movies') }}">
+<form class="form-inline mb-2" method="get" action="{{ url_for('main.people') }}">
   {{ search_form.q(size=20, class='form-control', placeholder=search_form.q.label.text) }}
 </form>
 

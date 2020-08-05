@@ -3,6 +3,8 @@ import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 import sqlalchemy as sa
+from hashlib import md5
+from sqlalchemy.ext.hybrid import hybrid_property
 
 
 class BaseModel(object):
@@ -37,6 +39,10 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def avatar(self, size):
+        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+        return f'https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}'
 
 
 class Movie(db.Model, BaseModel):
@@ -124,6 +130,10 @@ class People(db.Model, BaseModel):
             return self.image_url
         else:
             return "https://m.media-amazon.com/images/G/01/imdb/images/nopicture/32x44/name-2138558783._CB468460248_.png"
+    
+    @hybrid_property
+    def score(self):
+        return sum(role.movie.rating_value / (role.order+1)^0.2 for role in self.roles)
 
 
 class Character(db.Model, BaseModel):

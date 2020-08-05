@@ -1,3 +1,4 @@
+{% from '_macros.html' import render_field %}
 {% extends "base.html" %}
 
 {% block nav_movies %}active{% endblock %}
@@ -34,64 +35,26 @@
   <dl class="card-body mb-0">
     <div class="row">
       <div class="col-md-6">
-        <div class="mb-4">
-          <dt class="text-muted font-weight-normal">Title</dt>
-          <dd>{{ movie.title }}</dd>
-        </div>
-        <div class="mb-4">
-          <dt class="text-muted font-weight-normal">Year</dt>
-          <dd>{{ movie.year }}</dd>
-        </div>
-        <div class="mb-4">
-          <dt class="text-muted font-weight-normal">Director</dt>
-          <dd>{{ movie.director }}</dd>
-        </div>
-        <div class="mb-4">
-          <dt class="text-muted font-weight-normal">Category</dt>
-          <dd>{{ movie.category }}</dd>
-        </div>
-        <div class="mb-4">
-          <dt class="text-muted font-weight-normal">Certificate</dt>
-          <dd>{{ movie.certificate }}</dd>
-        </div>
+        {{ render_field('Title', value=movie.title) }}
+        {{ render_field('Year', value=movie.year) }}
+        {{ render_field('Director', value=movie.director) }}
+        {{ render_field('Category', value=movie.category) }}
+        {{ render_field('Certificate', value=movie.certificate) }}
       </div>
       <div class="col-md-6">
-        <div class="mb-4">
-          <dt class="text-muted font-weight-normal">Poster</dt>
-          <dd>
-            <img src="{{ movie.poster_url }}" alt="">
-          </dd>
-        </div>
+        {{ render_field('Poster', type='image', url=movie.default_image_url) }}
       </div>
     </div>
-    <div class="mb-4">
-      <dt class="text-muted font-weight-normal">Plot summary</dt>
-      <dd>{{ movie.plot_summary|markdown }}</dd>
-    </div>
-    <div class="mb-4">
-      <dt class="text-muted font-weight-normal">URL</dt>
-      <dd><a href="{{ movie.url }}" target="_blank">{{ movie.url }}</a></dd>
-    </div>
+    {{ render_field('Plot Summary', type='markdown', value=movie.plot_summary) }}
+    {{ render_field('URL', value='IMDB', type='link', url=movie.url) }}
     <div class="row">
       <div class="col-md-6">
-        <div class="mb-4">
-          <dt class="text-muted font-weight-normal">Runtime</dt>
-          <dd>{{ movie.runtime }} min</dd>
-        </div>
-        <div class="mb-4">
-          <dt class="text-muted font-weight-normal">Release date</dt>
-          <dd>{{ movie.release_date }}</dd>
-        </div>
+        {{ render_field('Runtime (min)', value=movie.runtime) }}
+        {{ render_field('Release date', value=movie.release_date) }}
       </div>
       <div class="col-md-6">
-        <div class="mb-4">
-          <dt class="text-muted font-weight-normal">Rating</dt>
-          <dd>{{ movie.rating_value }}</dd>
-        </div>
-        <div class="mb-4">
-          <dt class="text-muted font-weight-normal">Number of ratings</dt>
-          <dd>{{ movie.rating_count }}</dd>
-        </div>
+        {{ render_field('Rating', value=movie.rating_value) }}
+        {{ render_field('Rating count', value=movie.rating_count) }}
       </div>
     </div>
   </dl>
@@ -228,12 +191,6 @@
       '</div>',
     ].join('')
   }
-
-  // function queryParams(params) {
-  //   itemId = $('#itemId').val()
-  //   params.filter = JSON.stringify({ "movie_id": itemId })
-  //   return params
-  // }
 
   $(document).ready(function () {
     var $table = $('#table')

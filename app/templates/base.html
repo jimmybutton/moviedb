@@ -62,26 +62,30 @@
               <!-- <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
             </form>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link" href="#" style="position: relative;">
               <div class="d-inline position-relative">
                 <span class="badge badge-pill badge-danger px-1"
                   style="position: absolute; top:-4px; left: 50%;">99</span>
                 <i class="fa fa-bell fa-lg" aria-hidden="true"></i>
-                <!-- <span class="d-md-none">Notifications </span> -->
               </div>
             </a>
-          </li>
+          </li> -->
           <li class="nav-item dropdown">
             <a class="nav-link" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
               aria-expanded="false">
-              <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i>
-              <!-- d-none d-md-inline -->
-              <!-- <span class="d-md-none">User</span> -->
+              <!-- <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i> -->
+              <div class="rounded-circle overflow-hidden">
+                <img src="{{ current_user.avatar(32) }}" alt="" height="32px" widht="32px">
+              </div>
             </a>
             <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="dropdownMenuLink">
-              <a class="dropdown-item" href="{{ url_for('main.user', username=current_user.username) }}">Details</a>
-              <a class="dropdown-item" href="#">Settings</a>
+              <a class="dropdown-item" href="{{ url_for('main.user', username=current_user.username) }}">
+                Signed in as<br><strong>{{ current_user.username }}</strong>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{{ url_for('main.user', username=current_user.username) }}">Profile</a>
+              <a class="dropdown-item" href="{{ url_for('main.users') }}">Users</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a>
             </div>
