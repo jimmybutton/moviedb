@@ -29,8 +29,8 @@
 <form method="post" novalidate>
   {{ form.csrf_token() }}
   {{ render_form_row([form.title, form.year]) }}
-  {{ render_form_row([form.certificate, form.category, form.director]) }}
-  {{ render_form_row([form.release_date, form.release_date_uk, form.release_country]) }}
+  {{ render_form_row([form.certificate, form.category, form.director_name]) }}
+  {{ render_form_row([form.release_date, form.release_country]) }}
   {{ render_form_row([form.plot_summary]) }}
   {{ render_form_row([form.rating_value, form.rating_count, form.runtime]) }}
   {{ render_form_row([form.poster_url]) }}
@@ -51,7 +51,7 @@
   $(function () {
 
     // INITIALIZE DATEPICKER PLUGIN
-    $('#release_date_uk').datepicker({
+    $('#release_date').datepicker({
       clearBtn: true,
       format: "dd/mm/yyyy"
     });
