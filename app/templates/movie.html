@@ -51,6 +51,8 @@
       <div class="col-md-6">
         {{ render_field('Runtime (min)', value=movie.runtime) }}
         {{ render_field('Release date', value=movie.release_date) }}
+        {{ render_field('Release date NEW', value=moment(movie.release_date_uk).format('LL')) }}
+        {{ render_field('Release country', value=movie.release_country) }}
       </div>
       <div class="col-md-6">
         {{ render_field('Rating', value=movie.rating_value) }}

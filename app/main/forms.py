@@ -28,6 +28,8 @@ class EditMovieForm(FlaskForm):
     certificate = SelectField('Certificate', choices=[('',''),('U','U'),('12','12'),('12A','12A'),('15','15'),('18','18'),('R18','R18'),('A','A'),('PG','PG'),('U/A','U/A'),('S','S'),('X','X')])
     category = SelectField('Category', choices=[('',''),('Action','Action'),('Adventure','Adventure'),('Animation','Animation'),('Biography','Biography'),('Comedy','Comedy'),('Crime','Crime'),('Drama','Drama'),('Film-Noir','Film-Noir'),('Horror','Horror'),('Mystery','Mystery'),('Western','Western')])
     release_date = StringField('Release date')
+    release_date_uk = DateField('Release date NEW', format='%d/%m/%Y')
+    release_country = StringField('Release country') # 'UK', 'Hungary', 'USA', 'Denmark', 'France', 'India', 'Netherlands', None, 'Japan', 'Sweden', 'Iran', 'Brazil', 'West Germany', 'Italy', 'Turkey', 'Australia'
     director = StringField('Director', validators=[DataRequired()])
     plot_summary = TextAreaField('Plot summary', validators=[Length(min=0, max=300)])
     rating_value = DecimalField(label='Rating', validators=[Optional(), NumberRange(min=0, max=10)])

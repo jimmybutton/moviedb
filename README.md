@@ -41,9 +41,11 @@ A web application based on flask and boostrap 4 to browse movies, actors and dir
 - DONE add a actor model
 - DONE add association table
 - DONE search for movies
-- list view, details view and edit form for actors
+- DONE list view, details view and edit form for actors
 - create link for director
-- edit form for association table
+- update release_date to release_date_uk
+- edit form for character records
+- hook to update person score when character records are created / updated
 - display dates and times locally
 - filter movies by category, sort order...
 
