@@ -65,7 +65,7 @@ class Movie(db.Model, BaseModel):
     title = db.Column(db.String(128), index=True)
     year = db.Column(db.Integer)
     director_name = db.Column(db.String(64))
-    # director_id = db.Column(db.Integer, db.ForeignKey("people.id"))
+    director_id = db.Column(db.Integer, db.ForeignKey("people.id"))
     category = db.Column(db.String(64))
     certificate = db.Column(db.String(16))
     release_date = db.Column(db.Date)
@@ -124,6 +124,8 @@ class People(db.Model, BaseModel):
     roles = db.relationship(
         "Character", foreign_keys="Character.actor_id", backref="actor", lazy="dynamic"
     )
+
+    directed_movies = db.relationship("Movie", foreign_keys="Movie.director_id", backref='director', lazy='dynamic')
 
     def __repr__(self):
         return "<Person {}>".format(self.name)
