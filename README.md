@@ -1,6 +1,10 @@
 # moviedb
 A web application based on flask and boostrap 4 to browse movies, actors and directors, manage a watchlist, write reviews etc.
 
+It's using some data from the open [IMDB dataset](https://datasets.imdbws.com/) as example data.
+
+![Screenshots](docs/moviedb.gif)
+
 ## Features
 - user login and authorization
 - manage a list of movies and actors
@@ -9,25 +13,6 @@ A web application based on flask and boostrap 4 to browse movies, actors and dir
 - search functionality for movies and actors etc.
 - manage a watchlist
 - write reviews and rate movies
-
-### movie fields
-- title
-- year
-- director
-- description
-- imdb rating
-- (categories)
-
-### people fields
-- name
-- birthday
-- bio
-
-### association table
-- actor
-- role
-- movie
-- order
 
 ## ToDo
 ### Step 1
@@ -43,7 +28,7 @@ A web application based on flask and boostrap 4 to browse movies, actors and dir
 - DONE search for movies
 - DONE list view, details view and edit form for actors
 - create link for director
-- update release_date to release_date_uk
+- DONE update release_date to release_date_uk
 - edit form for character records
 - hook to update person score when character records are created / updated
 - display dates and times locally
